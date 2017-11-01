@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import scipy
-import sys 
+import sys
 import math
 import sklearn
 import sklearn.preprocessing
@@ -12,14 +12,15 @@ import time
 
 #create manifold
 def createYMatrixInit(matT,matW,matPhiMPlusOne):
+	shap1=matW.shape[0];
+	shap2=matPhiMPlusOne.shape[0];
 	TheMeans=matT.mean(0)
 	DMmeanMatrix = np.zeros([matW.shape[0], matPhiMPlusOne.shape[0]])
-	for i in range(matW.shape[0]):
-		for j in range(matPhiMPlusOne.shape[0]):
+	for i in range(shap1):
+		for j in range(shap2):
 			DMmeanMatrix[i,j] = TheMeans[i]
 	MatY = np.dot(matW, np.transpose(matPhiMPlusOne))
 	MatY = MatY + DMmeanMatrix
-	MatY = MatY
 	return(MatY)
    
 def createPhiMatrix(matX,matM,numX, numM,sigma):
@@ -60,8 +61,6 @@ def createFeatureMatrixNIPALS(matT, nMolecules, nDimensions):
 	Result = np.zeros([nDimensions, 2])
 	threshold = 0.0001
 	id = 0
-# best way : find column with highest norm
-# id = findMaxIndex(sumMatrixCols(matrixMultiplyOneByOne(matT,matT)))
 #shortest way: take first column
 	t = matT[:,id]
 	if (np.sum(t)==0):
@@ -119,10 +118,8 @@ def createFeatureMatrixNIPALS(matT, nMolecules, nDimensions):
 
 
 def createWMatrix(matX, matPhiMPlusOne, matU, nDimensions, nCenters):
-	Result = np.zeros([nDimensions,nCenters+1])
 	NormX = sklearn.preprocessing.scale(matX,axis=0, with_mean=True, with_std=True) 
 	myProd = np.dot(matU,np.transpose(NormX))
-#	Result = np.linalg.solve(matPhiMPlusOne.T.dot(matPhiMPlusOne), matPhiMPlusOne.T.dot(product)) 
 	tinv = np.linalg.solve(matPhiMPlusOne.T.dot(matPhiMPlusOne), matPhiMPlusOne.T)
 	Result = np.dot(myProd,np.transpose(tinv))
 	return(Result)
@@ -156,9 +153,9 @@ class ReturnOptimized(object):
 		self.matMeans = matMeans
 
 class ReturnU(object):
-        def __init__(self, matU, betaInv):
-                self.matU = matU 
-                self.betaInv = betaInv 
+	def __init__(self, matU, betaInv):
+		self.matU = matU 
+		self.betaInv = betaInv 
 
 def initiliaze(matT,k,m,s,l):
 	#create X matrix
@@ -210,71 +207,20 @@ def initiliaze(matT,k,m,s,l):
 
 
 def createDistanceMatrix(matY, matT):
-	nDimensions = matT.shape[1]
-	nMolecules = matT.shape[0]
-	nSamples = matY.shape[1]
-	Result = np.zeros([nSamples, nMolecules])
-	Somme = 0.0
-	for i in range(nSamples):
-		for j in range(nMolecules):
-			Result[i,j] = 0.0
-			for k in range(nDimensions):
-				Somme = (matY[k][i] - matT[j][k])
-				Result[i,j] += Somme*Somme
+	Result = scipy.spatial.distance.cdist(matY.T,matT,metric='sqeuclidean')	
 	return(Result)
 
 
-#def createPMatrix(matD,betaInv,nDimensions):
-#	nSamples = matD.shape[0]
-#	nMolecules = matD.shape[1]
-#	matP = np.zeros([nSamples, nMolecules])
-#	for i in range(nSamples): 
-#		for j in range(nMolecules): 
-#			#Result = P(t|x,W,B)
-#			matP[i,j] = np.exp(-np.exp(np.log(matD[i,j])-np.log(2)-np.log(betaInv)))
-#			if(matP[i,j]==0.0):
-#				matP[i,j]=sys.float_info.min
-#	return(matP)
-
 def createPMatrix(matD,betaInv,nDimensions):
 	beta=1/betaInv
-	nSamples = matD.shape[0]
-	nMolecules = matD.shape[1]
-	matP = np.zeros([nSamples, nMolecules])
 	constante = np.power(((beta)/(2*np.pi)),nDimensions/2)
-	for i in range(nSamples): 
-		for j in range(nMolecules): 
-			matP[i,j] = constante*np.exp(-(beta/2)*matD[i,j])
-#			if(matP[i,j]==0.0):
-#				matP[i,j]=sys.float_info.min
+	matP = constante*np.exp(-(beta/2)*matD)
 	return(matP)
 
 
-#def createRMatrix(matP):
-#	nSamples = matP.shape[0]
-#	nMolecules = matP.shape[1]
-#	matR = np.zeros([nSamples, nMolecules])
-#	Somme = np.zeros(nMolecules)
-#	for k in range(nMolecules):
-#		for i in range(nSamples):
-#			 Somme[k] += matP[i,k]
-#	for k in range(nMolecules):
-#		if Somme[k] == 0.0:
-#			for i in range(nSamples):
-#				matP[i,k] = 1/nSamples
-#			Somme[k] = 1.0
-#	for i in range(nSamples):
-#		for j in range(nMolecules):
-#			matR[i,k] = np.exp(np.log(matP[i,k])-np.log(Somme[k])) 
-#	return(matR)
-
 def createRMatrix(matP):
-	nSamples = matP.shape[0]
-	nMolecules = matP.shape[1]
-	matR = np.empty([nSamples,nMolecules])
-	for i in range(nSamples):
-		for j in range(nMolecules):
-			matR[i,j]=matP[i,j]/(sum(matP[:,j]))
+	sums = np.sum(matP,axis=0)
+	matR = matP / sums[None,:]
 	return(matR)
 
 def optimize(matT, initialModel, alpha, niter):
@@ -285,14 +231,22 @@ def optimize(matT, initialModel, alpha, niter):
 	diff=1000;
 	while i<(niter+1) and diff>0.0001:	
 		#expectation
+		#start = time.time();
 		matP = createPMatrix(matD,betaInv,matT.shape[1])
+		#end = time.time(); elapsed = end - start; print("P=",elapsed);start = time.time();
 		matR = createRMatrix(matP)
+		#end = time.time(); elapsed = end - start; print("R=",elapsed);start = time.time();
 		#maximization
 		matG = createGMatrix(matR)
+		#end = time.time(); elapsed = end - start; print("G=",elapsed);start = time.time();
 		matW = optimWMatrix(matR, initialModel.matPhiMPlusOne, matG, matT, betaInv, alpha)
+		#end = time.time(); elapsed = end - start; print("W=",elapsed);start = time.time();
 		matY = createYMatrix(matW,initialModel.matPhiMPlusOne)
+		#end = time.time(); elapsed = end - start; print("Y=",elapsed);start = time.time();
 		matD = createDistanceMatrix(matY, matT)
+		#end = time.time(); elapsed = end - start; print("D=",elapsed);start = time.time();
 		betaInv = optimBetaInv(matR,matD,matT.shape[1])
+		#end = time.time(); elapsed = end - start; print("b=",elapsed);start = time.time();
 		#objective function
 		if i == 1:
 			loglike = computelogLikelihood(matP,betaInv,matT.shape[1]);
@@ -300,18 +254,15 @@ def optimize(matT, initialModel, alpha, niter):
 			loglikebefore=loglike
 			loglike = computelogLikelihood(matP,betaInv,matT.shape[1])
 			diff=abs(loglikebefore-loglike)
+		#end = time.time(); elapsed = end - start; print("l=",elapsed);
 		print("Iter ", i, " ErrorFunction (should go down): ", loglike)
 		i += 1
 	matMeans = meanPoint(matR, initialModel.matX)
 	return ReturnOptimized(matW, matY, matP, matR, betaInv, matMeans)
 
 def createGMatrix(matR):
-	nSamples = matR.shape[0]
-	nMolecules = matR.shape[1]
-	matG = np.zeros([nSamples, nSamples])
-	for i in range(nSamples):
-		for n in range(nMolecules):
-			matG[i,i] += matR[i,n]
+	sums = np.sum(matR,axis=1)
+	matG = np.diag(sums)
 	return(matG) 
 
 def optimWMatrix(matR, matPhiMPlusOne, matG, matT, betaInv, alpha):
@@ -320,48 +271,20 @@ def optimWMatrix(matR, matPhiMPlusOne, matG, matT, betaInv, alpha):
 	PhiGPhi = np.dot(np.dot(np.transpose(matPhiMPlusOne),matG), matPhiMPlusOne)
 	for i in range(nCentersP):
 		LBmat[i][i] = alpha * betaInv
-	PhiGPhiLB  = PhiGPhi + LBmat
-#	Ginv = np.linalg.solve(PhiGPhiLB.T.dot(PhiGPhiLB), PhiGPhiLB.T)
+	PhiGPhiLB = PhiGPhi + LBmat
 	Ginv = np.linalg.inv(PhiGPhiLB)
 	matW = np.transpose(np.dot(np.dot(np.dot(Ginv, np.transpose(matPhiMPlusOne)),matR),matT))
 	return(matW)
 
 def optimBetaInv(matR,matD,nDimensions):
-	sum = 0.0
-	nSamples = matR.shape[0]
 	nMolecules = matR.shape[1]
-	for i in range(nSamples):
-		for j in range(nMolecules):
-			sum = sum + matR[i,j]*matD[i,j]
-	betaInv = sum/(nMolecules*nDimensions)
+	betaInv = np.sum(np.multiply(matR,matD))/(nMolecules*nDimensions)
 	return(betaInv)
 
 def meanPoint(matR,matX):
 	matMeans = np.dot(np.transpose(matR), matX)
 	return(matMeans)
 
-#def computelogLikelihood(matP,betaInv,nDimensions):
-#	nSamples = matP.shape[0]
-#	nMolecules = matP.shape[1]
-#	Ptwb = 0.0
-#	LogLikelihood = 0.0
-#	prior = np.log(nSamples)
-#	constante = (nDimensions/2)*np.log(2*np.pi*betaInv)
-#
-#	for j in range(nMolecules):
-#		Ptwb = 0.0
-#		for i in range(nSamples):
-      #init p(t|w,b)
-      #p(t|w,b)=sum p(t|i)*1/nSamples with prior=1/nSamples and p(t|i)=matP[i][j]*constante
-      #PDF obtained by summing over all gaussian components
-#			Ptwb += matP[i,j]
-#		if Ptwb > 0.0:
-#			LogLikelihood += np.log(Ptwb)
-#		else:
-#			LogLikelihood += np.log(sys.float_info.epsilon)
-#	LogLikelihood /= nMolecules
-#	LogLikelihood = LogLikelihood - constante - prior
-#	return(LogLikelihood)
 
 def computelogLikelihood(matP,betaInv,nDimensions):
 	nSamples = matP.shape[0]
@@ -369,8 +292,7 @@ def computelogLikelihood(matP,betaInv,nDimensions):
 	Ptwb = 0.0
 	LogLikelihood = 0.0
 	prior = 1/nSamples
-	for j in range(nMolecules):
-		LogLikelihood += np.log(max(sum(matP[:,j])*prior,sys.float_info.epsilon))
+	LogLikelihood = np.sum(np.log(np.maximum(np.sum(matP,axis=0)*prior,sys.float_info.epsilon)))
 	LogLikelihood /= nMolecules
 	return(-LogLikelihood)
 
