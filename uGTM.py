@@ -204,7 +204,7 @@ def initiliaze(matT,k,m,s,l):
 	matY = createYMatrixInit(matT,matW,matPhiMPlusOne)
 
 	betaInv = Uobj.betaInv
-	#betaInv = evalBetaInv(matY,Uobj.betaInv) 
+	betaInv = evalBetaInv(matY,Uobj.betaInv) 
 
 	return ReturnInitial(matX, matM, nSamples, nCenters, rbfWidth, matPhiMPlusOne, Uobj.matU, matW, matY, betaInv)
 
@@ -224,30 +224,30 @@ def createDistanceMatrix(matY, matT):
 	return(Result)
 
 
-def createPMatrix(matD,betaInv,nDimensions):
-	nSamples = matD.shape[0]
-	nMolecules = matD.shape[1]
-	matP = np.zeros([nSamples, nMolecules])
-	for i in range(nSamples): 
-		for j in range(nMolecules): 
-			#Result = P(t|x,W,B)
-			matP[i,j] = np.exp(-np.exp(np.log(matD[i,j])-np.log(2)-np.log(betaInv)))
-			if(matP[i,j]==0.0):
-				matP[i,j]=sys.float_info.min
-	return(matP)
-
 #def createPMatrix(matD,betaInv,nDimensions):
-#	beta=1/betaInv
 #	nSamples = matD.shape[0]
 #	nMolecules = matD.shape[1]
 #	matP = np.zeros([nSamples, nMolecules])
-#	constante = np.power(((beta)/(2*np.pi)),-nDimensions/2)
 #	for i in range(nSamples): 
 #		for j in range(nMolecules): 
-#			matP[i,j] = constante*np.exp(-(beta/2)*matD[i,j])
+#			#Result = P(t|x,W,B)
+#			matP[i,j] = np.exp(-np.exp(np.log(matD[i,j])-np.log(2)-np.log(betaInv)))
 #			if(matP[i,j]==0.0):
 #				matP[i,j]=sys.float_info.min
 #	return(matP)
+
+def createPMatrix(matD,betaInv,nDimensions):
+	beta=1/betaInv
+	nSamples = matD.shape[0]
+	nMolecules = matD.shape[1]
+	matP = np.zeros([nSamples, nMolecules])
+	constante = np.power(((beta)/(2*np.pi)),nDimensions/2)
+	for i in range(nSamples): 
+		for j in range(nMolecules): 
+			matP[i,j] = constante*np.exp(-(beta/2)*matD[i,j])
+#			if(matP[i,j]==0.0):
+#				matP[i,j]=sys.float_info.min
+	return(matP)
 
 
 #def createRMatrix(matP):
@@ -300,7 +300,7 @@ def optimize(matT, initialModel, alpha, niter):
 			loglikebefore=loglike
 			loglike = computelogLikelihood(matP,betaInv,matT.shape[1])
 			diff=abs(loglikebefore-loglike)
-		print("Iter ", i, " LogLikelihood: ", loglike)
+		print("Iter ", i, " ErrorFunction (should go down): ", loglike)
 		i += 1
 	matMeans = meanPoint(matR, initialModel.matX)
 	return ReturnOptimized(matW, matY, matP, matR, betaInv, matMeans)
@@ -340,28 +340,39 @@ def meanPoint(matR,matX):
 	matMeans = np.dot(np.transpose(matR), matX)
 	return(matMeans)
 
+#def computelogLikelihood(matP,betaInv,nDimensions):
+#	nSamples = matP.shape[0]
+#	nMolecules = matP.shape[1]
+#	Ptwb = 0.0
+#	LogLikelihood = 0.0
+#	prior = np.log(nSamples)
+#	constante = (nDimensions/2)*np.log(2*np.pi*betaInv)
+#
+#	for j in range(nMolecules):
+#		Ptwb = 0.0
+#		for i in range(nSamples):
+      #init p(t|w,b)
+      #p(t|w,b)=sum p(t|i)*1/nSamples with prior=1/nSamples and p(t|i)=matP[i][j]*constante
+      #PDF obtained by summing over all gaussian components
+#			Ptwb += matP[i,j]
+#		if Ptwb > 0.0:
+#			LogLikelihood += np.log(Ptwb)
+#		else:
+#			LogLikelihood += np.log(sys.float_info.epsilon)
+#	LogLikelihood /= nMolecules
+#	LogLikelihood = LogLikelihood - constante - prior
+#	return(LogLikelihood)
+
 def computelogLikelihood(matP,betaInv,nDimensions):
 	nSamples = matP.shape[0]
 	nMolecules = matP.shape[1]
 	Ptwb = 0.0
 	LogLikelihood = 0.0
-	prior = np.log(nSamples)
-	constante = (nDimensions/2)*np.log(2*np.pi*betaInv)
-
+	prior = 1/nSamples
 	for j in range(nMolecules):
-		Ptwb = 0.0
-		for i in range(nSamples):
-      #init p(t|w,b)
-      #p(t|w,b)=sum p(t|i)*1/nSamples with prior=1/nSamples and p(t|i)=matP[i][j]*constante
-      #PDF obtained by summing over all gaussian components
-			Ptwb += matP[i,j]
-		if Ptwb > 0.0:
-			LogLikelihood += np.log(Ptwb)
-		else:
-			LogLikelihood += np.log(sys.float_info.epsilon)
+		LogLikelihood += np.log(max(sum(matP[:,j])*prior,sys.float_info.epsilon))
 	LogLikelihood /= nMolecules
-	LogLikelihood = LogLikelihood - constante - prior
-	return(LogLikelihood)
+	return(-LogLikelihood)
 
 
 def evalBetaInv(matY,betaInv):
