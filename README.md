@@ -7,6 +7,10 @@ This is a python implementation (using sklearn and numpy, in uGTM.py): I am debu
 
 See the python notebook for an illustration & comparison with LLE in sklearn.
 
+To run an example and comparing with LLE (data is in csv format):
+
+python3.4 run_example.py --data csvlist.dat --labels csvlist.lbls
+
 - Héléna A. Gaspar
 
 
