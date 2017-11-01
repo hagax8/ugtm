@@ -351,7 +351,7 @@ def computelogLikelihood(matP,betaInv,nDimensions):
 	for j in range(nMolecules):
 		Ptwb = 0.0
 		for i in range(nSamples):
-      #initialize p(t|w,b)
+      #init p(t|w,b)
       #p(t|w,b)=sum p(t|i)*1/nSamples with prior=1/nSamples and p(t|i)=matP[i][j]*constante
       #PDF obtained by summing over all gaussian components
 			Ptwb += matP[i,j]
