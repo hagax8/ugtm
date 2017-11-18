@@ -15,14 +15,14 @@ def createYMatrixInit(matT,matW,matPhiMPlusOne):
 	shap1=matW.shape[0];
 	shap2=matPhiMPlusOne.shape[0];
 	TheMeans=matT.mean(0)
-	DMmeanMatrix = np.zeros([matW.shape[0], matPhiMPlusOne.shape[0]])
+	DMmeanMatrix = np.zeros([shap1, shap2])
 	for i in range(shap1):
 		for j in range(shap2):
 			DMmeanMatrix[i,j] = TheMeans[i]
 	MatY = np.dot(matW, np.transpose(matPhiMPlusOne))
 	MatY = MatY + DMmeanMatrix
 	return(MatY)
-   
+
 def createPhiMatrix(matX,matM,numX, numM,sigma):
 	Result=np.zeros([numX, numM + 1])
 	for i in range(numX):
@@ -131,14 +131,13 @@ def createYMatrix(matW,matPhiMPlusOne):
 
 
 class ReturnInitial(object):
-	def __init__(self, matX, matM, nSamples, nCenters, rbfWidth, matPhiMPlusOne, matU, matW, matY,betaInv):
+	def __init__(self, matX, matM, nSamples, nCenters, rbfWidth, matPhiMPlusOne, matW, matY,betaInv):
 		self.matX = matX 
 		self.matM = matM 
 		self.nCenters = nCenters
 		self.nSamples = nSamples
 		self.rbfWidth = rbfWidth
 		self.matPhiMPlusOne = matPhiMPlusOne
-		self.matU = matU
 		self.matW = matW
 		self.matY = matY
 		self.betaInv = betaInv
@@ -157,53 +156,85 @@ class ReturnU(object):
 		self.matU = matU 
 		self.betaInv = betaInv 
 
-def initiliaze(matT,k,m,s,l):
-	#create X matrix
 
+def initializeKernel(matT, k, m, s, featureSpaceDimension):
+	nMolecules = matT.shape[0]
+	nDimensions = featureSpaceDimension 
+	nSamples = k*k
+	nCenters = m*m
+	x = np.linspace(-1, 1, k)
+	matX = np.transpose(np.meshgrid(x,x)).reshape(k*k,2)
+	x = np.linspace(-1, 1, m)
+	matM = np.transpose(np.meshgrid(x,x)).reshape(m*m,2)
+	rbfWidth = computeWidth(matM,nCenters,s)
+	matPhiMPlusOne = createPhiMatrix(matX,matM,nSamples,nCenters,rbfWidth)
+	matW = KERNELinitMatLFromK(matT,nCenters) 		
+	matD = KERNELcreateDistanceMatrix(matT, matW, matPhiMPlusOne)
+	betaInv = initBetaInvRandom(matD,nSamples,nMolecules,nDimensions)
+	matY = createYMatrixInit(matT,matW,matPhiMPlusOne)
+	return ReturnInitial(matX, matM, nSamples, nCenters, rbfWidth, matPhiMPlusOne, matW, matY, betaInv)
+
+def optimizeKernel(matT, initialModel, alpha, niter):
+	matD = KERNELcreateDistanceMatrix(matT, initialModel.matW, initialModel.matPhiMPlusOne)
+	matY = initialModel.matY
+	betaInv = initialModel.betaInv
+	i = 1
+	diff=1000
+	while i<(niter+1) and diff>0.0001:
+		#expectation
+		start = time.time();
+		matP = createPMatrix(matD,betaInv,matT.shape[1])
+		end = time.time(); elapsed = end - start; print("P=",elapsed);start = time.time();
+		matR = createRMatrix(matP)
+		end = time.time(); elapsed = end - start; print("R=",elapsed);start = time.time();
+		#maximization
+		matG = createGMatrix(matR)
+		end = time.time(); elapsed = end - start; print("G=",elapsed);start = time.time();
+		matW = optimLMatrix(matR, initialModel.matPhiMPlusOne, matG, betaInv, alpha)
+		end = time.time(); elapsed = end - start; print("W=",elapsed);start = time.time();
+		matY = createYMatrix(matW,initialModel.matPhiMPlusOne)
+		end = time.time(); elapsed = end - start; print("Y=",elapsed);start = time.time();
+		matD = KERNELcreateDistanceMatrix(matT, matW, initialModel.matPhiMPlusOne)
+		end = time.time(); elapsed = end - start; print("D=",elapsed);start = time.time();
+		betaInv = optimBetaInv(matR,matD,matT.shape[1])
+		end = time.time(); elapsed = end - start; print("b=",elapsed);start = time.time();
+		#objective function
+		if i == 1:
+			loglike = computelogLikelihood(matP,betaInv,matT.shape[1]);
+		else:
+			loglikebefore = loglike
+			loglike = computelogLikelihood(matP,betaInv,matT.shape[1])
+			diff = abs(loglikebefore-loglike)
+		end = time.time(); elapsed = end - start; print("l=",elapsed);
+		print("Iter ", i, " ErrorFunction (should go down): ", loglike)
+		i += 1
+	matY = createYMatrix(matW,initialModel.matPhiMPlusOne)
+	matMeans = meanPoint(matR, initialModel.matX)
+	return ReturnOptimized(matW, matY, matP, matR, betaInv, matMeans)
+
+
+def initiliaze(matT,k,m,s):
 	nMolecules = matT.shape[0]
 	nDimensions = matT.shape[1]
-
 	nSamples=k*k
 	nCenters=m*m
-
 	x = np.linspace(-1, 1, k)
 	matX=np.transpose(np.meshgrid(x,x)).reshape(k*k,2)
-
-	#create M matrix
 	x = np.linspace(-1, 1, m)
 	matM=np.transpose(np.meshgrid(x,x)).reshape(m*m,2)
-	#matMnorm=sklearn.preprocessing.normalize(matM,axis=0)
-
-	##################
-	#compute width
 	rbfWidth=computeWidth(matM,nCenters,s) 
-
-	####################
-	#create Phi matrix
 	matPhiMPlusOne = createPhiMatrix(matX,matM,nSamples,nCenters,rbfWidth)
-
-	#####################
-	#create U matrix: use NIPALS approach since it's somewhat faster
-	#start = time.time()
 	Uobj = createFeatureMatrixNIPALS(matT, nMolecules, nDimensions)
-
-	#end = time.time(); elapsed = end - start
 	#alternative for creating U loading matrix: instead of NIPALS, use PCA (it's slower.....):
-#	pca = PCA(n_components=3)
-#	pca.fit(matT)
-#	matU=(pca.components_.T * np.sqrt(pca.explained_variance_))[:,0:2]
-#	betaInv=pca.explained_variance_[2]
-
-	#create W matrix
+##	pca = PCA(n_components=3)
+##	pca.fit(matT)
+##	matU=(pca.components_.T * np.sqrt(pca.explained_variance_))[:,0:2]
+##	betaInv=pca.explained_variance_[2]
 	matW = createWMatrix(matX,matPhiMPlusOne,Uobj.matU,nDimensions,nCenters)
-
-	#create Y matrix
 	matY = createYMatrixInit(matT,matW,matPhiMPlusOne)
-
 	betaInv = Uobj.betaInv
 	betaInv = evalBetaInv(matY,Uobj.betaInv) 
-
-	return ReturnInitial(matX, matM, nSamples, nCenters, rbfWidth, matPhiMPlusOne, Uobj.matU, matW, matY, betaInv)
+	return ReturnInitial(matX, matM, nSamples, nCenters, rbfWidth, matPhiMPlusOne, matW, matY, betaInv)
 
 
 def createDistanceMatrix(matY, matT):
@@ -276,6 +307,18 @@ def optimWMatrix(matR, matPhiMPlusOne, matG, matT, betaInv, alpha):
 	matW = np.transpose(np.dot(np.dot(np.dot(Ginv, np.transpose(matPhiMPlusOne)),matR),matT))
 	return(matW)
 
+
+def optimLMatrix(matR, matPhiMPlusOne, matG, betaInv, alpha):
+	nCentersP = matPhiMPlusOne.shape[1]
+	LBmat = np.zeros([nCentersP, nCentersP])
+	PhiGPhi = np.dot(np.dot(np.transpose(matPhiMPlusOne),matG), matPhiMPlusOne)
+	for i in range(nCentersP):
+		LBmat[i][i] = alpha * betaInv
+	PhiGPhiLB = PhiGPhi + LBmat
+	Ginv = np.linalg.inv(PhiGPhiLB)
+	matW = np.transpose(np.dot(np.dot(Ginv, np.transpose(matPhiMPlusOne)),matR))
+	return(matW)
+
 def optimBetaInv(matR,matD,nDimensions):
 	nMolecules = matR.shape[1]
 	betaInv = np.sum(np.multiply(matR,matD))/(nMolecules*nDimensions)
@@ -308,3 +351,29 @@ def evalBetaInv(matY,betaInv):
 		betaInv = abs(np.random.uniform(-1, 1, size=1));
 	return(betaInv);
 
+
+def KERNELinitMatLFromK(matT,nCenters):
+	nMolecules = matT.shape[0]
+	matL = np.empty([nMolecules,(nCenters+1)])
+	randVec = np.random.randint(nMolecules, size=(nCenters+1))		
+	for i in range(nMolecules):
+		for j in range(nCenters+1):
+			matL[i,j] = matT[i,randVec[j]]
+	return(matL)
+
+
+def KERNELcreateDistanceMatrix(matT, matL, matPhiMPlusOne):
+	nSamples = matPhiMPlusOne.shape[0]
+	nMolecules = matT.shape[0]
+	Result = np.empty([nSamples, nMolecules])
+	thefloat = 0.0
+	for i in range(nSamples):
+		LPhim = np.dot(matL, matPhiMPlusOne[i])
+		thefloat = np.dot(np.dot(LPhim,matT),LPhim)
+		for j in range(nMolecules):
+			Result[i,j] = matT[j,j] + thefloat - 2*(np.dot(matT[j],LPhim))
+	return(Result)
+
+def initBetaInvRandom(matD,nSamples,nMolecules,nDimensions):
+	betaInv = np.sum(matD)/nSamples/(nMolecules*nDimensions)
+	return(betaInv)

@@ -7,6 +7,7 @@ from sklearn.cluster import AgglomerativeClustering;
 from sklearn.decomposition import PCA;
 import mpl_toolkits.mplot3d.axes3d as p3;
 import argparse
+import scipy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', help='data file, csv format', dest='filenamedat')
@@ -14,10 +15,11 @@ parser.add_argument('--labels', help='label file, csv format', dest='filenamelbl
 args = parser.parse_args()
 
 #parameters;
-k=15;
+k=10;
 m=4;
 l=0.1;
 s=1;
+c=100;
 
 #process data
 import csv
@@ -31,7 +33,7 @@ reader = csv.reader(raw_labels, delimiter=',', quoting=csv.QUOTE_NONE)
 x = list(reader)
 data = np.array(x).astype('int')
 label = data - 1
-imatT = sklearn.preprocessing.scale(matT,axis=0, with_mean=True, with_std=True)
+matT = sklearn.preprocessing.scale(matT,axis=0, with_mean=True, with_std=True)
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler(feature_range=(-1, 1))
 scaler.fit(matT)
@@ -41,10 +43,10 @@ matT = scaler.transform(matT)
 #run model
 print("Computing GTM embedding")
 #initialModel: gaussian mixture and swiss roll
-initialModel = uGTM.initiliaze(matT,k,m,s,l)
+initialModel = uGTM.initiliaze(matT,k,m,s)
 #optimizedModel: gaussian mixture and swiss roll
 start = time.time();
-optimizedModel = uGTM.optimize(matT,initialModel,l,100)
+optimizedModel = uGTM.optimize(matT,initialModel,l,c)
 end = time.time(); elapsed = end - start; print("time taken for GTM: ",elapsed);
 #plot and compare with LLE
 mm = optimizedModel.matMeans
