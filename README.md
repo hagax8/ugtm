@@ -29,6 +29,8 @@ python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete
 ```
 This will generate a png and an html map. For GTM, there are two possible representations: the mean position, and the mode (the position where the data point has the highest posterior probability). On the html map, each point represents the mean position, and a grey line shows which node on the 2D map corresponds to the mode.
 
+The function uses default parameters: the size of the map (kxk) is determined automatically, m is set to sqrt(k), l (regularization coefficient) = 0.1 and w (RBF width factor) = 1. To change or optimize, see help.
+
 Instead of --data and --labels, you can load some test data from sklearn using --usetest (s = S in 3D space, swiss = swiss roll in 3D space, iris = iris classification dataset):
 
 ```
