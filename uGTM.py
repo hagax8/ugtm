@@ -745,6 +745,7 @@ def GTR(train,labels,test,k,m,s,l,n_neighbors=1,niter=200,representation="modes"
 	return prediction
 
 def optimizeGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m=0,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234):
+	print('k = sqrt(grid size), m = sqrt(radial basis function grid size), l = regularization, s = RBF width factor')
 	if k==0:
 		k=int(math.sqrt(5*math.sqrt(matT.shape[0])))+2
 	if m==0:
@@ -761,7 +762,7 @@ def optimizeGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 	modelvec=""
 	for s in svec:
 		for l in lvec:
-			modelstring=str(s)+"-"+str(l)
+			modelstring=str(s)+":"+str(l)
 			recallvec=[]
 			for j in range(10):
 				ss = KFold(n_splits=5, shuffle=True, random_state=j)
@@ -781,7 +782,7 @@ def optimizeGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				savemean=mean
 				saveh=h
 				modelvec=modelstring
-			print("s-l",modelstring,"avg. weighted recall",mean,"±",h,sep="\t")
+			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"avg. weighted recall",mean,"±",h,sep="\t")
 	print("########best GTC model##########")
 	print(modelvec,savemean,saveh)	
 	print("")
@@ -789,6 +790,7 @@ def optimizeGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				#print(classreport)
 
 def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m=0,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234):
+	print('k = sqrt(grid size), m = sqrt(radial basis function grid size), l = regularization, s = RBF width factor')
 	if k == 0:
 		k = int(math.sqrt(5*math.sqrt(matT.shape[0])))+2
 	if m == 0:
@@ -807,7 +809,7 @@ def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 	savehr2 = 0.0
 	for s in svec:
 		for l in lvec:
-			modelstring=str(s)+"-"+str(l)
+			modelstring=str(s)+":"+str(l)
 			rmsevec=[]
 			r2vec=[]
 			for j in range(10):
@@ -834,7 +836,7 @@ def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				modelvec = modelstring
 				savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
 				savehr2 = saveser2 * scipy.stats.t._ppf((1+0.95)/2., len(r2vec)-1)
-			print("s-l",modelstring,"rmse",mean,"±",h,"R2",meanr2,"±",hr2,sep="\t")
+			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"rmse",mean,"±",h,"R2",meanr2,"±",hr2,sep="\t")
 	print("########best GTR model##########")
 	print(modelvec,"rmse",savemean,"±",saveh,"r2",savemeanr2,"±",savehr2)
 	print("")

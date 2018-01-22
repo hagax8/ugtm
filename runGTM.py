@@ -1,9 +1,9 @@
-import uGTM;
-import numpy as np;
-import time;
+import uGTM
+import numpy as np
+import time
 import matplotlib
 import matplotlib.pyplot as plt, mpld3
-import sklearn.datasets;
+import sklearn.datasets
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
 from sklearn.metrics import pairwise_distances
@@ -17,23 +17,29 @@ from scipy.spatial.distance import cdist
 import math
 
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description='Generate and assess GTM maps for classification or regression.')
 parser.add_argument('--data', help='data file in csv format without header (must be a similarity matrix if --model kGTM is set, otherwise not)', dest='filenamedat')
 parser.add_argument('--labels', help='label file in csv format without header', dest='filenamelbls')
 parser.add_argument('--ids', help='label file in csv format without header', dest='filenameids')
-parser.add_argument('--labeltype', help='{continuous, discrete}: labels are continuous or discrete', dest='labeltype')
-parser.add_argument('--usetest', help='{s, swiss, iris): use S or swiss roll or iris test data', dest='usetest')
-parser.add_argument('--model',help='{GTM, kGTM, SVM, PCA, t-SNE, compare}: GTM model, kernel GTM model, SVM, PCA or comparison between: GTM, kGTM, LLE and tSNE for simple visualization, GTM and SVM for regression or classification (when --optimize is set)', dest='model') 
+parser.add_argument('--labeltype', help='labels are continuous or discrete', dest='labeltype', choices=['continuous','discrete'])
+parser.add_argument('--usetest', help='use S or swiss roll or iris test data', dest='usetest',choices=['s','swiss','iris'])
+parser.add_argument('--model',help='GTM model, kernel GTM model, SVM, PCA or comparison between: GTM, kGTM, LLE and tSNE for simple visualization, GTM and SVM for regression or classification (when --optimize is set); the optimized parameters for GTM are regularization and rbf_width_factor for given grid_size and rbf_grid_size', dest='model',choices=['GTM','kGTM','SVM','PCA','t-SNE','compare']) 
 parser.add_argument('--output',help='output name', dest='output')
-parser.add_argument('--optimize',help='show best l (regularization coefficient) and w combination (RBF width factor) for classification or regression', action='store_true' )
-parser.add_argument('--pca', help='do PCA preprocessing; if --n_components is not set, will use number of PCs explaining 80% of variance', action='store_true')
+parser.add_argument('--optimize',help='show best l (regularization coefficient) and w combination (RBF width factor) for classification or regression, with default grid size parameter k = sqrt(5*sqrt(Nfeatures))+2) and RBF grid size parameter m = sqrt(k)', action='store_true' )
+parser.add_argument('--pca', help='do PCA preprocessing; if --n_components is not set, will use number of PCs explaining 80%% of variance', action='store_true')
 parser.add_argument('--missing', help='there is missing data (encoded by NA)', action='store_true')
-parser.add_argument('--missing_strategy',help='{mean, median, most_frequent} missing data strategy, missing values encoded by NA; default is median', const='median', type=str, default='median', nargs='?',dest='missing_strategy')
+parser.add_argument('--missing_strategy',help='missing data strategy, missing values encoded by NA; default is median', const='median', type=str, default='median', nargs='?',dest='missing_strategy',choices=['mean','median','most_frequent'])
 parser.add_argument('--n_components',help='set number of components for PCA pre-processing, if --pca flag is present', const=-1, type=int, default=-1, nargs='?',dest='n_components')
+
+parser.add_argument('--regularization',help='set regularization factor, default: 0.1', type=float, dest='regularization')
+parser.add_argument('--rbf_width_factor',help='set RBF (radial basis function) width factor, default: 1.0', type=float, dest='rbf_width_factor')
+parser.add_argument('--grid_size',help='grid size (if k: the map will be kxk, default k = sqrt(5*sqrt(Nfeatures))+2)', type=int, dest='grid_size',default=0)
+parser.add_argument('--rbf_grid_size',help='RBF grid size (if m: the RBF grid will be mxm, default m = sqrt(grid_size))', type=int, dest='rbf_grid_size',default=0)
+
 parser.add_argument('--n_neighbors',help='set number of neighbors for predictive modelling', const=1, type=int, default=1, nargs='?',dest='n_neighbors')
 parser.add_argument('--random_state',help='change random state for map initialization (default is 5)', const=1234, type=int, default=1234, nargs='?',dest='random_state')
-parser.add_argument('--representation',help='{modes, means} Type of representation used for GTM: modes or means',dest='representation', const='modes', type=str, default='modes', nargs='?')
-parser.add_argument('--kernel',help='{euclidean, laplacian, jaccard, cosine,linear} type of kernel for Kernel GTM - default is cosine',dest='kernel', const='euclidean', type=str, default='euclidean', nargs='?')
+parser.add_argument('--representation',help='type of representation used for GTM: modes or means',dest='representation', const='modes', type=str, default='modes', nargs='?',choices=['means','modes'])
+parser.add_argument('--kernel',help='type of kernel for Kernel GTM - default is cosine',dest='kernel', const='euclidean', type=str, default='euclidean', nargs='?',choices=['euclidean','laplacian','jaccard','cosine','linear'])
 #parser.add_argument('--representation',help='{modes, means} Type of representation used for GTM: modes or means',dest='representation')
 args = parser.parse_args()
 print(args)
@@ -55,7 +61,7 @@ elif args.usetest =='iris':
 	iris = sklearn.datasets.load_iris()
 	matT = iris.data
 	label = iris.target
-else:
+elif args.filenamedat and args.filenamelbls:
 	import csv
 	#raw_data = open(args.filenamedat, 'rt')
 	#reader = csv.reader(raw_data, delimiter=',', quoting=csv.QUOTE_NONE)
@@ -67,36 +73,38 @@ else:
 	#reader = csv.reader(raw_labels, delimiter=',', quoting=csv.QUOTE_NONE)
 	#x = list(reader)
 	#data = np.array(x).astype('str')
-	label = genfromtxt(args.filenamelbls, delimiter="\t", dtype=str)
+	if useDiscrete == 1:
+		label = genfromtxt(args.filenamelbls, delimiter="\t", dtype=str)
+	else:
+		label = genfromtxt(args.filenamelbls, delimiter="\t", dtype=float)
 
+savelabelname = np.copy(label)
 if useDiscrete:
-	savelabelname = np.copy(label)
 	uniqClasses, label = np.unique(label, return_inverse=True)
 
 if args.filenameids is not None:
 	ids = genfromtxt(args.filenameids, delimiter="\t", dtype=str)
 
-if len(matT[0,:]) > 100:
+if ((args.filenamedat and args.filenamelbls) or args.usetest) and len(matT[0,:]) > 100:
 	args.pca = True
 
-#minmax scale
 if (args.optimize is True) and useDiscrete==1 and args.model=='GTM':
-        uGTM.optimizeGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+        uGTM.optimizeGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size)
     #	uGTM.optimizeGTC(matT,label,args.pca,args.n_components)
 #	uGTM.optimizeSVCrbf(matT,label)
 #	uGTM.optimizeSVC(matT,label)
 #matT = sklearn.preprocessing.scale(matT,axis=0, with_mean=True, with_std=True)
 elif(args.optimize is True) and useDiscrete==0 and args.model=='GTM':
-	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size)
 #	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca)
 elif(args.optimize is True) and useDiscrete==1 and args.model=='compare':
 	uGTM.optimizeSVCrbf(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
 	uGTM.optimizeSVC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
-	uGTM.optimizeGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+	uGTM.optimizeGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size)
 elif(args.optimize is True) and useDiscrete==0 and args.model=='compare':
 	uGTM.optimizeSVR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
-	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
-else:
+	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size)
+elif args.model and ((args.filenamedat and args.filenamelbls) or args.usetest):
 	matT=uGTM.pcaPreprocess(matT=matT,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
 	k=int(math.sqrt(5*math.sqrt(matT.shape[0])))+2
 	m=int(math.sqrt(k))
@@ -104,6 +112,19 @@ else:
 	s=1
 	c=150
 	maxdim=100
+
+	if args.regularization:
+		l=args.regularization
+
+	if args.rbf_width_factor:
+		s=args.rbf_width_factor
+
+	if args.grid_size:
+		k=args.grid_size
+
+	if args.rbf_grid_size:
+		m=args.rbf_grid_size
+
 	if args.model=='PCA':
 		fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
 		ax.grid(color='white', linestyle='solid')
