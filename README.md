@@ -74,6 +74,6 @@ python runGTM.py -h
 
 ## Author
 
-Héléna A. Gaspar, hgaspar.chemoinfo@gmail.com, https://github.com/hagax8
+Héléna A. Gaspar, hagax8@gmail.com, https://github.com/hagax8
 
 
