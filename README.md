@@ -56,7 +56,7 @@ python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete
 ```
 
 
-### Ex 4: Run 5-fold cross-validation repeated 10 times on GTM classification model to select parameters (for regression: --labeltype continuous), and do the same with SVC (classification) or SVR (regression)):
+### Ex 4: Run 5-fold cross-validation repeated 10 times on GTM classification model to select parameters (for regression: --labeltype continuous), and do the same with SVC (classification) or SVR (regression):
 
 ```
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out \
