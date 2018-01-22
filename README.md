@@ -22,7 +22,7 @@ mpl_toolkits
 
 ## Examples
 
-### Ex 1: Load some labeled test data, make a GTM map for classification (for regression: --labeltype discrete): 
+### Ex 1: Load some labeled test data, make a GTM map for classification (for regression: --labeltype continuous): 
 
 ```
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM
