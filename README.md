@@ -1,6 +1,10 @@
 # uGTM: Generative Topographic Mapping with Python.
 
-This is a python implementation (using sklearn, d3 and numpy, in uGTM.py): I am debugging this right now, so it might not be optimal yet. The kernel version of the algorithm (kGTM) is also implemented. You can also generate regression or classification maps, or evaluate the predictive accuracy (classification) or RMSE/R2 (regression) in repeated cross-validation experiments - all the workflows were implemented in runGTM.py, which uses the uGTM.py core functions.
+Generative Topographic Maps (GTMs) are probabilistic Kohonen maps. They are used as dimensionality reduction algorithms (as t-SNE, LLE, etc).
+
+This is a python implementation of GTMs, using sklearn, d3 and numpy: I am debugging this right now, so it might not be optimal yet. 
+
+uGTM.py contains the core functions and runGTM.py is an easy-to-use program. The kernel version of the algorithm (kGTM) is also implemented. You can also generate regression or classification maps, or evaluate the predictive accuracy (classification) or RMSE/R2 (regression) in repeated cross-validation experiments - all the workflows were implemented in runGTM.py, which uses the uGTM.py core functions.
 
 GTM is a dimensionality reduction algorithm created by Bishop et al. (https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf)
 
@@ -24,6 +28,16 @@ mpl_toolkits
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM
 ```
 This will generate a png and an html map. For GTM, there are two possible representations: the mean position, and the mode (the position where the data point has the highest posterior probability). On the html map, each point represents the mean position, and a grey line shows which node on the 2D map corresponds to the mode.
+
+Instead of --data and --labels, you can load some test data from sklearn using --usetest (s = S in 3D space, swiss = swiss roll in 3D space, iris = iris classification dataset):
+
+```
+python runGTM.py  --usetest s --labeltype continuous --output out --model compare
+```
+
+```
+python runGTM.py  --usetest iris --labeltype discrete --output out --model GTM
+```
 
 (you can also add ids with the --ids option to visualize data point ids on your html map, or generate a t-SNE map instead with --model t-SNE or kernel GTM with --model kGTM)
 
