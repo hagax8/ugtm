@@ -1,4 +1,4 @@
-# uGTM: Generative Topographic Mapping with Python.
+# uGTM v1.0 beta: Generative Topographic Mapping with Python.
 
 Generative Topographic Maps (GTMs) are probabilistic Kohonen maps. GTM is a dimensionality reduction algorithm (as t-SNE, LLE, etc).
 
