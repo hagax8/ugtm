@@ -44,20 +44,23 @@ python runGTM.py  --usetest iris --labeltype discrete --output out --model GTM
 ### Ex 2: With PCA pre-processing (usually better if less than 100 principal components, because of floating point precision limit) and missing data:
 
 ```
-python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM --pca --n_components 50 --missing --missing_strategy median
+python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM \\
+--pca --n_components  50 --missing --missing_strategy median
 ```
 
 ### Ex 3: Run 5-fold cross-validation repeated 10 times on GTM classification model to select parameters (for regression: --labeltype continuous): 
 
 ```
-python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM --optimize
+python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM \\
+--optimize
 ```
 
 
 ### Ex 4: Run 5-fold cross-validation repeated 10 times on GTM classification model to select parameters (for regression: --labeltype continuous), and do the same with SVC (classification) or SVR (regression)):
 
 ```
-python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM --optimize
+python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out --model GTM \\
+--optimize
 ```
 
 ## Get help
@@ -69,6 +72,6 @@ python runGTM.py -h
 
 ## Author
 
-Héléna A. Gaspar, hgaspar.chemoinfo@gmail.com
+Héléna A. Gaspar, hgaspar.chemoinfo@gmail.com, https://github.com/hagax8
 
 
