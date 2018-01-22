@@ -4,85 +4,134 @@ import time;
 import matplotlib
 import matplotlib.pyplot as plt, mpld3
 import sklearn.datasets;
-from sklearn.cluster import AgglomerativeClustering;
-from sklearn.decomposition import PCA;
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.decomposition import PCA
 from sklearn.metrics import pairwise_distances
-import mpl_toolkits.mplot3d.axes3d as p3;
+from sklearn import manifold
+from sklearn.preprocessing import MinMaxScaler
+from numpy import genfromtxt
+import mpl_toolkits.mplot3d.axes3d as p3
 import argparse
 import scipy
+from scipy.spatial.distance import cdist
 import math
 
-np.random.rand(4)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', help='data file in csv format without header (must be a similarity matrix if --model kGTM is set, otherwise not)', dest='filenamedat')
 parser.add_argument('--labels', help='label file in csv format without header', dest='filenamelbls')
+parser.add_argument('--ids', help='label file in csv format without header', dest='filenameids')
 parser.add_argument('--labeltype', help='{continuous, discrete}: labels are continuous or discrete', dest='labeltype')
 parser.add_argument('--usetest', help='{s, swiss, iris): use S or swiss roll or iris test data', dest='usetest')
-parser.add_argument('--model',help='{GTM, kGTM, compare}: GTM model, kernel GTM model, or comparison between GTM, kGTM, LLE and tSNE', dest='model') 
+parser.add_argument('--model',help='{GTM, kGTM, SVM, PCA, t-SNE, compare}: GTM model, kernel GTM model, SVM, PCA or comparison between: GTM, kGTM, LLE and tSNE for simple visualization, GTM and SVM for regression or classification (when --optimize is set)', dest='model') 
 parser.add_argument('--output',help='output name', dest='output')
-parser.add_argument('--optimize',help='show best l (regularization coefficient) and w combination (RBF width factor) for classification or regression',dest='optimize', action='store_true')
+parser.add_argument('--optimize',help='show best l (regularization coefficient) and w combination (RBF width factor) for classification or regression', action='store_true' )
+parser.add_argument('--pca', help='do PCA preprocessing; if --n_components is not set, will use number of PCs explaining 80% of variance', action='store_true')
+parser.add_argument('--missing', help='there is missing data (encoded by NA)', action='store_true')
+parser.add_argument('--missing_strategy',help='{mean, median, most_frequent} missing data strategy, missing values encoded by NA; default is median', const='median', type=str, default='median', nargs='?',dest='missing_strategy')
+parser.add_argument('--n_components',help='set number of components for PCA pre-processing, if --pca flag is present', const=-1, type=int, default=-1, nargs='?',dest='n_components')
+parser.add_argument('--n_neighbors',help='set number of neighbors for predictive modelling', const=1, type=int, default=1, nargs='?',dest='n_neighbors')
+parser.add_argument('--random_state',help='change random state for map initialization (default is 5)', const=1234, type=int, default=1234, nargs='?',dest='random_state')
+parser.add_argument('--representation',help='{modes, means} Type of representation used for GTM: modes or means',dest='representation', const='modes', type=str, default='modes', nargs='?')
+parser.add_argument('--kernel',help='{euclidean, laplacian, jaccard, cosine,linear} type of kernel for Kernel GTM - default is cosine',dest='kernel', const='euclidean', type=str, default='euclidean', nargs='?')
+#parser.add_argument('--representation',help='{modes, means} Type of representation used for GTM: modes or means',dest='representation')
 args = parser.parse_args()
+print(args)
 
 
+if args.model == 'PCA':
+	args.pca = True
+	args.n_components = 2
 
 useDiscrete = 0
+doOptim = False
 if args.labeltype == "discrete":
 	useDiscrete = 1
 if args.usetest == 's':
-	matT,label = sklearn.datasets.samples_generator.make_s_curve(500, random_state=0)
+	matT,label = sklearn.datasets.samples_generator.make_s_curve(500, random_state=args.random_state)
 elif args.usetest == 'swiss':
-	matT,label = sklearn.datasets.make_swiss_roll(n_samples=1000,random_state=0)
+	matT,label = sklearn.datasets.make_swiss_roll(n_samples=1500,random_state=args.random_state)
 elif args.usetest =='iris':
 	iris = sklearn.datasets.load_iris()
 	matT = iris.data
 	label = iris.target
 else:
 	import csv
-	raw_data = open(args.filenamedat, 'rt')
-	reader = csv.reader(raw_data, delimiter=',', quoting=csv.QUOTE_NONE)
-	x = list(reader)
-	data = np.array(x).astype('float')
-	matT = data
-	raw_labels = open(args.filenamelbls, 'rt')
-	reader = csv.reader(raw_labels, delimiter=',', quoting=csv.QUOTE_NONE)
-	x = list(reader)
-	data = np.array(x).astype('int')
-	label = data[:,0]
+	#raw_data = open(args.filenamedat, 'rt')
+	#reader = csv.reader(raw_data, delimiter=',', quoting=csv.QUOTE_NONE)
+	#x = list(reader)
+	#data = np.array(x).astype('float')
+	#matT = data
+	matT = genfromtxt(args.filenamedat, delimiter=",", dtype=np.float64)
+	#raw_labels = open(args.filenamelbls, 'rt')
+	#reader = csv.reader(raw_labels, delimiter=',', quoting=csv.QUOTE_NONE)
+	#x = list(reader)
+	#data = np.array(x).astype('str')
+	label = genfromtxt(args.filenamelbls, delimiter="\t", dtype=str)
 
+if useDiscrete:
+	savelabelname = np.copy(label)
+	uniqClasses, label = np.unique(label, return_inverse=True)
 
-k=int(math.sqrt(5*math.sqrt(matT.shape[0])))+2
-m=int(math.sqrt(k))
-l=0.1
-s=1
-c=100
-maxdim=200
+if args.filenameids is not None:
+	ids = genfromtxt(args.filenameids, delimiter="\t", dtype=str)
 
+if len(matT[0,:]) > 100:
+	args.pca = True
 
 #minmax scale
-if (args.optimize is not None) and useDiscrete==1 and args.model=='GTM':
-	uGTM.optimizeGTC(matT,label)
+if (args.optimize is True) and useDiscrete==1 and args.model=='GTM':
+        uGTM.optimizeGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+    #	uGTM.optimizeGTC(matT,label,args.pca,args.n_components)
 #	uGTM.optimizeSVCrbf(matT,label)
 #	uGTM.optimizeSVC(matT,label)
 #matT = sklearn.preprocessing.scale(matT,axis=0, with_mean=True, with_std=True)
-
-elif(args.optimize is not None) and useDiscrete==0 and args.model=='GTM':
-	uGTM.optimizeGTR(matT,label)
-elif(args.optimize is not None) and useDiscrete==1 and args.model=='compare':
-	uGTM.optimizeSVCrbf(matT,label)
-	uGTM.optimizeSVC(matT,label)
-	uGTM.optimizeGTC(matT,label)
-elif(args.optimize is not None) and useDiscrete==0 and args.model=='compare':
-	uGTM.optimizeSVR(matT,label)
-	uGTM.optimizeGTR(matT,label)
+elif(args.optimize is True) and useDiscrete==0 and args.model=='GTM':
+	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+#	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca)
+elif(args.optimize is True) and useDiscrete==1 and args.model=='compare':
+	uGTM.optimizeSVCrbf(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+	uGTM.optimizeSVC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+	uGTM.optimizeGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+elif(args.optimize is True) and useDiscrete==0 and args.model=='compare':
+	uGTM.optimizeSVR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+	uGTM.optimizeGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
 else:
-	from sklearn.preprocessing import MinMaxScaler
-	scaler = MinMaxScaler(feature_range=(-1, 1))
-	scaler.fit(matT)
-	matT = scaler.transform(matT)
-
+	matT=uGTM.pcaPreprocess(matT=matT,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state)
+	k=int(math.sqrt(5*math.sqrt(matT.shape[0])))+2
+	m=int(math.sqrt(k))
+	l=0.01
+	s=1
+	c=150
+	maxdim=100
+	if args.model=='PCA':
+		fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
+		ax.grid(color='white', linestyle='solid')
+		ax.set_title("PCA",size=30)
+		labels = ['point {0}'.format(i + 1) for i in range(label.shape[0])]
+		scatter = ax.scatter(matT[:, 0],matT[:, 1], c=label, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
+		if args.filenameids is not None:
+			tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=["%s: label=%s" % t for t in zip(ids,savelabelname)])
+		else:
+			tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=["%s: label=%s" % t for t in zip(labels, savelabelname)])
+		mpld3.plugins.connect(fig, tooltip)
+		mpld3.save_html(fig,args.output+"_pca.html")
+	if args.model=='t-SNE':
+		fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
+		ax.grid(color='white', linestyle='solid')
+		ax.set_title("t-SNE",size=30)
+		labels = ['point {0}'.format(i + 1) for i in range(label.shape[0])]
+		tsne = manifold.TSNE(n_components=2, init='pca', random_state=args.random_state)
+		matT_r = tsne.fit_transform(matT)
+		scatter = ax.scatter(matT_r[:, 0],matT_r[:, 1], c=label, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
+		if args.filenameids is not None:
+			tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=["%s: label=%s" % t for t in zip(ids,savelabelname)])
+		else:
+			tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=["%s: label=%s" % t for t in zip(labels, savelabelname)])
+		mpld3.plugins.connect(fig, tooltip)
+		mpld3.save_html(fig,args.output+"_t-sne.html")
 	if args.model=='GTM':
-		initialModel = uGTM.initialize(matT,k,m,s)
+		initialModel = uGTM.initialize(matT,k,m,s,random_state=args.random_state)
 		start = time.time();
 		optimizedModel = uGTM.optimize(matT,initialModel,l,c)
 		end = time.time(); elapsed = end - start; print("time taken for GTM: ",elapsed);
@@ -114,19 +163,25 @@ else:
 		else:
 			uGTM.plotLandscape(initialModel,optimizedModel,label)	
 		ax.grid(color='white', linestyle='solid')
-		ax.set_title("Map",size=30)
+		ax.set_title("GTM",size=30)
 		labels = ['point {0}'.format(i + 1) for i in range(label.shape[0])]
 		scatter = ax.scatter(means[:, 0],means[:, 1], c=label, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
 		for i in range(label.shape[0]):
 			plt.plot([means[i,0],modes[i,0]],[means[i,1],modes[i,1]],color='grey',linewidth=0.5)
 		#tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=["%s: -logP=%f" % t for t in zip(labels, list(-np.log10(z)))])
-		tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=["%s: label=%s" % t for t in zip(labels, label)])
+		#tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=["%s: label=%s" % t for t in zip(labels, savelabelname)])
+		if args.filenameids is not None:
+			tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=["%s: label=%s" % t for t in zip(ids,savelabelname)]) 
+		else:
+			tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=["%s: label=%s" % t for t in zip(labels, savelabelname)])
 		mpld3.plugins.connect(fig, tooltip)
-		mpld3.show()
+		mpld3.save_html(fig,args.output+"_GTM.html")
+		#mpld3.show()
 	elif args.model=='kGTM':
-		initialModel = uGTM.initializeKernel(matT,k,m,s,maxdim)
+		matK = uGTM.chooseKernel(matT,args.kernel)
+		initialModel = uGTM.initializeKernel(matK,k,m,s,maxdim,random_state=args.random_state)
 		start = time.time();
-		optimizedModel = uGTM.optimizeKernel(matT,initialModel,l,c)
+		optimizedModel = uGTM.optimizeKernel(matK,initialModel,l,c)
 		end = time.time(); elapsed = end - start; print("time taken for GTM: ",elapsed);
 		fig = plt.figure(figsize=(10,10))
 		means=optimizedModel.matMeans
@@ -138,16 +193,24 @@ else:
 		plt.close(fig)
 	elif args.model=='compare': 
 		print("Computing GTM embedding")
-		initialModel = uGTM.initialize(matT,k,m,s)
+		initialModel = uGTM.initialize(matT,k,m,s,random_state=args.random_state)
 		start = time.time();
 		optimizedModel = uGTM.optimize(matT,initialModel,l,c)
 		end = time.time(); elapsed = end - start; print("time taken for GTM: ",elapsed);
 		fig = plt.figure(figsize=(12,10))
-		ax = fig.add_subplot(331, projection='3d')
-		ax.scatter(matT[:, 0],matT[:, 1], matT[:, 2], c=label, cmap=plt.cm.Spectral)
-		ax.set_title("Original data")
+		#ax = fig.add_subplot(331, projection='3d')
+		#ax.scatter(matT[:, 0],matT[:, 1], matT[:, 2], c=label, cmap=plt.cm.Spectral)
+		#ax.set_title("Original data")
+		#plt.axis('tight')
+		#plt.tick_params(axis='both', left='off', top='off', right='off', bottom='off', labelleft='off', labeltop='off', labelright='off', labelbottom='off')
+		ax = fig.add_subplot(331)
+		ax.scatter(matT[:,0], matT[:,1], c=label, cmap=plt.cm.Spectral)
 		plt.axis('tight')
-		plt.tick_params(axis='both', left='off', top='off', right='off', bottom='off', labelleft='off', labeltop='off', labelright='off', labelbottom='off')
+		plt.xticks([]), plt.yticks([])
+		if args.pca:
+			plt.title('PCA')
+		else:
+			plt.title('Original data')
 		ax = fig.add_subplot(334)
 		ax.scatter(optimizedModel.matMeans[:, 0], optimizedModel.matMeans[:, 1], c=label, cmap=plt.cm.Spectral)
 		plt.axis('tight')
@@ -158,10 +221,9 @@ else:
 			uGTM.plotClassMap(initialModel,optimizedModel,label)
 		else:
 			uGTM.plotLandscape(initialModel,optimizedModel,label)
-		matK = sklearn.metrics.pairwise.laplacian_kernel(matT)
-		matK
-		print("Computing kGTM embedding")
-		initialModel = uGTM.initializeKernel(matK,k,m,s,maxdim)
+		matK = uGTM.chooseKernel(matT,'laplacian') 
+		print("Computing kGTM embedding (laplacian)")
+		initialModel = uGTM.initializeKernel(matK,k,m,s,maxdim,random_state=args.random_state)
 		print("The estimated feature space dimension is: ", initialModel.nDimensions)
 		start = time.time();
 		optimizedModel = uGTM.optimizeKernel(matK,initialModel,l,c)
@@ -177,9 +239,10 @@ else:
 			uGTM.plotClassMap(initialModel,optimizedModel,label)
 		else:
 			uGTM.plotLandscape(initialModel,optimizedModel,label)
-		matK = np.divide(1,(1+pairwise_distances(matT, metric="euclidean")))
-		print("Computing kGTM embedding")
-		initialModel = uGTM.initializeKernel(matK,k,m,s,maxdim)
+		#matK = np.divide(1,(1+pairwise_distances(matT, metric="euclidean")))
+		matK = uGTM.chooseKernel(matT,'euclidean')
+		print("Computing kGTM embedding (euclidean)")
+		initialModel = uGTM.initializeKernel(matK,k,m,s,maxdim,random_state=args.random_state)
 		print("The estimated feature space dimension is: ", initialModel.nDimensions)
 		start = time.time();
 		optimizedModel = uGTM.optimizeKernel(matK,initialModel,l,c)
@@ -195,7 +258,6 @@ else:
 			uGTM.plotClassMap(initialModel,optimizedModel,label)
 		else:
 			uGTM.plotLandscape(initialModel,optimizedModel,label)
-		from sklearn import manifold
 		print("Computing LLE embedding")
 		start = time.time(); 
 		matT_r, err = manifold.locally_linear_embedding(matT, n_neighbors=12,n_components=2)
@@ -208,7 +270,7 @@ else:
 		plt.title('LLE')
 		print("Computing t-SNE: embedding")
 		start = time.time();
-		tsne = manifold.TSNE(n_components=2, init='pca', random_state=0)
+		tsne = manifold.TSNE(n_components=2, init='pca', random_state=args.random_state)
 		matT_r = tsne.fit_transform(matT)
 		end = time.time(); elapsed = end - start; print("time taken for TSNE: ",elapsed);
 		print("Done. Reconstruction error: %g" % err)
