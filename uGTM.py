@@ -771,7 +771,7 @@ def optimizeGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				for train_index, test_index in ss.split(matT):
 					train=np.copy(matT[train_index])
 					test=np.copy(matT[test_index])
-					prediction=GTC(train,labels[train_index],test,k,m,s,l,n_neighbors,niter,representation,doPCA=doPCA,n_components=n_components,random_state=random_state)
+					prediction=GTC(train=train,labels=labels[train_index],test=test,k=k,m=m,s=s,l=l,n_neighbors=n_neighbors,niter=niter,representation=representation,doPCA=doPCA,n_components=n_components,random_state=random_state,missing=missing,missing_strategy=missing_strategy)
 					y_true=np.append(y_true,labels[test_index])
 					y_pred=np.append(y_pred,prediction)
 				recall=recall_score(y_true, y_pred, average='weighted') 
@@ -819,7 +819,7 @@ def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				for train_index, test_index in ss.split(matT):
 					train = np.copy(matT[train_index])
 					test = np.copy(matT[test_index])
-					prediction = GTR(train,labels[train_index],test,k,m,s,l,n_neighbors,niter,representation,doPCA,n_components,random_state=random_state)
+					prediction = GTR(train=train,labels=labels[train_index],test=test,k=k,m=m,s=s,l=l,n_neighbors=n_neighbors,niter=niter,representation=representation,doPCA=doPCA,n_components=n_components,random_state=random_state,missing=missing,missing_strategy=missing_strategy)
 					y_pred = np.append(y_pred,prediction)
 					y_true = np.append(y_true,labels[test_index])
 				rmse = math.sqrt(mean_squared_error(y_true, y_pred))
@@ -850,8 +850,8 @@ def pcaPreprocess(matT,doPCA=False,n_components=-1,missing=False,missing_strateg
 		matT = imp.fit_transform(matT)
 	sel = VarianceThreshold()
 	matT = sel.fit_transform(matT)
-#	scaler = MinMaxScaler(feature_range=(-1, 1))
-#	matT = scaler.fit_transform(matT)
+	scaler = MinMaxScaler(feature_range=(-1, 1))
+	matT = scaler.fit_transform(matT)
 	if n_components == -1 and doPCA:
 		pca = PCA(random_state=random_state)
 		pca.fit(matT)
@@ -888,12 +888,13 @@ def chooseKernel(matT,kerneltype='euclidean'):
 def processTrainTest(train,test,doPCA,n_components,missing=False,missing_strategy='most_frequent',random_state=1234):
 	if missing:
 		imp = Imputer(strategy=missing_strategy, axis=0)
-		imp.fit(train)
-		train = imp.transform(train)
+		train = imp.fit_transform(train)
 		test = imp.transform(test)
 	scaler = MinMaxScaler(feature_range=(-1, 1))
-	scaler.fit(train)
-	train = scaler.transform(train)
+	sel = VarianceThreshold()
+	train = sel.fit_transform(train)
+	test = sel.transform(test)
+	train = scaler.fit_transform(train)
 	test = scaler.transform(test)
 	if n_components==-1 and doPCA==True:
 		#scaler = preprocessing.StandardScaler().fit(train)
@@ -908,7 +909,6 @@ def processTrainTest(train,test,doPCA,n_components,missing=False,missing_strateg
 	#	train = scaler.transform(train)
 	#	test = scaler.transform(test)
 		pca = PCA(random_state=random_state,n_components=n_components)
-		pca.fit(train)
-		train = pca.transform(train)
+		train = pca.fit_transform(train)
 		test = pca.transform(test)
 	return(ReturnProcessedTrainTest(train,test))
