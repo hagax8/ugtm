@@ -604,7 +604,7 @@ def optimizeSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missing_st
 			savemean=mean
 			saveh=h
 			modelvec=modelstring
-		print("C",modelstring,"avg. weighted recall",mean,"±",h,sep="\t")
+		print("C",modelstring,"avg. weighted recall",mean,"+/-",h,sep="\t")
 	print("########best linear SVM model##########")
 	print(modelvec,savemean,saveh)
 	print("")
@@ -669,9 +669,9 @@ def optimizeSVR(matT,labels,doPCA=False,n_components=-1,missing=False,missing_st
 				modelvec = modelstring
 				savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
 				savehr2 = saveser2 * scipy.stats.t._ppf((1+0.95)/2., len(r2vec)-1)
-			print("C-epsilon",modelstring,"rmse",mean,"±",h,"r2",meanr2,"±",hr2,sep="\t")
+			print("C-epsilon",modelstring,"rmse",mean,"+/-",h,"r2",meanr2,"+/-",hr2,sep="\t")
 	print("########best linear SVM model##########")
-	print(modelvec,"rmse",savemean,"±",saveh,"r2",savemeanr2,"±",savehr2)
+	print(modelvec,"rmse",savemean,"+/-",saveh,"r2",savemeanr2,"+/-",savehr2)
 	print("")
 
 
@@ -725,7 +725,7 @@ def optimizeSVCrbf(matT,labels,doPCA=False,n_components=-1,missing=False,missing
 				savemean = mean
 				saveh = h
 				modelvec = modelstring
-			print("C-gamma",modelstring,"avg. weighted recall",mean,"±",h,sep="\t")
+			print("C-gamma",modelstring,"avg. weighted recall",mean,"+/-",h,sep="\t")
 	print("########best RBF SVM model##########")
 	print(modelvec,savemean,saveh,sep="\t")
 	print("")
@@ -782,7 +782,7 @@ def optimizeGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				savemean=mean
 				saveh=h
 				modelvec=modelstring
-			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"avg. weighted recall",mean,"±",h,sep="\t")
+			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"avg. weighted recall",mean,"+/-",h,sep="\t")
 	print("########best GTC model##########")
 	print(modelvec,savemean,saveh)	
 	print("")
@@ -836,9 +836,9 @@ def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				modelvec = modelstring
 				savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
 				savehr2 = saveser2 * scipy.stats.t._ppf((1+0.95)/2., len(r2vec)-1)
-			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"rmse",mean,"±",h,"R2",meanr2,"±",hr2,sep="\t")
+			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"rmse",mean,"+/-",h,"R2",meanr2,"+/-",hr2,sep="\t")
 	print("########best GTR model##########")
-	print(modelvec,"rmse",savemean,"±",saveh,"r2",savemeanr2,"±",savehr2)
+	print(modelvec,"rmse",savemean,"+/-",saveh,"r2",savemeanr2,"+/-",savehr2)
 	print("")
 
 
