@@ -110,7 +110,7 @@ elif args.model and ((args.filenamedat and args.filenamelbls) or args.usetest):
 	m=int(math.sqrt(k))
 	l=0.01
 	s=1
-	c=150
+	c=1000
 	maxdim=100
 
 	if args.regularization:
@@ -159,7 +159,7 @@ elif args.model and ((args.filenamedat and args.filenamelbls) or args.usetest):
 		fig = plt.figure(figsize=(10,10))
 		means=optimizedModel.matMeans
 		modes=optimizedModel.matModes
-		#prediction=uGTM.predictNN(initialModel,optimizedModel,label,matT,'classification',1,'modes')
+		prediction=uGTM.predictNN(initialModel,optimizedModel,label,matT,'classification',1,'means')
 		ax = fig.add_subplot(221); ax.scatter(means[:, 0], means[:, 1], c=label, cmap=plt.cm.Spectral); plt.axis('tight'); plt.xticks([]), plt.yticks([]); plt.title('Means'); 
 		ax = fig.add_subplot(222); ax.scatter(modes[:, 0], modes[:, 1], c=label, cmap=plt.cm.Spectral); plt.axis('tight'); plt.xticks([]), plt.yticks([]); plt.title('Modes');
 		ax = fig.add_subplot(223);
