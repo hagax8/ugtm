@@ -251,7 +251,7 @@ def optimizeKernel(matT, initialModel, alpha, niter,verbose=True):
 		#end = time.time(); elapsed = end - start; print("l=",elapsed);
 		if verbose == True:
 			#print("Iter ", i, " Err: ", loglike," Beta: ",1/betaInv)
-                        print("Iter ", i, " Err: ", loglike)
+			print("Iter ", i, " Err: ", loglike)
 		if diff <= 0.0001:
 			converged+=1
 		i += 1
@@ -316,15 +316,15 @@ def createDistanceMatrix(matY, matT):
 def createPMatrix(matD,betaInv,nDimensions):
 	matP = np.array([],dtype=np.longdouble) 
 	beta = 1/betaInv
-	if nDimensions > 100:
-		dim = 100
-	else:
-		dim = nDimensions
+#	if nDimensions > 100:
+#		dim = 100
+#	else:
+	dim = nDimensions
 	constante = np.power(((beta)/(2*np.pi)),dim/2)
 	#constante = 1
 	matP = constante*np.exp(-(beta/2)*matD)
 	#matP[matP < np.finfo(float).tiny ] = np.finfo(float).tiny
-        #threshold_indices = matP == 0 
+	#threshold_indices = matP == 0 
 	#matP[threshold_indices] = sys.float_info.min 
 	return(matP)
 
@@ -332,17 +332,14 @@ def createPMatrix(matD,betaInv,nDimensions):
 def createRMatrix(matP):
 	matR = np.array([],dtype=np.longdouble)
 	sums = np.sum(matP,axis=0)
-	ids = np.where(sums == 0)[0]
-	if(len(ids)>0):
-		print("These guys have 0 probability and can't be mapped:")
-		print(ids+1)
+	epsilon=10E-8
 	#nk = len(matP[:,1])
 	#ratio = 1/nk
 	#if len(ids)>0 and ('matR' in locals() or 'matR' in globals()):
 	#saved = np.copy(matR)
 		#nk = len(matR[:,1])
 		#ratio = 1/nk
-	matR = matP / sums[None,:]
+	matR = matP / (sums[None,:]+epsilon)
 	#matR=np.delete(matR,ids,axis=1)
 	#for i in ids:
 	#	matR[:,i] = ratio 
@@ -389,7 +386,7 @@ def optimize(matT, initialModel, alpha, niter, verbose=True):
 		#end = time.time(); elapsed = end - start; print("l=",elapsed);
 		if verbose:
 			#print("Iter ", i, " Err: ", loglike," Beta: ",1/betaInv)
-                        print("Iter ", i, " Err: ", loglike)
+			print("Iter ", i, " Err: ", loglike)
 		i += 1
 	#final iteration to make sure matR fits matD
 	if verbose == 1:
@@ -515,12 +512,32 @@ def plotClassMap(initialModel,optimizedModel,label):
 	#plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
 	uniqClasses, label = np.unique(label, return_inverse=True)
 	plt.scatter(x, y, 175*(10/k), z, cmap=plt.cm.Spectral,marker="s",alpha=0.3)
-	plt.scatter(optimizedModel.matMeans[:,0], optimizedModel.matMeans[:,1], 20, label, cmap=plt.cm.Spectral,edgecolor='black',marker="o")
+	#plt.scatter(optimizedModel.matMeans[label==1,0], optimizedModel.matMeans[label==1,1], 20, label[label==1], cmap=plt.cm.Spectral,edgecolor='black',marker="o")
+	plt.scatter(optimizedModel.matModes[label==1,0], optimizedModel.matModes[label==1,1], 20, c="blue", edgecolor='black',marker="o")
 	plt.title('Class Map')
 	plt.xlim(-1.1, 1.1)
 	plt.ylim(-1.1, 1.1)
 	plt.axis('tight')
 	plt.xticks([]), plt.yticks([])	
+
+
+def plotClassMapNoPoints(initialModel,optimizedModel,label):
+	k = math.sqrt(initialModel.nSamples);
+	x = initialModel.matX[:,0]
+	y = initialModel.matX[:,1]
+	z = classMap(optimizedModel,label).activityModel
+	#ti = np.linspace(-1.0, 1.0, k)
+	#XI, YI = np.meshgrid(ti, ti)
+	#f = interpolate.NearestNDInterpolator(initialModel.matX,z)
+	#ZI=f(XI,YI)
+	#plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
+	uniqClasses, label = np.unique(label, return_inverse=True)
+	plt.scatter(x, y, 175*(10/k), z, cmap=plt.cm.Spectral,marker="s",alpha=0.3)
+	plt.title('Class Map')
+	plt.xlim(-1.1, 1.1)
+	plt.ylim(-1.1, 1.1)
+	plt.axis('tight')
+	plt.xticks([]), plt.yticks([])
 
 def projection(initialModel,optimizedModel,newT):
 	matD = createDistanceMatrix(optimizedModel.matY, newT)
@@ -843,8 +860,8 @@ def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 
 
 def pcaPreprocess(matT,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234):
-	if(n_components>100):
-		n_components=100
+#	if(n_components>100):
+#		n_components=100
 	if missing:
 		imp = Imputer(strategy=missing_strategy, axis=0)
 		matT = imp.fit_transform(matT)
@@ -857,8 +874,8 @@ def pcaPreprocess(matT,doPCA=False,n_components=-1,missing=False,missing_strateg
 		pca.fit(matT)
 		n_components=np.searchsorted(pca.explained_variance_ratio_.cumsum(), 0.8)+1
 		print("Number of components explaining 80%% of the variance = %s\n" % n_components)
-	if(n_components>100):   
-		n_components=100
+#	if(n_components>100):
+#		n_components=100
 	if doPCA:
 #		scaler = preprocessing.StandardScaler()
 #		matT = scaler.fit_transform(matT)
