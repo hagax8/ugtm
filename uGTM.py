@@ -513,7 +513,7 @@ def plotClassMap(initialModel,optimizedModel,label):
 	uniqClasses, label = np.unique(label, return_inverse=True)
 	plt.scatter(x, y, 175*(10/k), z, cmap=plt.cm.Spectral,marker="s",alpha=0.3)
 	#plt.scatter(optimizedModel.matMeans[label==1,0], optimizedModel.matMeans[label==1,1], 20, label[label==1], cmap=plt.cm.Spectral,edgecolor='black',marker="o")
-	plt.scatter(optimizedModel.matModes[label==1,0], optimizedModel.matModes[label==1,1], 20, c="blue", edgecolor='black',marker="o")
+	plt.scatter(optimizedModel.matModes[:,0], optimizedModel.matModes[:,1], 20, c="blue", edgecolor='black',marker="o")
 	plt.title('Class Map')
 	plt.xlim(-1.1, 1.1)
 	plt.ylim(-1.1, 1.1)
