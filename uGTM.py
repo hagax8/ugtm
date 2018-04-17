@@ -19,14 +19,13 @@ from sklearn.svm import SVC
 from sklearn.svm import SVR
 from sklearn.preprocessing import Imputer
 from sklearn.feature_selection import VarianceThreshold
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import time
 import random
 from scipy.interpolate import Rbf
 from scipy import interpolate
-import matplotlib
-matplotlib.use('agg')
-import matplotlib.pyplot as plt
 from matplotlib import cm
 import scipy.stats as st
 from sklearn.feature_selection import VarianceThreshold
@@ -623,7 +622,7 @@ def optimizeSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missing_st
 			savemean=mean
 			saveh=h
 			modelvec=modelstring
-		print("C",modelstring,"avg. weighted recall",mean,"+/-",h,sep="\t")
+		print("C\t",modelstring,"\tavg. weighted recall\t",mean,"\t+/-\t",h)
 	print("########best linear SVM model##########")
 	print(modelvec,savemean,saveh)
 	print("")
@@ -688,7 +687,7 @@ def optimizeSVR(matT,labels,doPCA=False,n_components=-1,missing=False,missing_st
 				modelvec = modelstring
 				savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
 				savehr2 = saveser2 * scipy.stats.t._ppf((1+0.95)/2., len(r2vec)-1)
-			print("C-epsilon",modelstring,"rmse",mean,"+/-",h,"r2",meanr2,"+/-",hr2,sep="\t")
+			print("C-epsilon\t",modelstring,"\trmse\t",mean,"\t+/-\t",h,"\tr2\t",meanr2,"\t+/-\t",hr2)
 	print("########best linear SVM model##########")
 	print(modelvec,"rmse",savemean,"+/-",saveh,"r2",savemeanr2,"+/-",savehr2)
 	print("")
@@ -744,9 +743,9 @@ def optimizeSVCrbf(matT,labels,doPCA=False,n_components=-1,missing=False,missing
 				savemean = mean
 				saveh = h
 				modelvec = modelstring
-			print("C-gamma",modelstring,"avg. weighted recall",mean,"+/-",h,sep="\t")
+			print("C-gamma\t",modelstring,"\tavg. weighted recall\t",mean,"\t+/-\t",h)
 	print("########best RBF SVM model##########")
-	print(modelvec,savemean,saveh,sep="\t")
+	print(modelvec,"\t",savemean,"\t",saveh)
 	print("")
 
 def GTC(train,labels,test,k,m,s,l,n_neighbors=1,niter=200,representation="modes",doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234):
@@ -801,7 +800,7 @@ def optimizeGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				savemean=mean
 				saveh=h
 				modelvec=modelstring
-			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"avg. weighted recall",mean,"+/-",h,sep="\t")
+			print("k:m:s:l\t",str(k)+':'+str(m)+':'+modelstring,"\tavg. weighted recall\t",mean,"\t+/-\t",h)
 	print("########best GTC model##########")
 	print(modelvec,savemean,saveh)	
 	print("")
@@ -855,7 +854,7 @@ def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 				modelvec = modelstring
 				savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
 				savehr2 = saveser2 * scipy.stats.t._ppf((1+0.95)/2., len(r2vec)-1)
-			print("k:m:s:l",str(k)+':'+str(m)+':'+modelstring,"rmse",mean,"+/-",h,"R2",meanr2,"+/-",hr2,sep="\t")
+			print("k:m:s:l\t",str(k)+':'+str(m)+':'+modelstring,"\trmse\t",mean,"\t+/-\t",h,"\tR2\t",meanr2,"\t+/-\t",hr2)
 	print("########best GTR model##########")
 	print(modelvec,"rmse",savemean,"+/-",saveh,"r2",savemeanr2,"+/-",savehr2)
 	print("")
