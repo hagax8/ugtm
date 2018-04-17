@@ -24,6 +24,8 @@ import time
 import random
 from scipy.interpolate import Rbf
 from scipy import interpolate
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import scipy.stats as st
