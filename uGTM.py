@@ -266,8 +266,9 @@ def optimizeKernel(matT, initialModel, alpha, niter,verbose=True):
 
 
 def landscape(optimizedModel,activity):
-	sums = np.sum(optimizedModel.matR,axis=0)
-	landscape = np.dot(activity,optimizedModel.matR) / sums[None,:]
+	epsilon=10e-8
+	sums = np.sum(optimizedModel.matR+epsilon,axis=0)
+	landscape = np.dot(activity,optimizedModel.matR+epsilon) / sums[None,:]
 	return np.asarray(landscape)[0,:]
 
 def classMap(optimizedModel,activity):
@@ -313,39 +314,33 @@ def createDistanceMatrix(matY, matT):
 	Result = scipy.spatial.distance.cdist(matY.T,matT,metric='sqeuclidean')	
 	return(Result)
 
+def exp_normalize(x):
+    y = np.array([],dtype=np.longdouble)
+    y = x - np.expand_dims(np.max(x, axis = 0), 0)
+    y = np.exp(y)
+    #y = y/(np.sum(y,axis=0)[None,:])
+    return(y)
 
 def createPMatrix(matD,betaInv,nDimensions):
 	matP = np.array([],dtype=np.longdouble) 
 	beta = 1/betaInv
-#	if nDimensions > 100:
-#		dim = 100
-#	else:
 	dim = nDimensions
-	constante = np.power(((beta)/(2*np.pi)),dim/2)
-	#constante = 1
-	matP = constante*np.exp(-(beta/2)*matD)
-	#matP[matP < np.finfo(float).tiny ] = np.finfo(float).tiny
-	#threshold_indices = matP == 0 
-	#matP[threshold_indices] = sys.float_info.min 
+	#constante = np.power(((beta)/(2*np.pi)),dim/2)
+	constante = 1
+	#def exp_normalize(x):
+	#    y = x - np.expand_dims(np.max(x, axis = 0), 0)
+	#    return np.exp(y)
+	#matP = exp_normalize(np.log(constante)-(beta/2)*matD)
+	#matP = exp_normalize(-(beta/2)*matD)
+	matP = exp_normalize(-(beta/2)*matD)
 	return(matP)
 
 
 def createRMatrix(matP):
 	matR = np.array([],dtype=np.longdouble)
 	sums = np.sum(matP,axis=0)
-	epsilon=10E-8
-	#nk = len(matP[:,1])
-	#ratio = 1/nk
-	#if len(ids)>0 and ('matR' in locals() or 'matR' in globals()):
-	#saved = np.copy(matR)
-		#nk = len(matR[:,1])
-		#ratio = 1/nk
-	matR = matP / (sums[None,:]+epsilon)
-	#matR=np.delete(matR,ids,axis=1)
-	#for i in ids:
-	#	matR[:,i] = ratio 
+	matR = (matP) / (sums[None,:])
 	return(matR)
-	#return(ReturnExtendedR(matR,ids))
 
 def optimize(matT, initialModel, alpha, niter, verbose=True):
 	matD = createDistanceMatrix(initialModel.matY, matT)
@@ -360,9 +355,6 @@ def optimize(matT, initialModel, alpha, niter, verbose=True):
 		matP = createPMatrix(matD,betaInv,initialModel.nDimensions)
 		#end = time.time(); elapsed = end - start; print("P=",elapsed);start = time.time();
 		matR=createRMatrix(matP)
-	#	matR = obj.matR
-	#	ids = obj.ids
-#		matT=np.delete(matT,ids,axis=0)
 		#end = time.time(); elapsed = end - start; print("R=",elapsed);start = time.time();
 		#maximization
 		matG = createGMatrix(matR)
@@ -445,10 +437,13 @@ def computelogLikelihood(matP,betaInv,nDimensions):
 	nMolecules = matP.shape[1]
 	Ptwb = 0.0
 	LogLikelihood = 0.0
-	prior = 1/nSamples
-	LogLikelihood = np.sum(np.log(np.maximum(np.sum(matP,axis=0)*prior,np.finfo(float).tiny)))
-	#LogLikelihood = np.sum(np.log(np.sum(matP,axis=0)*prior))
-	#LogLikelihood = np.sum(np.log(np.sum(matP,axis=0)*prior))
+	prior = 1.0/nSamples
+	placeholder=50
+	constante=np.longdouble(np.power(((1/betaInv)/(2*np.pi)),np.minimum(nDimensions/2,placeholder)))
+	#constante=1
+	#print(constante,";",betaInv,";",np.finfo(np.longdouble).tiny)
+	LogLikelihood = np.sum(np.log(np.maximum(np.sum(constante*matP,axis=0)*prior,np.finfo(np.longdouble).tiny)))
+	#LogLikelihood = np.sum(np.log(np.sum(matP*constante,axis=0)*prior))
 	LogLikelihood /= nMolecules
 	return(-LogLikelihood)
 
@@ -492,7 +487,7 @@ def plotLandscape(initialModel,optimizedModel,label):
 	f = interpolate.NearestNDInterpolator(initialModel.matX,z)
 	ZI=f(XI,YI)
 	plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
-	plt.scatter(x, y, 175*(10/k), z, cmap=plt.cm.Spectral,marker="s")
+	plt.scatter(x, y, 50*(10/k), z, cmap=plt.cm.Spectral,marker="s")
 	plt.scatter(optimizedModel.matMeans[:,0], optimizedModel.matMeans[:,1], 20, label, cmap=plt.cm.Spectral,edgecolor='black',marker="o")
 	plt.title('Landscape')
 	plt.xlim(-1.1, 1.1)
@@ -861,28 +856,29 @@ def optimizeGTR(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m
 
 
 def pcaPreprocess(matT,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234):
-#	if(n_components>100):
-#		n_components=100
 	if missing:
 		imp = Imputer(strategy=missing_strategy, axis=0)
 		matT = imp.fit_transform(matT)
-	sel = VarianceThreshold()
-	matT = sel.fit_transform(matT)
-	scaler = MinMaxScaler(feature_range=(-1, 1))
+	#sel = VarianceThreshold()
+	#matT = sel.fit_transform(matT)
+	#scaler = MinMaxScaler(feature_range=(-1, 1))
+	scaler =preprocessing.StandardScaler()
 	matT = scaler.fit_transform(matT)
-	if n_components == -1 and doPCA:
-		pca = PCA(random_state=random_state)
-		pca.fit(matT)
-		n_components=np.searchsorted(pca.explained_variance_ratio_.cumsum(), 0.8)+1
-		print("Number of components explaining 80%% of the variance = %s\n" % n_components)
-#	if(n_components>100):
-#		n_components=100
+	if n_components == -1:
+	    n_components = 0.80
+	#if n_components == -1 and doPCA:
+#		pca = PCA(random_state=random_state)
+#		pca.fit(matT)
+		#n_components=np.searchsorted(pca.explained_variance_ratio_.cumsum(), 0.8)+1
+#		n_components = (np.abs(pca.explained_variance_ratio_.cumsum() - 0.8)).argmin()+1
+#		print("Number of components explaining 80%% of the variance = %s\n" % n_components)
 	if doPCA:
 #		scaler = preprocessing.StandardScaler()
 #		matT = scaler.fit_transform(matT)
 		pca = PCA(random_state=random_state,n_components=n_components)
 #PCA on covariance matrix 
 		matT = pca.fit_transform(matT)
+		n_components=pca.n_components_
 		print("Using %s components explaining %s%% of the variance\n" % (n_components,pca.explained_variance_ratio_.cumsum()[n_components-1]*100))
 	return(matT)
 
@@ -908,20 +904,23 @@ def processTrainTest(train,test,doPCA,n_components,missing=False,missing_strateg
 		imp = Imputer(strategy=missing_strategy, axis=0)
 		train = imp.fit_transform(train)
 		test = imp.transform(test)
-	scaler = MinMaxScaler(feature_range=(-1, 1))
-	sel = VarianceThreshold()
-	train = sel.fit_transform(train)
-	test = sel.transform(test)
+	#scaler = MinMaxScaler(feature_range=(-1, 1))
+	scaler = preprocessing.StandardScaler()
+	#sel = VarianceThreshold()
+	#train = sel.fit_transform(train)
+	#test = sel.transform(test)
 	train = scaler.fit_transform(train)
 	test = scaler.transform(test)
-	if n_components==-1 and doPCA==True:
-		#scaler = preprocessing.StandardScaler().fit(train)
+	if(n_components==-1):
+	    n_components=0.80
+	#if n_components==-1 and doPCA==True:
+		#scaler = preprocessing.StandardScaler()
 		#scaler.fit(train)
 		#td = scaler.transform(train)
-		pca = PCA(random_state=random_state)
-		pca.fit(train)
-		n_components = np.searchsorted(pca.explained_variance_ratio.cumsum(),0.8)+1
-		print("Number of components explaining 80%% of the variance in training set = %s\n" % n_components)
+#		pca = PCA(random_state=random_state)
+#		pca.fit(train)
+#		n_components = np.searchsorted(pca.explained_variance_ratio.cumsum(),0.8)+1
+#		print("Number of components explaining 80%% of the variance in training set = %s\n" % n_components)
 	if doPCA:
 	#	scaler = preprocessing.StandardScaler().fit(train)
 	#	train = scaler.transform(train)

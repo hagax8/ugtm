@@ -29,7 +29,7 @@ parser.add_argument('--optimize',help='show best l (regularization coefficient) 
 parser.add_argument('--pca', help='do PCA preprocessing; if --n_components is not set, will use number of PCs explaining 80%% of variance', action='store_true')
 parser.add_argument('--missing', help='there is missing data (encoded by NA)', action='store_true')
 parser.add_argument('--missing_strategy',help='missing data strategy, missing values encoded by NA; default is median', const='median', type=str, default='median', nargs='?',dest='missing_strategy',choices=['mean','median','most_frequent'])
-parser.add_argument('--n_components',help='set number of components for PCA pre-processing, if --pca flag is present', const=-1, type=int, default=-1, nargs='?',dest='n_components')
+parser.add_argument('--n_components',help='set number of components for PCA pre-processing, if --pca flag is present', const=-1, type=float, default=-1, nargs='?',dest='n_components')
 
 parser.add_argument('--regularization',help='set regularization factor, default: 0.1', type=float, dest='regularization')
 parser.add_argument('--rbf_width_factor',help='set RBF (radial basis function) width factor, default: 1.0', type=float, dest='rbf_width_factor')
@@ -56,7 +56,7 @@ if args.labeltype == "discrete":
 if args.usetest == 's':
 	matT,label = sklearn.datasets.samples_generator.make_s_curve(500, random_state=args.random_state)
 elif args.usetest == 'swiss':
-	matT,label = sklearn.datasets.make_swiss_roll(n_samples=1500,random_state=args.random_state)
+	matT,label = sklearn.datasets.make_swiss_roll(n_samples=2000,random_state=args.random_state)
 elif args.usetest =='iris':
 	iris = sklearn.datasets.load_iris()
 	matT = iris.data
