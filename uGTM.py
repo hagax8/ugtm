@@ -1372,10 +1372,10 @@ def plotMultiPanelGTM(initialModel,optimizedModel,label,output,useDiscrete):
 	ax = fig.add_subplot(221); 
 	ax.scatter(means[:, 0], means[:, 1], c=label, cmap=plt.cm.Spectral); plt.axis('tight'); plt.xticks([]), plt.yticks([]); plt.title('Means');
 	#plot2: GTM modes visualization
-	ax = fig.add_subplot(222);
-	ax.scatter(modes[:, 0], modes[:, 1], c=label, cmap=plt.cm.Spectral); plt.axis('tight'); plt.xticks([]), plt.yticks([]); plt.title('Modes');
+	ax2 = fig.add_subplot(222);
+	ax2.scatter(modes[:, 0], modes[:, 1], c=label, cmap=plt.cm.Spectral); plt.axis('tight'); plt.xticks([]), plt.yticks([]); plt.title('Modes');
 	#plot3: GTM landscape visualization
-	ax = fig.add_subplot(223);
+	ax3 = fig.add_subplot(223);
 	#if it's label data, the landscape is a class map; otherwise, it is a continuous landscape
 	if useDiscrete:
 		plotClassMap(initialModel,optimizedModel,label)
@@ -1384,10 +1384,9 @@ def plotMultiPanelGTM(initialModel,optimizedModel,label,output,useDiscrete):
 	#add mapping from mean positions to modes (GTM nodes where the data points have max probability)
 	for i in range(label.shape[0]):
 		plt.plot([means[i,0],modes[i,0]],[means[i,1],modes[i,1]],color='grey',linewidth=0.5)
-	ax = fig.add_subplot(224);
 		
 	#plot4: GTM landscape visualization without means/modes mappings
-	ax = fig.add_subplot(224);
+	ax4 = fig.add_subplot(224);
 	if useDiscrete:
 		plotClassMapNoPoints(initialModel,optimizedModel,label)
 	else:
