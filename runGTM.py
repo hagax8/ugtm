@@ -59,7 +59,7 @@ def plotHTML_any(label_numeric,label_names,coordinates,ids,plot_ids,modeltype="p
 	ax.grid(color='white', linestyle='solid')
 	ax.set_title(modeltype,size=30)
 	labels = ['point {0}'.format(i + 1) for i in range(label_names.shape[0])]
-	scatter = ax.scatter(coordinates[:, 0],coordinates[:, 1], c=label_numeric, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
+	scatter = ax.scatter(coordinates[:, 0].tolist(),coordinates[:, 1].tolist(), c=label_numeric, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
 	if plot_ids:
 		tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=["%s: label=%s" % t for t in zip(ids,label_names)])
 	else:
@@ -79,10 +79,10 @@ def plotHTML_GTM(label_numeric,label_names,initialModel,optimizedModel,ids,plot_
 	ax.grid(color='white', linestyle='solid')
 	ax.set_title(modeltype,size=30)
 	labels = ['point {0}'.format(i + 1) for i in range(label_names.shape[0])]
-	scatter = ax.scatter(means[:, 0],means[:, 1], c=label_numeric, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
+	scatter = ax.scatter(means[:, 0].tolist(),means[:, 1].tolist(), c=label_numeric, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
 	if plot_arrows:
 		for i in range(label_names.shape[0]):
-			plt.plot([means[i,0],modes[i,0]],[means[i,1],modes[i,1]],color='grey',linewidth=0.5)
+			plt.plot([means[i,0].tolist(),modes[i,0].tolist()],[means[i,1].tolist(),modes[i,1].tolist()],color='grey',linewidth=0.5)
 	if plot_ids:
 		tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=["%s: label=%s" % t for t in zip(ids,label_names)])
 	else:
@@ -102,10 +102,10 @@ def plotHTML_GTM_withprojection(label_numeric,label_names,initialModel,optimized
 	ax.grid(color='white', linestyle='solid')
 	ax.set_title(modeltype,size=30)
 	labels = ['point {0}'.format(i + 1) for i in range(means.shape[0])]
-	scatter = ax.scatter(means[:, 0],means[:, 1], c="black",s=20,alpha=1,edgecolor='black')
+	scatter = ax.scatter(means[:, 0].tolist(),means[:, 1].tolist(), c="black",s=20,alpha=1,edgecolor='black')
 	if plot_arrows:
 		for i in range(label_names.shape[0]):
-			plt.plot([means[i,0],modes[i,0]],[means[i,1],modes[i,1]],color='grey',linewidth=0.5)
+			plt.plot([means[i,0].tolist(),modes[i,0].tolist()],[means[i,1].tolist(),modes[i,1].tolist()],color='grey',linewidth=0.5)
 	if plot_ids:
 		tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=list(testids))
 	else:
@@ -168,7 +168,6 @@ else:
 	type_of_experiment='visualization'
 
 
-
 #TYPE OF EXPERIMENT: 1: CROSSVALIDATION: CAN BE SVM, GTM, PCA
 ###################################################
 ###################################################
@@ -200,7 +199,6 @@ elif type_of_experiment == 'traintest':
 	uGTM.printClassPredictions(prediction,output=args.output)
 	plotHTML_GTM_withprojection(label_numeric=labelnum,label_names=label,initialModel=prediction['initialModel'],optimizedModel=prediction['optimizedModel'],projections=prediction["indiv_projections"],ids=ids,testids=testids,plot_arrows=True,plot_ids=args.filenameids,plot_test_ids=args.filenametestids,modeltype="GTM_projection",useDiscrete=useDiscrete)
 	exit
-
 
 
 #TYPE OF EXPERIMENT: 3: VISUALIZATION: CAN BE t-SNE, GTM, PCA 
@@ -244,7 +242,7 @@ elif type_of_experiment == 'visualization':
 		exit
 
 	#########if it's for t-SNE visualization
-	if args.model=='t-SNE':
+	elif args.model=='t-SNE':
 		#perform tsne embedding
 		tsne = manifold.TSNE(n_components=2, init='pca', random_state=args.random_state)
 		matT_r = tsne.fit_transform(matT)
@@ -252,7 +250,7 @@ elif type_of_experiment == 'visualization':
 		exit
 
 	#########if it's for GTM visualization
-	if args.model=='GTM':
+	elif args.model=='GTM':
 		#perform GTM embedding
 		initialModel = uGTM.initialize(matT,k,m,s,random_state=args.random_state)
 		start = time.time();
@@ -363,7 +361,7 @@ elif type_of_experiment == 'visualization':
 		plt.close(fig)
 		exit
 	else:
-		print("Sorry. Model not recognized")
+		print("Sorry. Model not recognized.")
 		exit
 else:
 	print("Sorry. Could not guess what you wanted. Remember to define --model and (--data and --labels) or --model and --usetest.")
