@@ -15,6 +15,8 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.model_selection import KFold 
 from sklearn.metrics import classification_report
 from sklearn.metrics import recall_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import f1_score
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 from sklearn.svm import SVC
@@ -30,7 +32,6 @@ from scipy.interpolate import Rbf
 from scipy import interpolate
 from matplotlib import cm
 import scipy.stats as st
-from sklearn.feature_selection import VarianceThreshold
 
 #create manifold
 def createYMatrixInit(matT,matW,matPhiMPlusOne):
@@ -164,10 +165,11 @@ class ReturnProcessedTrainTest(object):
 		self.test = test
 
 class ReturnClassMap(object):
-	def __init__(self, nodeClassP, nodeClassT, activityModel):
+	def __init__(self, nodeClassP, nodeClassT, activityModel, uniqClasses):
 		self.nodeClassP = nodeClassP
 		self.nodeClassT = nodeClassT
 		self.activityModel = activityModel
+		self.uniqClasses = uniqClasses
 
 
 class ReturnInitial(object):
@@ -230,22 +232,14 @@ def optimizeKernel(matT, initialModel, alpha, niter,verbose=True):
 	converged = 0
 	while (i<(niter+1)) and (converged<4):
 		#expectation
-		#start = time.time();
 		matP = createPMatrix(matD,betaInv,initialModel.nDimensions)
-		#end = time.time(); elapsed = end - start; print("P=",elapsed);start = time.time();
 		matR = createRMatrix(matP)
-		#end = time.time(); elapsed = end - start; print("R=",elapsed);start = time.time();
 		#maximization
 		matG = createGMatrix(matR)
-		#end = time.time(); elapsed = end - start; print("G=",elapsed);start = time.time();
 		matW = optimLMatrix(matR, initialModel.matPhiMPlusOne, matG, betaInv, alpha)
-		#end = time.time(); elapsed = end - start; print("W=",elapsed);start = time.time();
 		matY = createYMatrix(matW,initialModel.matPhiMPlusOne)
-		#end = time.time(); elapsed = end - start; print("Y=",elapsed);start = time.time();
 		matD = KERNELcreateDistanceMatrix(matT, matW, initialModel.matPhiMPlusOne)
-		#end = time.time(); elapsed = end - start; print("D=",elapsed);start = time.time();
 		betaInv = optimBetaInv(matR,matD,initialModel.nDimensions)
-		#end = time.time(); elapsed = end - start; print("b=",betaInv,elapsed);start = time.time();
 		#objective function
 		if i == 1:
 			loglike = computelogLikelihood(matP,betaInv,initialModel.nDimensions);
@@ -253,9 +247,7 @@ def optimizeKernel(matT, initialModel, alpha, niter,verbose=True):
 			loglikebefore = loglike
 			loglike = computelogLikelihood(matP,betaInv,initialModel.nDimensions)
 			diff = abs(loglikebefore-loglike)
-		#end = time.time(); elapsed = end - start; print("l=",elapsed);
 		if verbose == True:
-			#print("Iter ", i, " Err: ", loglike," Beta: ",1/betaInv)
 			print("Iter ", i, " Err: ", loglike)
 		if diff <= 0.0001:
 			converged+=1
@@ -287,19 +279,25 @@ def classMap(optimizedModel,activity,prior="equiprobable"):
 	#likelihood
 	nodeClassT = np.zeros([nSamples,nClasses])
 	sumClass = np.zeros([nClasses])
+	summe = np.zeros([nSamples])
 	for i in range(nClasses):
 	    sumClass[i]=(classVector==i).sum()
 	if prior=="estimated":
 	    priors=sumClass/sumClass.sum()
 	elif prior=="equiprobable":
-	    priors=np.zeros([nClasses])+(1/nClasses)
+	    priors=np.zeros([nClasses])+(1.0/nClasses)
 	for i in range(nClasses):
 		for k in range(nSamples):
 			nodeClassT[k,i] = optimizedModel.matR[classVector==i,k].sum()/sumClass[i]
-	nodeClassP = nodeClassT*priors
-	nodeClassP= nodeClassP/(np.sum(nodeClassP,axis=1))[0]
+	for i in range(nClasses):
+		for k in range(nSamples):
+			nodeClassP[k,i]=nodeClassT[k,i]*priors[i]
+			summe[k]+=nodeClassP[k,i]
+	for i in range(nClasses):
+		for k in range(nSamples):
+			nodeClassP[k,i]=nodeClassP[k,i]/summe[k]	
 	nodeClass = np.argmax(nodeClassP, axis=1)
-	return(ReturnClassMap(nodeClassP,nodeClassT,nodeClass))
+	return(ReturnClassMap(nodeClassP,nodeClassT,nodeClass,uniqClasses))
 
 
 def initialize(matT,k,m,s,random_state=1234):
@@ -334,7 +332,6 @@ def exp_normalize(x):
     y = np.array([],dtype=np.longdouble)
     y = x - np.expand_dims(np.max(x, axis = 0), 0)
     y = np.exp(y)
-    #y = y/(np.sum(y,axis=0)[None,:])
     return(y)
 
 def createPMatrix(matD,betaInv,nDimensions):
@@ -343,11 +340,6 @@ def createPMatrix(matD,betaInv,nDimensions):
 	dim = nDimensions
 	#constante = np.power(((beta)/(2*np.pi)),dim/2)
 	constante = 1
-	#def exp_normalize(x):
-	#    y = x - np.expand_dims(np.max(x, axis = 0), 0)
-	#    return np.exp(y)
-	#matP = exp_normalize(np.log(constante)-(beta/2)*matD)
-	#matP = exp_normalize(-(beta/2)*matD)
 	matP = exp_normalize(-(beta/2)*matD)
 	return(matP)
 
@@ -367,22 +359,14 @@ def optimize(matT, initialModel, alpha, niter, verbose=True):
 	converged = 0
 	while i<(niter+1) and (converged<4):	
 		#expectation
-		#start = time.time();
 		matP = createPMatrix(matD,betaInv,initialModel.nDimensions)
-		#end = time.time(); elapsed = end - start; print("P=",elapsed);start = time.time();
 		matR=createRMatrix(matP)
-		#end = time.time(); elapsed = end - start; print("R=",elapsed);start = time.time();
 		#maximization
 		matG = createGMatrix(matR)
-		#end = time.time(); elapsed = end - start; print("G=",elapsed);start = time.time();
 		matW = optimWMatrix(matR, initialModel.matPhiMPlusOne, matG, matT, betaInv, alpha)
-		#end = time.time(); elapsed = end - start; print("W=",elapsed);start = time.time();
 		matY = createYMatrix(matW,initialModel.matPhiMPlusOne)
-		#end = time.time(); elapsed = end - start; print("Y=",elapsed);start = time.time();
 		matD = createDistanceMatrix(matY, matT)
-		#end = time.time(); elapsed = end - start; print("D=",elapsed);start = time.time();
 		betaInv = optimBetaInv(matR,matD,initialModel.nDimensions)
-		#end = time.time(); elapsed = end - start; print("b=",elapsed);start = time.time();
 		#objective function
 		if i == 1:
 			loglike = computelogLikelihood(matP,betaInv,initialModel.nDimensions);
@@ -394,7 +378,6 @@ def optimize(matT, initialModel, alpha, niter, verbose=True):
 			converged += 1
 		else:
 			converged = 0
-		#end = time.time(); elapsed = end - start; print("l=",elapsed);
 		if verbose:
 			#print("Iter ", i, " Err: ", loglike," Beta: ",1/betaInv)
 			print("Iter ", i, " Err: ", loglike)
@@ -458,10 +441,7 @@ def computelogLikelihood(matP,betaInv,nDimensions):
 	prior = 1.0/nSamples
 	placeholder=50
 	constante=np.longdouble(np.power(((1/betaInv)/(2*np.pi)),np.minimum(nDimensions/2,placeholder)))
-	#constante=1
-	#print(constante,";",betaInv,";",np.finfo(np.longdouble).tiny)
 	LogLikelihood = np.sum(np.log(np.maximum(np.sum(constante*matP,axis=0)*prior,np.finfo(np.longdouble).tiny)))
-	#LogLikelihood = np.sum(np.log(np.sum(matP*constante,axis=0)*prior))
 	LogLikelihood /= nMolecules
 	return(-LogLikelihood)
 
@@ -507,6 +487,25 @@ def plotLandscape(initialModel,optimizedModel,label):
 	plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
 	plt.scatter(x, y, 50*(10/k), z, cmap=plt.cm.Spectral,marker="s")
 	plt.scatter(optimizedModel.matMeans[:,0], optimizedModel.matMeans[:,1], 20, label, cmap=plt.cm.Spectral,edgecolor='black',marker="o")
+	plt.title('Landscape')
+	plt.xlim(-1.1, 1.1)
+	plt.ylim(-1.1, 1.1)
+	plt.colorbar()
+	plt.axis('tight')
+	plt.xticks([]), plt.yticks([])
+
+
+def plotLandscapeNoPoints(initialModel,optimizedModel,label):
+	k = math.sqrt(initialModel.nSamples);
+	x = initialModel.matX[:,0]
+	y = initialModel.matX[:,1]
+	z = landscape(optimizedModel,label)
+	ti = np.linspace(-1.0, 1.0, k)
+	XI, YI = np.meshgrid(ti, ti)
+	f = interpolate.NearestNDInterpolator(initialModel.matX,z)
+	ZI=f(XI,YI)
+	plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
+	plt.scatter(x, y, 50*(10/k), z, cmap=plt.cm.Spectral,marker="s")
 	plt.title('Landscape')
 	plt.xlim(-1.1, 1.1)
 	plt.ylim(-1.1, 1.1)
@@ -579,8 +578,6 @@ def predictNN(initialModel,optimizedModel,labels,newT,modeltype,n_neighbors=1,re
 		dist,nnID = fitted.kneighbors(rep,return_distance=True)
 		dist[dist<=0]=np.finfo(float).tiny
 		predicted = np.average(activityModel[nnID],axis=1,weights=1/((dist)**2))
-		#predicted = np.average(activityModel[nnID],axis=1)
-		#print(activityModel[nnID])
 	else:
 		nnID = fitted.kneighbors(rep,return_distance=False)
 		predicted=activityModel[nnID]
@@ -621,11 +618,14 @@ def crossvalidatePCAC(matT,labels,doPCA=False,n_components=-1,missing=False,miss
 	print("Classes: ",uniqClasses)
 	print("nClasses: ",nClasses)
 	print("")
-	print("model\tnumber of neighbors\tavg. weighted recall with CI",end="")
+	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses): 
 		print("\trecall %s" % (uniqClasses[i]), end="")
+	for i in range(nClasses):
+		print("\tprecision %s" % (uniqClasses[i]), end="")
+	for i in range(nClasses):
+		print("\tF1-score %s" % (uniqClasses[i]), end="")
 	print("")
-
 	if n_neighbors <= 0:
 		Kvec = np.arange(start=1,stop=31,step=1,dtype=np.int32)
 	else:
@@ -635,14 +635,24 @@ def crossvalidatePCAC(matT,labels,doPCA=False,n_components=-1,missing=False,miss
 	saveh = 0.0
 	nummodel = 0
 	savemodel = ""
-	recallvec = []
-	recallclassvec = np.array([]) 
-	meanclass=np.zeros(nClasses)
-	seclass=np.zeros(nClasses)
-	hclass=np.zeros(nClasses)
 	for c in Kvec:
 		nummodel += 1
 		modelstring = str(c)
+		recallvec = []
+		precisionvec = []
+		f1vec = []
+		recallclassvec = np.array([])
+		precisionclassvec = np.array([])
+		f1classvec = np.array([])
+		meanclass=np.zeros(nClasses)
+		meanprecisionclass = np.zeros(nClasses)
+		meanf1class = np.zeros(nClasses)
+		seclass=np.zeros(nClasses)
+		seprecisionclass=np.zeros(nClasses)
+		sef1class=np.zeros(nClasses)
+		hclass=np.zeros(nClasses)
+		hprecisionclass=np.zeros(nClasses)
+		hf1class=np.zeros(nClasses)
 		for j in range(10):
 			ss = KFold(n_splits=5, shuffle=True, random_state=j)
 			y_true=[]
@@ -654,25 +664,43 @@ def crossvalidatePCAC(matT,labels,doPCA=False,n_components=-1,missing=False,miss
 				y_pred = np.append(y_pred,predictNNSimple(processed.train,processed.test,labels[train_index],c,"classification"))
 				y_true = np.append(y_true,labels[test_index])
 			recall = recall_score(y_true, y_pred, average='weighted')
+			precision = precision_score(y_true, y_pred, average='weighted')
+			f1 = f1_score(y_true, y_pred, average='weighted')
 			recallvec = np.append(recallvec,recall)
+			precisionvec = np.append(precisionvec,precision)
+			f1vec = np.append(f1vec,f1)
 			recallclass = recall_score(y_true,y_pred,average=None)
+			precisionclass = precision_score(y_true,y_pred,average=None)
+			f1class =  f1_score(y_true,y_pred,average=None)
 			if(j==0):
 				recallclassvec = recallclass
+				precisionclassvec = precisionclass
+				f1classvec = f1class
 			else:
 				recallclassvec = np.vstack([recallclassvec,recallclass])
+				precisionclassvec =  np.vstack([precisionclassvec,precisionclass])
+				f1classvec =  np.vstack([f1classvec,f1class])
 		mean, se = np.mean(recallvec), st.sem(recallvec)
+		meanprecision, seprecision = np.mean(precisionvec), st.sem(precisionvec)
+		meanf1, sef1 = np.mean(f1vec), st.sem(f1vec)
 		h = se * scipy.stats.t._ppf((1+0.95)/2., len(recallvec)-1)
-		if(mean > savemean):
-			savemean=mean
-			saveh=h
+		hprecision = seprecision * scipy.stats.t._ppf((1+0.95)/2., len(precisionvec)-1)
+		hf1 = sef1 * scipy.stats.t._ppf((1+0.95)/2., len(f1vec)-1)
+		if(meanf1 > savemean):
+			savemean=meanf1
+			saveh=hf1
 			modelvec=modelstring
 			savemodel="Model "+str(nummodel)
 		for i in range(0,nClasses):
 			meanclass[i], seclass[i] = np.mean(recallclassvec[:,i]), st.sem(recallclassvec[:,i])
+			meanf1class[i], sef1class[i] = np.mean(f1classvec[:,i]), st.sem(f1classvec[:,i])
+			meanprecisionclass[i], seprecisionclass[i] = np.mean(precisionclassvec[:,i]), st.sem(precisionclassvec[:,i])
 			hclass[i] =  seclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(recallclassvec[:,i])-1)
-		print("Model %s\t%s\t%.2f +/- %.3f" % (nummodel,modelstring, mean, h),end="")
+			hprecisionclass[i] =  seprecisionclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(precisionclassvec[:,i])-1)
+			hf1class[i] =  sef1class[i] * scipy.stats.t._ppf((1+0.95)/2., len(f1classvec[:,i])-1)
+		print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (nummodel,modelstring, mean, h, meanprecision, hprecision, meanf1, hf1),end="")
 		for i in range(nClasses):
-			print("\t%.2f +/- %.3f" % (meanclass[i], hclass[i]),end="")
+			print("\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (meanclass[i], hclass[i], meanprecisionclass[i], hprecisionclass[i], meanf1class[i], hf1class[i]),end="")
 		print('')
 	print('')
 	print("########best nearest neighbors model##########")
@@ -747,11 +775,14 @@ def crossvalidateSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 	print("Classes: ",uniqClasses)
 	print("nClasses: ",nClasses)
 	print("")
-	print("model\tC\tavg. weighted recall with CI",end="")
-	for i in range(nClasses): 
+	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
+	for i in range(nClasses):
 		print("\trecall %s" % (uniqClasses[i]), end="")
-	print("")
-
+	for i in range(nClasses):
+		print("\tprecision %s" % (uniqClasses[i]), end="")
+	for i in range(nClasses):
+		print("\tF1-score %s" % (uniqClasses[i]), end="")
+	print("")		    
 	if C < 0.0:
 		Cvec = np.power(2,np.arange(start=-5,stop=15,step=1,dtype=np.float))
 	else:
@@ -763,12 +794,22 @@ def crossvalidateSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 	savemodel = ""
 	for C in Cvec:
 		modelstring = str(C)
-		recallvec = []
-		recallclassvec = np.array([]) 
-		meanclass=np.zeros(nClasses)
-		seclass=np.zeros(nClasses)
-		hclass=np.zeros(nClasses)
 		nummodel += 1
+		recallvec = []
+		precisionvec = []
+		f1vec = []
+		recallclassvec = np.array([])
+		precisionclassvec = np.array([])
+		f1classvec = np.array([])
+		meanclass=np.zeros(nClasses)
+		meanprecisionclass = np.zeros(nClasses)
+		meanf1class = np.zeros(nClasses)
+		seclass=np.zeros(nClasses)
+		seprecisionclass=np.zeros(nClasses)
+		sef1class=np.zeros(nClasses)
+		hclass=np.zeros(nClasses)
+		hprecisionclass=np.zeros(nClasses)
+		hf1class=np.zeros(nClasses)
 		for j in range(10):
 			ss = KFold(n_splits=5, shuffle=True, random_state=j)
 			y_true=[]
@@ -782,25 +823,43 @@ def crossvalidateSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 				y_pred = np.append(y_pred,clf.predict(processed.test))
 				y_true = np.append(y_true,labels[test_index])
 			recall = recall_score(y_true, y_pred, average='weighted')
+			precision = precision_score(y_true, y_pred, average='weighted')
+			f1 = f1_score(y_true, y_pred, average='weighted')
 			recallvec = np.append(recallvec,recall)
+			precisionvec = np.append(precisionvec,precision)
+			f1vec = np.append(f1vec,f1)
 			recallclass = recall_score(y_true,y_pred,average=None)
+			precisionclass = precision_score(y_true,y_pred,average=None)
+			f1class =  f1_score(y_true,y_pred,average=None)
 			if(j==0):
 				recallclassvec = recallclass
+				precisionclassvec = precisionclass
+				f1classvec = f1class
 			else:
 				recallclassvec = np.vstack([recallclassvec,recallclass])
+				precisionclassvec =  np.vstack([precisionclassvec,precisionclass])
+				f1classvec =  np.vstack([f1classvec,f1class])
 		mean, se = np.mean(recallvec), st.sem(recallvec)
+		meanprecision, seprecision = np.mean(precisionvec), st.sem(precisionvec)
+		meanf1, sef1 = np.mean(f1vec), st.sem(f1vec)
 		h = se * scipy.stats.t._ppf((1+0.95)/2., len(recallvec)-1)
-		for i in range(0,nClasses):
-			meanclass[i], seclass[i] = np.mean(recallclassvec[:,i]), st.sem(recallclassvec[:,i])
-			hclass[i] =  seclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(recallclassvec[:,i])-1)
-		if(mean > savemean):
-			savemean=mean
-			saveh=h
+		hprecision = seprecision * scipy.stats.t._ppf((1+0.95)/2., len(precisionvec)-1)
+		hf1 = sef1 * scipy.stats.t._ppf((1+0.95)/2., len(f1vec)-1)
+		if(meanf1 > savemean):
+			savemean=meanf1
+			saveh=hf1
 			modelvec=modelstring
 			savemodel="Model "+str(nummodel)
-		print("Model %s\t%s\t%.2f +/- %.3f" % (nummodel,modelstring, mean, h),end="")
+		for i in range(0,nClasses):
+			meanclass[i], seclass[i] = np.mean(recallclassvec[:,i]), st.sem(recallclassvec[:,i])
+			meanf1class[i], sef1class[i] = np.mean(f1classvec[:,i]), st.sem(f1classvec[:,i])
+			meanprecisionclass[i], seprecisionclass[i] = np.mean(precisionclassvec[:,i]), st.sem(precisionclassvec[:,i])
+			hclass[i] =  seclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(recallclassvec[:,i])-1)
+			hprecisionclass[i] =  seprecisionclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(precisionclassvec[:,i])-1)
+			hf1class[i] =  sef1class[i] * scipy.stats.t._ppf((1+0.95)/2., len(f1classvec[:,i])-1)
+		print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (nummodel,modelstring, mean, h, meanprecision, hprecision, meanf1, hf1),end="")
 		for i in range(nClasses):
-			print("\t%.2f +/- %.3f" % (meanclass[i], hclass[i]),end="")
+			print("\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (meanclass[i], hclass[i], meanprecisionclass[i], hprecisionclass[i], meanf1class[i], hf1class[i]),end="")
 		print('')
 	print('')
 	print("########best linear SVM model##########")
@@ -824,9 +883,6 @@ def crossvalidateSVR(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 	savemeanr2 = 0.0
 	savehr2 = 0.0
 	if n_components == -1 and doPCA == True:
-#		scaler = preprocessing.StandardScaler().fit(matT)
-#		scaler.fit(matT)
-#		td = scaler.transform(matT)
 		pca = PCA(random_state=random_state)
 		pca.fit(matT)
 		n_components = np.searchsorted(pca.explained_variance_ratio_.cumsum(), 0.8)+1
@@ -844,18 +900,6 @@ def crossvalidateSVR(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 					train = np.copy(matT[train_index])
 					test = np.copy(matT[test_index])
 					processed=processTrainTest(train,test,doPCA,n_components,missing,missing_strategy)
-#					scaler = MinMaxScaler(feature_range=(-1, 1))
-#					scaler.fit(train)
-#					train = scaler.transform(train)
-#					test = scaler.transform(test)
-#					if doPCA:
-#						scaler = preprocessing.StandardScaler().fit(train)
-#						train = scaler.transform(train)
-#						test = scaler.transform(test)
-#						pca = PCA(n_components=n_components)
-#						pca.fit(train)
-#						train=pca.transform(train)
-#						test=pca.transform(test)
 					clf = SVR(kernel='linear', C=C, epsilon=eps)
 					clf.fit(processed.train, labels[train_index])
 					y_pred = np.append(y_pred,clf.predict(processed.test))
@@ -882,23 +926,49 @@ def crossvalidateSVR(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 
 
 def crossvalidateSVCrbf(matT,labels,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234):
-	modeltype="classification"
-	Cvec = np.power(2,np.arange(start=-5,stop=15,step=1,dtype=np.float))
-	gvec = np.power(2,np.arange(start=-15,stop=3,step=1,dtype=np.float))
+	Cvec = np.power(2.0,np.arange(start=-5,stop=15,step=1,dtype=np.float))
+	gvec = np.power(2.0,np.arange(start=-15,stop=3,step=1,dtype=np.float))
 	modelvec = ""
 	savemean = -9999 
 	saveh = 0.0
 	if n_components == -1 and doPCA == True:
-		#scaler = preprocessing.StandardScaler().fit(matT)
-		#dt = scaler.transform(matT)
 		pca = PCA(random_state=random_state)
 		pca.fit(matT)
 		n_components = np.searchsorted(pca.explained_variance_ratio_.cumsum(), 0.8)+1
 		print("Using number of components explaining 80%% of the variance = %s\n" % n_components)
+	modeltype = "classification"
+	uniqClasses, labels = np.unique(labels, return_inverse=True)
+	nClasses=len(uniqClasses)
+	print("Classes: ",uniqClasses)
+	print("nClasses: ",nClasses)
+	print("")
+	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
+	for i in range(nClasses):
+		print("\trecall %s" % (uniqClasses[i]), end="")
+	for i in range(nClasses):
+		print("\tprecision %s" % (uniqClasses[i]), end="")
+	for i in range(nClasses):
+		print("\tF1-score %s" % (uniqClasses[i]), end="")
+	print("")
 	for C in Cvec:
 		for g in gvec:
 			modelstring = str(C)+"-"+str(g)
+			nummodel += 1
 			recallvec = []
+			precisionvec = []
+			f1vec = []
+			recallclassvec = np.array([])
+			precisionclassvec = np.array([])
+			f1classvec = np.array([])
+			meanclass=np.zeros(nClasses)
+			meanprecisionclass = np.zeros(nClasses)
+			meanf1class = np.zeros(nClasses)
+			seclass=np.zeros(nClasses)
+			seprecisionclass=np.zeros(nClasses)
+			sef1class=np.zeros(nClasses)
+			hclass=np.zeros(nClasses)
+			hprecisionclass=np.zeros(nClasses)
+			hf1class=np.zeros(nClasses)
 			for j in range(10):
 				ss = KFold(n_splits=5, shuffle=True, random_state=j)
 				y_true = []
@@ -907,35 +977,93 @@ def crossvalidateSVCrbf(matT,labels,doPCA=False,n_components=-1,missing=False,mi
 					train = np.copy(matT[train_index])
 					test = np.copy(matT[test_index])
 					processed=processTrainTest(train,test,doPCA,n_components,missing,missing_strategy)
-#					scaler = MinMaxScaler(feature_range=(-1, 1))
-#					scaler.fit(train)
-#					train = scaler.transform(train)
-#					test = scaler.transform(test)
-#					if doPCA:
-#						scaler = preprocessing.StandardScaler().fit(train)
-#						train = scaler.transform(train)
-#						test = scaler.transform(test)
-#						pca = PCA(n_components=n_components)
-#						pca.fit(train)
-#						train = pca.transform(train)
-#						test = pca.transform(test)
 					clf = SVC(kernel='rbf', C=C, gamma=g)
 					clf.fit(processed.train, labels[train_index])
 					y_pred = np.append(y_pred,clf.predict(processed.test))
 					y_true = np.append(y_true,labels[test_index])
 				recall = recall_score(y_true, y_pred, average='weighted')
+				precision = precision_score(y_true, y_pred, average='weighted')
+				f1 = f1_score(y_true, y_pred, average='weighted')
 				recallvec = np.append(recallvec,recall)
+				precisionvec = np.append(precisionvec,precision)
+				f1vec = np.append(f1vec,f1)
+				recallclass = recall_score(y_true,y_pred,average=None)
+				precisionclass = precision_score(y_true,y_pred,average=None)
+				f1class =  f1_score(y_true,y_pred,average=None)
+				if(j==0):
+					recallclassvec = recallclass
+					precisionclassvec = precisionclass
+					f1classvec = f1class
+				else:
+					recallclassvec = np.vstack([recallclassvec,recallclass])
+					precisionclassvec =  np.vstack([precisionclassvec,precisionclass])
+					f1classvec =  np.vstack([f1classvec,f1class])
 			mean, se = np.mean(recallvec), st.sem(recallvec)
+			meanprecision, seprecision = np.mean(precisionvec), st.sem(precisionvec)
+			meanf1, sef1 = np.mean(f1vec), st.sem(f1vec)
 			h = se * scipy.stats.t._ppf((1+0.95)/2., len(recallvec)-1)
-			if(mean > savemean):
-				savemean = mean
-				saveh = h
-				modelvec = modelstring
-			print("C-gamma\t",modelstring,"\tavg. weighted recall\t",mean,"\t+/-\t",h)
-	print('')
+			hprecision = seprecision * scipy.stats.t._ppf((1+0.95)/2., len(precisionvec)-1)
+			hf1 = sef1 * scipy.stats.t._ppf((1+0.95)/2., len(f1vec)-1)
+			if(meanf1 > savemean):
+				savemean=meanf1
+				saveh=hf1
+				modelvec=modelstring
+				savemodel="Model "+str(nummodel)
+			for i in range(0,nClasses):
+				meanclass[i], seclass[i] = np.mean(recallclassvec[:,i]), st.sem(recallclassvec[:,i])
+				meanf1class[i], sef1class[i] = np.mean(f1classvec[:,i]), st.sem(f1classvec[:,i])
+				meanprecisionclass[i], seprecisionclass[i] = np.mean(precisionclassvec[:,i]), st.sem(precisionclassvec[:,i])
+				hclass[i] =  seclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(recallclassvec[:,i])-1)
+				hprecisionclass[i] =  seprecisionclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(precisionclassvec[:,i])-1)
+				hf1class[i] =  sef1class[i] * scipy.stats.t._ppf((1+0.95)/2., len(f1classvec[:,i])-1)
+			print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (nummodel,modelstring, mean, h, meanprecision, hprecision, meanf1, hf1),end="")
+			for i in range(nClasses):
+				print("\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (meanclass[i], hclass[i], meanprecisionclass[i], hprecisionclass[i], meanf1class[i], hf1class[i]),end="")
+			print('')
+
 	print("########best RBF SVM model##########")
 	print(modelvec,"\t",savemean,"\t",saveh)
 	print("")
+
+
+def advancedGTC(train,labels,test,n_neighbors=1,representation="modes",niter=200,k=0,m=0,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234,predict_mode="bayes",prior="equiprobable",regularization=-1.0,rbf_width_factor=-1.0):
+	if k<=0:
+		k=int(math.sqrt(5*math.sqrt(train.shape[0])))+2
+	if m<=0:
+		m=int(math.sqrt(k))
+	if n_components==-1 and doPCA:
+		pca=PCA(random_state=random_state)
+		pca.fit(matT)
+		n_components=np.searchsorted(pca.explained_variance_ratio_.cumsum(), 0.8)+1
+		print("Using number of components explaining 80%% of the variance in whole data set = %s\n" % n_components)
+	if regularization < 0.0 :
+		l = 0.1
+	else:
+		l = regularization
+	if rbf_width_factor <= 0.0:
+		s = 0.3 
+	else:
+		s = rbf_width_factor 
+	processed = processTrainTest(train,test,doPCA,n_components,missing,missing_strategy)
+	initialModel = initialize(processed.train,k,m,s,random_state=random_state)
+	optimizedModel = optimize(processed.train,initialModel,l,niter,0)
+	prediction = advancedPredictBayes(initialModel,optimizedModel,labels,processed.test,prior)
+	return prediction
+
+def advancedPredictBayes(initialModel,optimizedModel,labels,newT,prior="equiprobable"):
+	predicted = {}
+	cl = classMap(optimizedModel,labels,prior)
+	activityModel=cl.nodeClassP
+	projected = projection(initialModel,optimizedModel,newT)
+	predicted["optimizedModel"]=optimizedModel
+	predicted["initialModel"]=initialModel
+	predicted["indiv_projections"]=projected
+	predicted["indiv_probabilities"] = np.matmul(projected.matR,activityModel)
+	predicted["indiv_predictions"] = np.argmax(predicted["indiv_probabilities"],axis=1)
+	predicted["group_projections"] =  np.mean(projected.matR,axis=0)
+	predicted["group_probabilities"] = np.matmul(predicted["group_projections"],activityModel)
+	predicted["uniqClasses"]=cl.uniqClasses	
+	return predicted
 
 def GTC(train,labels,test,k,m,s,l,n_neighbors=1,niter=200,representation="modes",doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234,predict_mode="bayes",prior="equiprobable"):
 	processed = processTrainTest(train,test,doPCA,n_components,missing,missing_strategy)
@@ -954,16 +1082,21 @@ def GTR(train,labels,test,k,m,s,l,n_neighbors=1,niter=200,representation="modes"
 	prediction = predictNN(initialModel=initialModel,optimizedModel=optimizedModel,labels=labels,newT=processed.test,modeltype="regression",n_neighbors=n_neighbors,representation=representation)
 	return prediction
 
+
 def crossvalidateGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,k=0,m=0,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234,predict_mode="bayes",prior="equiprobable",regularization=-1.0,rbf_width_factor=-1.0):
 	print('k = sqrt(grid size), m = sqrt(radial basis function grid size), l = regularization, s = RBF width factor')
 	uniqClasses, labels = np.unique(labels, return_inverse=True)
-	print("Classes: ",uniqClasses)
 	nClasses=len(uniqClasses)
+	print("Classes: ",uniqClasses)
 	print("nClasses: ",nClasses)
 	print("")
-	print("model\tk:m:l:s\tavg. weighted recall with CI",end="")
+	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses):
 		print("\trecall %s" % (uniqClasses[i]), end="")
+	for i in range(nClasses):
+		print("\tprecision %s" % (uniqClasses[i]), end="")
+	for i in range(nClasses):
+		print("\tF1-score %s" % (uniqClasses[i]), end="")
 	print("")
 	if k==0:
 		k=int(math.sqrt(5*math.sqrt(matT.shape[0])))+2
@@ -990,12 +1123,22 @@ def crossvalidateGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,
 	for s in svec:
 		for l in lvec:
 			modelstring=str(k)+':'+str(m)+":"+str(s)+":"+str(l)
-			recallvec=[]
-			recallclassvec = np.array([])
-			meanclass=np.zeros(nClasses)
-			seclass=np.zeros(nClasses)
-			hclass=np.zeros(nClasses)
 			nummodel+=1
+			recallvec = []
+			precisionvec = []
+			f1vec = []
+			recallclassvec = np.array([])
+			precisionclassvec = np.array([])
+			f1classvec = np.array([])
+			meanclass=np.zeros(nClasses)
+			meanprecisionclass = np.zeros(nClasses)
+			meanf1class = np.zeros(nClasses)
+			seclass=np.zeros(nClasses)
+			seprecisionclass=np.zeros(nClasses)
+			sef1class=np.zeros(nClasses)
+			hclass=np.zeros(nClasses)
+			hprecisionclass=np.zeros(nClasses)
+			hf1class=np.zeros(nClasses)
 			for j in range(10):
 				ss = KFold(n_splits=5, shuffle=True, random_state=j)
 				y_true=[]
@@ -1006,27 +1149,46 @@ def crossvalidateGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,
 					prediction=GTC(train=train,labels=labels[train_index],test=test,k=k,m=m,s=s,l=l,n_neighbors=n_neighbors,niter=niter,representation=representation,doPCA=doPCA,n_components=n_components,random_state=random_state,missing=missing,missing_strategy=missing_strategy,predict_mode=predict_mode,prior=prior)
 					y_true=np.append(y_true,labels[test_index])
 					y_pred=np.append(y_pred,prediction)
-				recall=recall_score(y_true, y_pred, average='weighted')
-				recallvec=np.append(recallvec,recall)
+				recall = recall_score(y_true, y_pred, average='weighted')
+				precision = precision_score(y_true, y_pred, average='weighted')
+				f1 = f1_score(y_true, y_pred, average='weighted')
+				recallvec = np.append(recallvec,recall)
+				precisionvec = np.append(precisionvec,precision)
+				f1vec = np.append(f1vec,f1)
 				recallclass = recall_score(y_true,y_pred,average=None)
+				precisionclass = precision_score(y_true,y_pred,average=None)
+				f1class =  f1_score(y_true,y_pred,average=None)
 				if(j==0):
 					recallclassvec = recallclass
+					precisionclassvec = precisionclass
+					f1classvec = f1class
 				else:
 					recallclassvec = np.vstack([recallclassvec,recallclass])
+					precisionclassvec =  np.vstack([precisionclassvec,precisionclass])
+					f1classvec =  np.vstack([f1classvec,f1class])
 			mean, se = np.mean(recallvec), st.sem(recallvec)
+			meanprecision, seprecision = np.mean(precisionvec), st.sem(precisionvec)
+			meanf1, sef1 = np.mean(f1vec), st.sem(f1vec)
 			h = se * scipy.stats.t._ppf((1+0.95)/2., len(recallvec)-1)
-			if(mean > savemean):
-				savemean=mean
-				saveh=h
+			hprecision = seprecision * scipy.stats.t._ppf((1+0.95)/2., len(precisionvec)-1)
+			hf1 = sef1 * scipy.stats.t._ppf((1+0.95)/2., len(f1vec)-1)
+			if(meanf1 > savemean):
+				savemean=meanf1
+				saveh=hf1
 				modelvec=modelstring
-				savemodel = "Model "+str(nummodel)
+				savemodel="Model "+str(nummodel)
 			for i in range(0,nClasses):
 				meanclass[i], seclass[i] = np.mean(recallclassvec[:,i]), st.sem(recallclassvec[:,i])
+				meanf1class[i], sef1class[i] = np.mean(f1classvec[:,i]), st.sem(f1classvec[:,i])
+				meanprecisionclass[i], seprecisionclass[i] = np.mean(precisionclassvec[:,i]), st.sem(precisionclassvec[:,i])
 				hclass[i] =  seclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(recallclassvec[:,i])-1)
-			print("Model %s\t%s\t%.2f +/- %.3f" % (nummodel,modelstring, mean, h),end="")
+				hprecisionclass[i] =  seprecisionclass[i] * scipy.stats.t._ppf((1+0.95)/2., len(precisionclassvec[:,i])-1)
+				hf1class[i] =  sef1class[i] * scipy.stats.t._ppf((1+0.95)/2., len(f1classvec[:,i])-1)
+			print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (nummodel,modelstring, mean, h, meanprecision, hprecision, meanf1, hf1),end="")
 			for i in range(nClasses):
-				print("\t%.2f +/- %.3f" % (meanclass[i], hclass[i]),end="")
+				print("\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f" % (meanclass[i], hclass[i], meanprecisionclass[i], hprecisionclass[i], meanf1class[i], hf1class[i]),end="")
 			print('')
+
 	print('')
 	print("########best GTC model##########")
 	print(savemodel)	
@@ -1098,24 +1260,12 @@ def pcaPreprocess(matT,doPCA=False,n_components=-1,missing=False,missing_strateg
 	if missing:
 		imp = Imputer(strategy=missing_strategy, axis=0)
 		matT = imp.fit_transform(matT)
-	#sel = VarianceThreshold()
-	#matT = sel.fit_transform(matT)
-	#scaler = MinMaxScaler(feature_range=(-1, 1))
 	scaler =preprocessing.StandardScaler()
 	matT = scaler.fit_transform(matT)
 	if n_components == -1:
 	    n_components = 0.80
-	#if n_components == -1 and doPCA:
-#		pca = PCA(random_state=random_state)
-#		pca.fit(matT)
-		#n_components=np.searchsorted(pca.explained_variance_ratio_.cumsum(), 0.8)+1
-#		n_components = (np.abs(pca.explained_variance_ratio_.cumsum() - 0.8)).argmin()+1
-#		print("Number of components explaining 80%% of the variance = %s\n" % n_components)
 	if doPCA:
-#		scaler = preprocessing.StandardScaler()
-#		matT = scaler.fit_transform(matT)
 		pca = PCA(random_state=random_state,n_components=n_components)
-#PCA on covariance matrix 
 		matT = pca.fit_transform(matT)
 		n_components=pca.n_components_
 		print("Using %s components explaining %s%% of the variance\n" % (n_components,pca.explained_variance_ratio_.cumsum()[n_components-1]*100))
@@ -1143,28 +1293,106 @@ def processTrainTest(train,test,doPCA,n_components,missing=False,missing_strateg
 		imp = Imputer(strategy=missing_strategy, axis=0)
 		train = imp.fit_transform(train)
 		test = imp.transform(test)
-	#scaler = MinMaxScaler(feature_range=(-1, 1))
 	scaler = preprocessing.StandardScaler()
-	#sel = VarianceThreshold()
-	#train = sel.fit_transform(train)
-	#test = sel.transform(test)
 	train = scaler.fit_transform(train)
 	test = scaler.transform(test)
 	if(n_components==-1):
 	    n_components=0.80
-	#if n_components==-1 and doPCA==True:
-		#scaler = preprocessing.StandardScaler()
-		#scaler.fit(train)
-		#td = scaler.transform(train)
-#		pca = PCA(random_state=random_state)
-#		pca.fit(train)
-#		n_components = np.searchsorted(pca.explained_variance_ratio.cumsum(),0.8)+1
-#		print("Number of components explaining 80%% of the variance in training set = %s\n" % n_components)
 	if doPCA:
-	#	scaler = preprocessing.StandardScaler().fit(train)
-	#	train = scaler.transform(train)
-	#	test = scaler.transform(test)
 		pca = PCA(random_state=random_state,n_components=n_components)
 		train = pca.fit_transform(train)
 		test = pca.transform(test)
 	return(ReturnProcessedTrainTest(train,test))
+
+
+def whichExperiment(matT,label,args,useDiscrete=0):
+	if  useDiscrete==1 and args.model=='GTM':
+		decide = 'crossvalidateGTC'
+	elif useDiscrete==0 and args.model=='GTM':
+		decide = 'crossvalidateGTR'
+	elif useDiscrete==1 and args.model=='SVM':
+		decide = 'crossvalidateSVC'
+	elif useDiscrete==0 and args.model=='SVM':
+		decide = 'crossvalidateSVR'
+	elif useDiscrete==1 and args.model=='PCA':
+		decide = 'crossvalidatePCAC'
+	elif useDiscrete==0 and args.model=='PCA':
+		decide = 'crossvalidatePCAR'
+	elif useDiscrete==1 and args.model=='compare':
+		decide = 'comparecrossvalidateC'
+	elif useDiscrete==0 and args.model=='compare':
+		decide = 'comparecrossvalidateR'
+	else:
+		print("Could not determine which experiment to conduct.")
+	if decide == 'crossvalidateGTC':
+		crossvalidateGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size,predict_mode=args.predict_mode,prior=args.prior,regularization=args.regularization,rbf_width_factor=args.rbf_width_factor)
+	elif decide == 'crossvalidateGTR':
+		crossvalidateGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size,regularization=args.regularization,rbf_width_factor=args.rbf_width_factor)
+	elif decide == 'crossvalidateSVC':
+		crossvalidateSVC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,C=args.svm_margin)
+	elif decide =='crossvalidateSVR':
+		crossvalidateSVR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,C=args.svm_margin,epsilon=args.svm_epsilon)
+	elif decide =='crossvalidatePCAC':
+		crossvalidatePCAC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,n_neighbors=args.n_neighbors)
+	elif decide =='crossvalidatePCAR':
+		crossvalidatePCAR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,n_neighbors=args.n_neighbors)
+	elif decide =='comparecrossvalidateC':
+		crossvalidateSVC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,C=args.svm_margin)
+		crossvalidateGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size,predict_mode=args.predict_mode,prior=args.prior,regularization=args.regularization,rbf_width_factor=args.rbf_width_factor)
+	elif decide == 'comparecrossvalidateR':
+		crossvalidateSVR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,C=args.svm_margin,epsilon=args.svm_epsilon)
+		crossvalidateGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size,regularization=args.regularization,rbf_width_factor=args.rbf_width_factor)
+	else:
+		print("Could not determine which experiment to conduct.")
+
+def printClassPredictions(prediction,output):
+	string = ""
+	for i in range(len(prediction["uniqClasses"])-1):
+		string += str(prediction["uniqClasses"][i])+","
+	string +=  str(prediction["uniqClasses"][len(prediction["uniqClasses"])-1])
+	np.savetxt(fname=output+"_indiv_probabilities.csv",X=prediction["indiv_probabilities"],delimiter=",",header=string,fmt='%.2f')
+	np.savetxt(fname=output+"_indiv_predictions.csv",X=prediction["indiv_predictions"],delimiter=",",header=string,fmt='%.2f')
+	np.savetxt(fname=output+"_group_probabilities.csv",X=prediction["group_probabilities"].reshape(1, prediction["group_probabilities"].shape[0]),delimiter=",",header=string,fmt='%.2f')
+	print("Wrote to disk:")
+	print("%s: individual probabilities" % (output+"_indiv_probabilities.csv"))
+	print("%s: individual predictions" % (output+"_indiv_predictions.csv"))
+	print("%s: group probabilities" % (output+"_group_probabilities.csv"))
+	print("")
+
+
+
+
+
+
+def plotMultiPanelGTM(initialModel,optimizedModel,label,output,useDiscrete):
+	fig = plt.figure(figsize=(10,10))
+	means=optimizedModel.matMeans
+	modes=optimizedModel.matModes
+	#plot1: GTM means visualization
+	ax = fig.add_subplot(221); 
+	ax.scatter(means[:, 0], means[:, 1], c=label, cmap=plt.cm.Spectral); plt.axis('tight'); plt.xticks([]), plt.yticks([]); plt.title('Means');
+	#plot2: GTM modes visualization
+	ax = fig.add_subplot(222);
+	ax.scatter(modes[:, 0], modes[:, 1], c=label, cmap=plt.cm.Spectral); plt.axis('tight'); plt.xticks([]), plt.yticks([]); plt.title('Modes');
+	#plot3: GTM landscape visualization
+	ax = fig.add_subplot(223);
+	#if it's label data, the landscape is a class map; otherwise, it is a continuous landscape
+	if useDiscrete:
+		plotClassMap(initialModel,optimizedModel,label)
+	else:
+		plotLandscape(initialModel,optimizedModel,label)
+	#add mapping from mean positions to modes (GTM nodes where the data points have max probability)
+	for i in range(label.shape[0]):
+		plt.plot([means[i,0],modes[i,0]],[means[i,1],modes[i,1]],color='grey',linewidth=0.5)
+	ax = fig.add_subplot(224);
+		
+	#plot4: GTM landscape visualization without means/modes mappings
+	ax = fig.add_subplot(224);
+	if useDiscrete:
+		plotClassMapNoPoints(initialModel,optimizedModel,label)
+	else:
+		plotLandscapeNoPoints(initialModel,optimizedModel,label)
+	fig.set_size_inches(16, 13)
+	fig.savefig(output+".pdf",format='pdf', dpi=500)
+	plt.close(fig)
+	print("\nWrote pdf to disk: %s\n" % (output+".pdf"))
