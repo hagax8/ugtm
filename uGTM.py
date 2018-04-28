@@ -275,27 +275,38 @@ def classMap(optimizedModel,activity,prior="equiprobable"):
 	nMolecules = optimizedModel.matR.shape[0]
 	nSamples = optimizedModel.matR.shape[1]
 	#posterior distribution
-	nodeClassP = np.zeros([nSamples,nClasses])
+	nodeClassP = np.zeros([nSamples,nClasses],dtype=np.longdouble)
 	#likelihood
-	nodeClassT = np.zeros([nSamples,nClasses])
-	sumClass = np.zeros([nClasses])
-	summe = np.zeros([nSamples])
+	nodeClassT = np.zeros([nSamples,nClasses],dtype=np.longdouble)
+	sumClass = np.zeros([nClasses],dtype=np.longdouble)
+	summe = np.zeros([nSamples],dtype=np.longdouble)
 	for i in range(nClasses):
 	    sumClass[i]=(classVector==i).sum()
 	if prior=="estimated":
 	    priors=sumClass/sumClass.sum()
 	elif prior=="equiprobable":
 	    priors=np.zeros([nClasses])+(1.0/nClasses)
+
 	for i in range(nClasses):
 		for k in range(nSamples):
 			nodeClassT[k,i] = optimizedModel.matR[classVector==i,k].sum()/sumClass[i]
+
 	for i in range(nClasses):
 		for k in range(nSamples):
 			nodeClassP[k,i]=nodeClassT[k,i]*priors[i]
 			summe[k]+=nodeClassP[k,i]
+
+
 	for i in range(nClasses):
 		for k in range(nSamples):
-			nodeClassP[k,i]=nodeClassP[k,i]/summe[k]	
+			if summe[k]!=0.0:
+				nodeClassP[k,i]=nodeClassP[k,i]/summe[k]
+	
+	for k in range(nSamples):
+		if summe[k] == 0.0:
+			for i in range(nClasses):
+				nodeClassP[k,i]=1/nClasses
+	
 	nodeClass = np.argmax(nodeClassP, axis=1)
 	return(ReturnClassMap(nodeClassP,nodeClassT,nodeClass,uniqClasses))
 

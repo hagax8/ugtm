@@ -194,6 +194,8 @@ elif type_of_experiment == 'traintest':
 	test = genfromtxt(args.test, delimiter=",", dtype=np.float64)
 	if args.filenametestids is not None:
 		testids = genfromtxt(args.filenametestids, delimiter="\t", dtype=str)
+	else:
+		testids = ""
 	prediction=uGTM.advancedGTC(train=matT,labels=label,test=test,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size,predict_mode=args.predict_mode,prior=args.prior,regularization=args.regularization,rbf_width_factor=args.rbf_width_factor)
 	plotHTML_GTM(label_numeric=labelnum,label_names=label,initialModel=prediction['initialModel'],optimizedModel=prediction['optimizedModel'],ids=ids,plot_arrows=True,plot_ids=args.filenameids,modeltype="GTM",useDiscrete=useDiscrete)
 	uGTM.printClassPredictions(prediction,output=args.output)
