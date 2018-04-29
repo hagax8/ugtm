@@ -275,11 +275,11 @@ def classMap(optimizedModel,activity,prior="equiprobable"):
 	nMolecules = optimizedModel.matR.shape[0]
 	nSamples = optimizedModel.matR.shape[1]
 	#posterior distribution
-	nodeClassP = np.zeros([nSamples,nClasses],dtype=np.longdouble)
+	nodeClassP = np.zeros([nSamples,nClasses])
 	#likelihood
-	nodeClassT = np.zeros([nSamples,nClasses],dtype=np.longdouble)
-	sumClass = np.zeros([nClasses],dtype=np.longdouble)
-	summe = np.zeros([nSamples],dtype=np.longdouble)
+	nodeClassT = np.zeros([nSamples,nClasses])
+	sumClass = np.zeros([nClasses])
+	summe = np.zeros([nSamples])
 	for i in range(nClasses):
 	    sumClass[i]=(classVector==i).sum()
 	if prior=="estimated":
@@ -301,7 +301,7 @@ def classMap(optimizedModel,activity,prior="equiprobable"):
 		for k in range(nSamples):
 			if summe[k]!=0.0:
 				nodeClassP[k,i]=nodeClassP[k,i]/summe[k]
-	
+
 	for k in range(nSamples):
 		if summe[k] == 0.0:
 			for i in range(nClasses):
@@ -629,7 +629,7 @@ def crossvalidatePCAC(matT,labels,doPCA=False,n_components=-1,missing=False,miss
 	print("Classes: ",uniqClasses)
 	print("nClasses: ",nClasses)
 	print("")
-	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
+	print("model\tparameters=k_for_kNN\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses): 
 		print("\trecall %s" % (uniqClasses[i]), end="")
 	for i in range(nClasses):
@@ -774,7 +774,7 @@ def crossvalidatePCAR(matT,labels,doPCA=False,n_components=-1,missing=False,miss
 	print("k = number of nearest neighbors", modelvec,"rmse",savemean,"+/-",saveh,"r2",savemeanr2,"+/-",savehr2)
 	print("")
 
-def crossvalidateSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234,C=-1.0):
+def crossvalidateSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234,C=1.0):
 	if n_components == -1 and doPCA == True:
 		pca = PCA(random_state=random_state)
 		pca.fit(matT)
@@ -786,7 +786,7 @@ def crossvalidateSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 	print("Classes: ",uniqClasses)
 	print("nClasses: ",nClasses)
 	print("")
-	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
+	print("model\tparameters=C\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses):
 		print("\trecall %s" % (uniqClasses[i]), end="")
 	for i in range(nClasses):
@@ -935,13 +935,20 @@ def crossvalidateSVR(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 	print(modelvec,"rmse",savemean,"+/-",saveh,"r2",savemeanr2,"+/-",savehr2)
 	print("")
 
+def crossvalidateSVCrbf(matT,labels,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234,C=1,gamma=1):
 
-def crossvalidateSVCrbf(matT,labels,doPCA=False,n_components=-1,missing=False,missing_strategy='most_frequent',random_state=1234):
-	Cvec = np.power(2.0,np.arange(start=-5,stop=15,step=1,dtype=np.float))
-	gvec = np.power(2.0,np.arange(start=-15,stop=3,step=1,dtype=np.float))
+	if C < 0.0:
+		Cvec = np.power(2,np.arange(start=-5,stop=15,step=1,dtype=np.float))
+	else:
+		Cvec = [ C ]
+	if gamma < 0.0:
+		gvec = np.power(2.0,np.arange(start=-15,stop=3,step=1,dtype=np.float))
+	else:
+		gvec = [ gamma ]
 	modelvec = ""
-	savemean = -9999 
+	savemean = -9999.0 
 	saveh = 0.0
+	nummodel = 0
 	if n_components == -1 and doPCA == True:
 		pca = PCA(random_state=random_state)
 		pca.fit(matT)
@@ -953,7 +960,7 @@ def crossvalidateSVCrbf(matT,labels,doPCA=False,n_components=-1,missing=False,mi
 	print("Classes: ",uniqClasses)
 	print("nClasses: ",nClasses)
 	print("")
-	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
+	print("model\tparameters=C:gamma\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses):
 		print("\trecall %s" % (uniqClasses[i]), end="")
 	for i in range(nClasses):
@@ -1101,7 +1108,7 @@ def crossvalidateGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,
 	print("Classes: ",uniqClasses)
 	print("nClasses: ",nClasses)
 	print("")
-	print("model\tnumber of neighbors\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
+	print("model\tparameters=k:m:s:l\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses):
 		print("\trecall %s" % (uniqClasses[i]), end="")
 	for i in range(nClasses):
@@ -1325,6 +1332,8 @@ def whichExperiment(matT,label,args,useDiscrete=0):
 		decide = 'crossvalidateSVC'
 	elif useDiscrete==0 and args.model=='SVM':
 		decide = 'crossvalidateSVR'
+	elif useDiscrete==1 and args.model=='SVMrbf':
+		decide = 'crossvalidateSVCrbf'
 	elif useDiscrete==1 and args.model=='PCA':
 		decide = 'crossvalidatePCAC'
 	elif useDiscrete==0 and args.model=='PCA':
@@ -1334,13 +1343,16 @@ def whichExperiment(matT,label,args,useDiscrete=0):
 	elif useDiscrete==0 and args.model=='compare':
 		decide = 'comparecrossvalidateR'
 	else:
-		print("Could not determine which experiment to conduct.")
+		decide = ''
+		exit
 	if decide == 'crossvalidateGTC':
 		crossvalidateGTC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size,predict_mode=args.predict_mode,prior=args.prior,regularization=args.regularization,rbf_width_factor=args.rbf_width_factor)
 	elif decide == 'crossvalidateGTR':
 		crossvalidateGTR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,n_neighbors=args.n_neighbors,representation=args.representation,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,k=args.grid_size,m=args.rbf_grid_size,regularization=args.regularization,rbf_width_factor=args.rbf_width_factor)
 	elif decide == 'crossvalidateSVC':
 		crossvalidateSVC(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,C=args.svm_margin)
+	elif decide == 'crossvalidateSVCrbf':
+		crossvalidateSVCrbf(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,C=args.svm_margin,gamma=args.svm_gamma)
 	elif decide =='crossvalidateSVR':
 		crossvalidateSVR(matT=matT,labels=label,doPCA=args.pca,n_components=args.n_components,missing=args.missing,missing_strategy=args.missing_strategy,random_state=args.random_state,C=args.svm_margin,epsilon=args.svm_epsilon)
 	elif decide =='crossvalidatePCAC':
