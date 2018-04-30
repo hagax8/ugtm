@@ -4,19 +4,25 @@ import time
 import matplotlib
 import matplotlib.pyplot as plt, mpld3
 import sklearn.datasets
-from sklearn.cluster import AgglomerativeClustering
 from sklearn.decomposition import PCA
 from sklearn.metrics import pairwise_distances
 from sklearn import manifold
 from sklearn.preprocessing import MinMaxScaler
 from numpy import genfromtxt
-import mpl_toolkits.mplot3d.axes3d as p3
 import argparse
 import scipy
-from scipy.spatial.distance import cdist
 import math
 import csv
+import json
 
+# this fixed json serializing issues in mpld3, cf. github.com/mpld3/mpld3/issues/434 
+class NumpyEncoder(json.JSONEncoder):
+	def default(self, obj):
+		if isinstance(obj, np.ndarray):
+			return obj.tolist()
+		return json.JSONEncoder.default(self, obj)
+from mpld3 import _display
+_display.NumpyEncoder = NumpyEncoder
 
 ############ argument parsing
 parser = argparse.ArgumentParser(description='Generate and assess GTM maps for classification or regression.')
@@ -69,6 +75,7 @@ def plotHTML_any(label_numeric,label_names,coordinates,ids,plot_ids,modeltype="p
 	mpld3.save_html(fig,args.output+"_"+modeltype+".html")
 	print("\nWrote html plot to disk: %s\n" % (args.output+"_"+modeltype+".html"))
 
+
 def plotHTML_GTM(label_numeric,label_names,initialModel,optimizedModel,ids,plot_arrows=True,plot_ids=False,modeltype="GTM",useDiscrete=0):
 	fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
 	if useDiscrete:
@@ -80,10 +87,10 @@ def plotHTML_GTM(label_numeric,label_names,initialModel,optimizedModel,ids,plot_
 	ax.grid(color='white', linestyle='solid')
 	ax.set_title(modeltype,size=30)
 	labels = ['point {0}'.format(i + 1) for i in range(label_names.shape[0])]
-	scatter = ax.scatter(means[:, 0].tolist(),means[:, 1].tolist(), c=label_numeric, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
+	scatter = ax.scatter(means[:, 0],means[:, 1], c=label_numeric, s=20,alpha=0.3,cmap=plt.cm.Spectral, edgecolor='black')
 	if plot_arrows:
 		for i in range(label_names.shape[0]):
-			plt.plot([means[i,0].tolist(),modes[i,0].tolist()],[means[i,1].tolist(),modes[i,1].tolist()],color='grey',linewidth=0.5)
+			plt.plot([means[i,0],modes[i,0]],[means[i,1],modes[i,1]],color='grey',linewidth=0.5)
 	if plot_ids:
 		tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=["%s: label=%s" % t for t in zip(ids,label_names)])
 	else:
@@ -103,14 +110,14 @@ def plotHTML_GTM_withprojection(label_numeric,label_names,initialModel,optimized
 	ax.grid(color='white', linestyle='solid')
 	ax.set_title(modeltype,size=30)
 	labels = ['point {0}'.format(i + 1) for i in range(means.shape[0])]
-	scatter = ax.scatter(means[:, 0].tolist(),means[:, 1].tolist(), c="black",s=20,alpha=1,edgecolor='black')
+	scatter = ax.scatter(means[:, 0],means[:, 1], c="black",s=20,alpha=1,edgecolor='black')
 	if plot_arrows:
-		for i in range(label_names.shape[0]):
-			plt.plot([means[i,0].tolist(),modes[i,0].tolist()],[means[i,1].tolist(),modes[i,1].tolist()],color='grey',linewidth=0.5)
+		for i in range(means.shape[0]):
+			plt.plot([means[i,0],modes[i,0]],[means[i,1],modes[i,1]],color='grey',linewidth=0.5)
 	if plot_ids:
 		tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=list(testids))
 	else:
-		tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=labels)
+		tooltip = mpld3.plugins.PointLabelTooltip(scatter,labels=list(labels))
 	mpld3.plugins.connect(fig, tooltip)
 	mpld3.save_html(fig,args.output+"_"+modeltype+".html")
 	print("\nWrote html plot to disk: %s\n" % (args.output+"_"+modeltype+".html"))

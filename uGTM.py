@@ -322,12 +322,13 @@ def initialize(matT,k,m,s,random_state=1234):
 	matM = np.transpose(np.meshgrid(x,x)).reshape(m*m,2)
 	rbfWidth = computeWidth(matM,nCenters,s) 
 	matPhiMPlusOne = createPhiMatrix(matX,matM,nSamples,nCenters,rbfWidth)
-	Uobj = createFeatureMatrixNIPALS(matT, nMolecules, nDimensions,random_state=random_state)
+	#Uobj = createFeatureMatrixNIPALS(matT, nMolecules, nDimensions,random_state=random_state)
 	#alternative for creating U loading matrix: instead of NIPALS, use PCA (it's slower.....):
-##	pca = PCA(n_components=3)
-##	pca.fit(matT)
-##	matU=(pca.components_.T * np.sqrt(pca.explained_variance_))[:,0:2]
-##	betaInv=pca.explained_variance_[2]
+	pca = PCA(n_components=3,random_state=random_state)
+	pca.fit(matT)
+	matU=(pca.components_.T * np.sqrt(pca.explained_variance_))[:,0:2]
+	betaInv=pca.explained_variance_[2]
+	Uobj = ReturnU(matU,betaInv)
 	matW = createWMatrix(matX,matPhiMPlusOne,Uobj.matU,nDimensions,nCenters)
 	matY = createYMatrixInit(matT,matW,matPhiMPlusOne)
 	betaInv = Uobj.betaInv
@@ -632,9 +633,7 @@ def crossvalidatePCAC(matT,labels,doPCA=False,n_components=-1,missing=False,miss
 	print("model\tparameters=k_for_kNN\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses): 
 		print("\trecall %s" % (uniqClasses[i]), end="")
-	for i in range(nClasses):
 		print("\tprecision %s" % (uniqClasses[i]), end="")
-	for i in range(nClasses):
 		print("\tF1-score %s" % (uniqClasses[i]), end="")
 	print("")
 	if n_neighbors <= 0:
@@ -789,9 +788,7 @@ def crossvalidateSVC(matT,labels,doPCA=False,n_components=-1,missing=False,missi
 	print("model\tparameters=C\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses):
 		print("\trecall %s" % (uniqClasses[i]), end="")
-	for i in range(nClasses):
 		print("\tprecision %s" % (uniqClasses[i]), end="")
-	for i in range(nClasses):
 		print("\tF1-score %s" % (uniqClasses[i]), end="")
 	print("")		    
 	if C < 0.0:
@@ -1111,9 +1108,7 @@ def crossvalidateGTC(matT,labels,n_neighbors=1,representation="modes",niter=200,
 	print("model\tparameters=k:m:s:l\tavg. weighted recall with CI\t avg. weighted precision with CI\t avg. weighted F1-score with CI",end="")
 	for i in range(nClasses):
 		print("\trecall %s" % (uniqClasses[i]), end="")
-	for i in range(nClasses):
 		print("\tprecision %s" % (uniqClasses[i]), end="")
-	for i in range(nClasses):
 		print("\tF1-score %s" % (uniqClasses[i]), end="")
 	print("")
 	if k==0:
