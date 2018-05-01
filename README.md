@@ -38,11 +38,6 @@ python runGTM.py  --usetest s --labeltype continuous --output out --model GTM
 python runGTM.py  --usetest s --labeltype continuous --output out --model kGTM
 python runGTM.py  --usetest s --labeltype continuous --output out --model t-SNE
 python runGTM.py  --usetest s --labeltype continuous --output out --model PCA
-
-
-```
-
-```
 python runGTM.py  --usetest iris --labeltype discrete --output out --model GTM
 python runGTM.py  --usetest iris --labeltype discrete --output out --model kGTM
 python runGTM.py  --usetest iris --labeltype discrete --output out --model t-SNE
