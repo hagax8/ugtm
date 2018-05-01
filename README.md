@@ -66,28 +66,34 @@ python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out \
 --model GTM --crossvalidate
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out \
---model SVMrbf --crossvalidate
+--model SVM --crossvalidate
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out \
 --model SVMrbf --crossvalidate
-
+python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype discrete --output out \
+--model PCA --crossvalidate
 ```
 To try different parameters for GTM: --regularization -1 --rbf_width_factor -1.
 To try different parameters for linear SVM: --svm_margin -1.
-To try different parameters for rbf SVM: --svm_margin -1 --svm_gamma -1
+To try different parameters for rbf SVM: --svm_margin -1 --svm_gamma -1.
+To try different parameters for PCA: --n_neighbors -1.
 
 
 
-### Ex 4: Run 5-fold cross-validation repeated 10 times on GTM or linear SVM regression model:
+
+### Ex 4: Run 5-fold cross-validation repeated 10 times on GTM, PCA k-NN or linear SVM regression model:
 
 ```
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype continuous --output out \
 --model GTM --crossvalidate
 python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype continuous --output out \
 --model SVM --crossvalidate
+python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype continuous --output out \
+--model PCA --crossvalidate
 ```
 
 To try different parameters for GTM: --regularization -1 --rbf_width_factor -1.
 To try different parameters for linear SVM: --svm_margin -1.
+To try different parameters for PCA: --n_neighbors -1.
 
 
 ## Get help
