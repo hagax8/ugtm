@@ -2,7 +2,7 @@
 
 Generative Topographic Maps (GTMs) are probabilistic Kohonen maps. GTM is a dimensionality reduction algorithm (as t-SNE, LLE, etc).
 
-This is a python implementation of GTMs, using sklearn, d3 and numpy: I am debugging this right now, so it might not be optimal yet. 
+This is a python implementation of GTMs, using sklearn, d3 and numpy.
 
 uGTM.py contains the core functions and runGTM.py is an easy-to-use program. The kernel version of the algorithm (kGTM) is also implemented. You can also generate regression or classification maps, or evaluate the predictive accuracy (classification) or RMSE/R2 (regression) in repeated cross-validation experiments - all the workflows were implemented in runGTM.py, which uses the uGTM.py core functions.
 
@@ -78,8 +78,6 @@ To try different parameters for rbf SVM: --svm_margin -1 --svm_gamma -1.
 To try different parameters for PCA: --n_neighbors -1.
 
 
-
-
 ### Ex 4: Run 5-fold cross-validation repeated 10 times on GTM, PCA k-NN or linear SVM regression model:
 
 ```
@@ -94,6 +92,12 @@ python runGTM.py  --data csvlist.dat --labels csvlist.lbls  --labeltype continuo
 To try different parameters for GTM: --regularization -1 --rbf_width_factor -1.
 To try different parameters for linear SVM: --svm_margin -1.
 To try different parameters for PCA: --n_neighbors -1.
+
+### Ex 5: Train a GTM map on a training set and project a test set:
+
+```
+python runGTM.py --model GTM --data train --test test --labels lbls  --labeltype discrete --output out
+```
 
 
 ## Get help
