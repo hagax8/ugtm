@@ -1,4 +1,6 @@
-# ugtm v1.0: Generative Topographic Mapping with Python.
+# ugtm v1.1.2: Generative Topographic Mapping with Python.
+
+Link to the package documentation: http://ugtm.readthedocs.io/en/latest/
 
 GTM (Generative Topographic Mapping) is a dimensionality reduction algorithm (as t-SNE, LLE, etc) created by Bishop et al. (https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf) and a probabilistic counterpart of Kohonen maps.
 
