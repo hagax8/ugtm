@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ugtm.ugtm_plot &mdash; ugtm v1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ugtm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">ugtm</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ugtm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ugtm.ugtm_plot</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ugtm.ugtm_plot</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;agg&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">interpolate</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span><span class="o">,</span> <span class="nn">mpld3</span>
+<span class="kn">from</span> <span class="nn">.ugtm_landscape</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<div class="viewcode-block" id="NumpyEncoder"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.NumpyEncoder">[docs]</a><span class="k">class</span> <span class="nc">NumpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+<div class="viewcode-block" id="NumpyEncoder.default"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.NumpyEncoder.default">[docs]</a>        <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span></div></div>
+<span class="kn">from</span> <span class="nn">mpld3</span> <span class="k">import</span> <span class="n">_display</span>
+<span class="n">_display</span><span class="o">.</span><span class="n">NumpyEncoder</span> <span class="o">=</span> <span class="n">NumpyEncoder</span>
+
+<div class="viewcode-block" id="plot_pdf"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plot_pdf">[docs]</a><span class="k">def</span> <span class="nf">plot_pdf</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> \
+             <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+	<span class="k">elif</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">label_numeric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span>
+	<span class="k">elif</span> <span class="ow">not</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">label_numeric</span> <span class="o">=</span><span class="n">labels</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span>
+	<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+	<span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> \
+                             <span class="n">c</span><span class="o">=</span><span class="n">colvec</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">pointsize</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span> \
+                             <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">discrete</span> <span class="ow">and</span> <span class="p">(</span><span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([]),</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+	<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wrote pdf to disk: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.pdf&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="plotMultiPanelGTM"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plotMultiPanelGTM">[docs]</a><span class="k">def</span> <span class="nf">plotMultiPanelGTM</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> \
+                      <span class="n">pointsize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+	<span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">label_numeric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span>
+	<span class="k">elif</span> <span class="ow">not</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">label_numeric</span> <span class="o">=</span> <span class="n">labels</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+	<span class="n">means</span><span class="o">=</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matMeans</span>
+	<span class="n">modes</span><span class="o">=</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matModes</span>
+	<span class="c1">#plot1: GTM means visualization</span>
+	<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">);</span> 
+	<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">means</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">means</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colvec</span><span class="p">,</span> \
+                   <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">pointsize</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> \
+                   <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Means&#39;</span><span class="p">);</span>
+	<span class="c1">#plot2: GTM modes visualization</span>
+	<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">);</span>
+	<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">modes</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">modes</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colvec</span><span class="p">,</span> \
+                    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">pointsize</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> \
+                    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([]),</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Modes&#39;</span><span class="p">)</span>
+	<span class="c1">#plot3: GTM landscape visualization</span>
+	<span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">);</span>
+	<span class="c1">#if it&#39;s label data, the landscape is a class map; </span>
+	<span class="c1">#otherwise, it is a continuous landscape</span>
+	<span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">plotClassMapNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span> \
+                                     <span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plotLandscapeNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span> \
+                                      <span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">means</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">means</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colvec</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span> \
+                    <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">pointsize</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+	<span class="c1">#add mapping from mean positions to modes </span>
+	<span class="c1">#(GTM nodes where the data points have max probability)</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">means</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> \
+                         <span class="p">[</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+		
+	<span class="c1">#plot4: GTM landscape visualization without means/modes mappings</span>
+	<span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">);</span>
+	<span class="k">if</span> <span class="n">discrete</span> <span class="ow">and</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plotClassMapNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span> \
+                                     <span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plotLandscapeNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span> \
+                                      <span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+	<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wrote pdf to disk: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.pdf&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="plot_html"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plot_html">[docs]</a><span class="k">def</span> <span class="nf">plot_html</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;plot&quot;</span><span class="p">,</span> \
+              <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span> 
+	<span class="k">elif</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">label_numeric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span>
+	<span class="k">elif</span> <span class="ow">not</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">label_numeric</span> <span class="o">=</span> <span class="n">labels</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span> 
+	<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;#EEEEEE&#39;</span><span class="p">))</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+	<span class="n">pointsidx</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;point </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">coordinates</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+	<span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> \
+                             <span class="n">c</span><span class="o">=</span><span class="n">colvec</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">pointsize</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span> \
+                             <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: label=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span><span class="n">labels</span><span class="p">)]</span>
+	<span class="k">elif</span> <span class="n">ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: id=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pointsidx</span><span class="p">,</span><span class="n">ids</span><span class="p">)]</span>
+	<span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: label=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pointsidx</span><span class="p">,</span><span class="n">labels</span><span class="p">)]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pointsidx</span><span class="p">)</span> 
+	<span class="n">tooltip</span> <span class="o">=</span> <span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">PointLabelTooltip</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">tooltipstr</span><span class="p">)</span>
+	<span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">tooltip</span><span class="p">)</span>
+	<span class="n">mpld3</span><span class="o">.</span><span class="n">save_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.html&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wrote html plot to disk: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.html&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="plot_html_GTM"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plot_html_GTM">[docs]</a><span class="k">def</span> <span class="nf">plot_html_GTM</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">plot_arrows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> \
+                  <span class="n">title</span><span class="o">=</span><span class="s2">&quot;GTM&quot;</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> \
+                  <span class="n">pointsize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+	<span class="k">elif</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">label_numeric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span>
+	<span class="k">elif</span> <span class="ow">not</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">label_numeric</span> <span class="o">=</span> <span class="n">labels</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="n">label_numeric</span>
+	<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;#EEEEEE&#39;</span><span class="p">))</span>
+	<span class="k">if</span> <span class="n">discrete</span> <span class="ow">and</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plotClassMapNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span> \
+                                     <span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  
+		<span class="n">plotLandscapeNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span> \
+                                      <span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="n">means</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matMeans</span>
+	<span class="n">modes</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matModes</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+	<span class="n">pointsidx</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;point </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">means</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+	<span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">means</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="n">means</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">colvec</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">pointsize</span><span class="p">,</span> \
+                             <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">plot_arrows</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">means</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+			<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> \
+                                 <span class="p">[</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: label=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span><span class="n">labels</span><span class="p">)]</span>
+	<span class="k">elif</span> <span class="n">ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: id=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pointsidx</span><span class="p">,</span><span class="n">ids</span><span class="p">)]</span>
+	<span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: label=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pointsidx</span><span class="p">,</span><span class="n">labels</span><span class="p">)]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">tooltipstr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pointsidx</span><span class="p">)</span>
+	<span class="n">tooltip</span> <span class="o">=</span> <span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">PointLabelTooltip</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">tooltipstr</span><span class="p">)</span>
+	<span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">tooltip</span><span class="p">)</span>
+	<span class="n">mpld3</span><span class="o">.</span><span class="n">save_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.html&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wrote html plot to disk: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.html&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="plot_html_GTM_projection"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plot_html_GTM_projection">[docs]</a><span class="k">def</span> <span class="nf">plot_html_GTM_projection</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">projections</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> \
+                             <span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">plot_arrows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;GTM_projection&quot;</span><span class="p">,</span> \
+                             <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> \
+                             <span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">colvec</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+	<span class="k">elif</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">label_numeric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="ow">not</span> <span class="n">discrete</span><span class="p">:</span>
+		<span class="n">label_numeric</span> <span class="o">=</span> <span class="n">labels</span>
+	<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;#EEEEEE&#39;</span><span class="p">))</span>
+	<span class="k">if</span> <span class="n">discrete</span> <span class="ow">and</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plotClassMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">plotLandscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="n">do_interpolate</span><span class="p">)</span>
+	<span class="n">means</span><span class="o">=</span><span class="n">projections</span><span class="o">.</span><span class="n">matMeans</span>
+	<span class="n">modes</span><span class="o">=</span><span class="n">projections</span><span class="o">.</span><span class="n">matModes</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">)</span>
+	<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+	<span class="n">pointsidx</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;point </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">means</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+	<span class="n">scatter</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">means</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="n">means</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> \
+                             <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">pointsize</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">plot_arrows</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">means</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+			<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> \
+                                 <span class="p">[</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">modes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">tooltip</span> <span class="o">=</span> <span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">PointLabelTooltip</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">ids</span><span class="p">))</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">tooltip</span> <span class="o">=</span> <span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">PointLabelTooltip</span><span class="p">(</span><span class="n">scatter</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pointsidx</span><span class="p">))</span>
+	<span class="n">mpld3</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">tooltip</span><span class="p">)</span>
+	<span class="n">mpld3</span><span class="o">.</span><span class="n">save_html</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.html&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wrote html plot to disk: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.html&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="plotLandscape"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plotLandscape">[docs]</a><span class="k">def</span> <span class="nf">plotLandscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="n">k</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+	<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">z</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">do_interpolate</span><span class="p">:</span>
+		<span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="n">XI</span><span class="p">,</span> <span class="n">YI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="n">ti</span><span class="p">)</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">NearestNDInterpolator</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+		<span class="n">ZI</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span> <span class="n">YI</span><span class="p">,</span> <span class="n">ZI</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">50</span><span class="o">*</span><span class="p">(</span><span class="mi">10</span><span class="o">/</span><span class="n">k</span><span class="p">),</span> <span class="n">z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matMeans</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matMeans</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> \
+                    <span class="mi">20</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Landscape&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([]),</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span></div>
+
+<div class="viewcode-block" id="plotLandscapeNoPoints"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plotLandscapeNoPoints">[docs]</a><span class="k">def</span> <span class="nf">plotLandscapeNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="n">k</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+	<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span> 
+	<span class="n">x</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">z</span> <span class="o">=</span> <span class="n">landscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">do_interpolate</span><span class="p">:</span>
+		<span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="n">XI</span><span class="p">,</span> <span class="n">YI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="n">ti</span><span class="p">)</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">NearestNDInterpolator</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+		<span class="n">ZI</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span> <span class="n">YI</span><span class="p">,</span> <span class="n">ZI</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">50</span><span class="o">*</span><span class="p">(</span><span class="mi">10</span><span class="o">/</span><span class="n">k</span><span class="p">),</span> <span class="n">z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Landscape&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([]),</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span></div>
+
+<div class="viewcode-block" id="plotClassMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plotClassMap">[docs]</a><span class="k">def</span> <span class="nf">plotClassMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="n">k</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+	<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">label_numeric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="n">z</span> <span class="o">=</span> <span class="n">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span><span class="n">prior</span><span class="p">)</span><span class="o">.</span><span class="n">activityModel</span>
+	<span class="k">if</span> <span class="n">do_interpolate</span><span class="p">:</span>
+		<span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="n">XI</span><span class="p">,</span> <span class="n">YI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="n">ti</span><span class="p">)</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">NearestNDInterpolator</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+		<span class="n">ZI</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span> <span class="n">YI</span><span class="p">,</span> <span class="n">ZI</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">175</span><span class="o">*</span><span class="p">(</span><span class="mi">10</span><span class="o">/</span><span class="n">k</span><span class="p">),</span> <span class="n">z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matMeans</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matMeans</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> \
+                    <span class="mi">20</span><span class="p">,</span> <span class="n">label_numeric</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Class Map&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([]),</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>	</div>
+
+
+<div class="viewcode-block" id="plotClassMapNoPoints"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plotClassMapNoPoints">[docs]</a><span class="k">def</span> <span class="nf">plotClassMapNoPoints</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">labels</span><span class="p">,</span><span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">,</span><span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="n">k</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+	<span class="n">n</span><span class="o">=</span><span class="mi">100</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">label_numeric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span><span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+	<span class="n">z</span> <span class="o">=</span> <span class="n">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">label_numeric</span><span class="p">,</span><span class="n">prior</span><span class="p">)</span><span class="o">.</span><span class="n">activityModel</span>
+	<span class="k">if</span> <span class="n">do_interpolate</span><span class="p">:</span>
+		<span class="n">ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+		<span class="n">XI</span><span class="p">,</span> <span class="n">YI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ti</span><span class="p">,</span> <span class="n">ti</span><span class="p">)</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">NearestNDInterpolator</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+		<span class="n">ZI</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span><span class="n">YI</span><span class="p">)</span>
+		<span class="n">plt</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">XI</span><span class="p">,</span> <span class="n">YI</span><span class="p">,</span> <span class="n">ZI</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">175</span><span class="o">*</span><span class="p">(</span><span class="mi">10</span><span class="o">/</span><span class="n">k</span><span class="p">),</span> <span class="n">z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Spectral</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Class Map&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([]),</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Helena A. Gaspar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'v1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
