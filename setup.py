@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
-from sphinx.setup_command import BuildDoc
-cmdclass = {'build_sphinx': BuildDoc}
+#from sphinx.setup_command import BuildDoc
+#cmdclass = {'build_sphinx': BuildDoc}
 
 setup(name='ugtm',
-	version='1.0',
+	version='1.1.2',
 	description='Generative Topographic Mapping (GTM) for python, GTM classification and GTM regression',
-	long_description=open('README.txt').read(),
+	long_description=open('README.rst').read(),
 	url='http://github.com/hagax8/ugtm',
 	author='Helena A. Gaspar',
 	author_email='hagax8@gmail.com',

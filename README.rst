@@ -14,10 +14,10 @@ ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (k
     labels=np.random.choice([1,2],size=100)
 
     #build GTM map
-    gtm=ugtm.runGTM(data=data,labels=labels,verbose=True)
+    gtm=ugtm.runGTM(data=data,verbose=True)
 
     #plot GTM map (html)
-    gtm.plot_html("out")
+    gtm.plot_html(output="out")
 
 
 1. Import package

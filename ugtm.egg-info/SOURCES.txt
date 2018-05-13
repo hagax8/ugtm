@@ -2,7 +2,6 @@ CHANGES.txt
 LICENSE.txt
 MANIFEST.in
 README.rst
-README.txt
 setup.cfg
 setup.py
 docs/build/html/_sources/index.rst.txt
