@@ -1,0 +1,5 @@
+numpy
+sklearn
+matplotlib
+scipy
+mpld3

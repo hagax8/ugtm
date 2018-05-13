@@ -1,0 +1,437 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ugtm &mdash; ugtm v1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="ugtm documentation" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ugtm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ugtm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#import-package">1. Import package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#construct-and-plot-gtm-maps-or-kgtm-maps">2. Construct and plot GTM maps (or kGTM maps)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-html-maps">3. Plot html maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-pdf-maps">4. Plot pdf maps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plot-multipanel-views-only-if-labels-or-activities-are-provided">5. Plot multipanel views (only if labels or activities are provided)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-new-data-onto-existing-gtm-map">6. Project new data onto existing GTM map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-predictions-for-a-test-set-gtm-regression-gtr-and-classification-gtc">7. Output predictions for a test set: GTM regression (GTR) and classification (GTC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-gtm-predictions-with-per-class-probabilities">8. Advanced GTM predictions with per-class probabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crossvalidation-experiments">9. Crossvalidation experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#links-references">10. Links &amp; references</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ugtm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>ugtm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ugtm">
+<h1>ugtm<a class="headerlink" href="#ugtm" title="Permalink to this headline">¶</a></h1>
+<p>ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (kernel Generative Topographic Mapping), GTM classification models (kNN, Bayes) and GTM regression models. ugtm also implements cross-validation options which can be used to compare GTM classification models to SVM classification models, and GTM regression models to SVM regression models. Typical usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">ugtm</span>
+
+<span class="c1">#generate sample data and labels: replace this with your own data</span>
+<span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">labels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1">#build GTM map</span>
+<span class="n">gtm</span><span class="o">=</span><span class="n">ugtm</span><span class="o">.</span><span class="n">runGTM</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#plot GTM map (html)</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_html</span><span class="p">(</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="import-package">
+<h2>1. Import package<a class="headerlink" href="#import-package" title="Permalink to this headline">¶</a></h2>
+<p>Import ugtm package, allowing to construct GTM and kernel GTM (kGTM) maps, GTM classification models, GTM regression models:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ugtm</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="construct-and-plot-gtm-maps-or-kgtm-maps">
+<h2>2. Construct and plot GTM maps (or kGTM maps)<a class="headerlink" href="#construct-and-plot-gtm-maps-or-kgtm-maps" title="Permalink to this headline">¶</a></h2>
+<p>A gtm object can be created by running the function runGTM on a dataset. Parameters for runGTM are: k = sqrt(number of nodes), m = sqrt(number of rbf centres), s = RBF width factor, l = regularization coefficient. The number of iteration for the expectation-maximization algorithm is set to 200 by default. This is an example with random data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#import numpy to generate random data</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#generate random data (independent variables x),</span>
+<span class="c1">#discrete labels (dependent variable y),</span>
+<span class="c1">#and continuous labels (dependent variable y),</span>
+<span class="c1">#to experiment with categorical or continuous outcomes</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">labels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;class1&quot;</span><span class="p">,</span><span class="s2">&quot;class2&quot;</span><span class="p">],</span><span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">activity</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#create a gtm object and write model</span>
+<span class="n">gtm</span> <span class="o">=</span> <span class="n">ugtm</span><span class="o">.</span><span class="n">runGTM</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;testout1&quot;</span><span class="p">)</span>
+
+<span class="c1">#run verbose</span>
+<span class="n">gtm</span> <span class="o">=</span> <span class="n">ugtm</span><span class="o">.</span><span class="n">runGTM</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#to run a kernel GTM model instead, run following:</span>
+<span class="n">gtm</span> <span class="o">=</span> <span class="n">ugtm</span><span class="o">.</span><span class="n">runkGTM</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">doKernel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+
+<span class="c1">#access coordinates (means or modes), and responsibilities of gtm object</span>
+<span class="n">gtm_coordinates</span> <span class="o">=</span> <span class="n">gtm</span><span class="o">.</span><span class="n">matMeans</span>
+<span class="n">gtm_modes</span> <span class="o">=</span> <span class="n">gtm</span><span class="o">.</span><span class="n">matModes</span>
+<span class="n">gtm_responsibilities</span> <span class="o">=</span> <span class="n">gtm</span><span class="o">.</span><span class="n">matR</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-html-maps">
+<h2>3. Plot html maps<a class="headerlink" href="#plot-html-maps" title="Permalink to this headline">¶</a></h2>
+<p>Call the plot_html() function on the gtm object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#run model on train</span>
+<span class="n">gtm</span> <span class="o">=</span> <span class="n">ugtm</span><span class="o">.</span><span class="n">runGTM</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+
+<span class="c1"># ex. plot gtm object with landscape, html: labels are continuous</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_html</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout10&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># ex. plot gtm object with landscape, html: labels are discrete</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_html</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout11&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># ex. plot gtm object with landscape, html: labels are continuous</span>
+<span class="c1"># no interpolation between nodes</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_html</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout12&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> \
+              <span class="n">do_interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">ids</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># ex. plot gtm object with landscape, html: labels are discrete,</span>
+<span class="c1"># no interpolation between nodes</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_html</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout13&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> \
+              <span class="n">do_interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-pdf-maps">
+<h2>4. Plot pdf maps<a class="headerlink" href="#plot-pdf-maps" title="Permalink to this headline">¶</a></h2>
+<p>Call the plot() function on the gtm object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#run model on train</span>
+<span class="n">gtm</span> <span class="o">=</span> <span class="n">ugtm</span><span class="o">.</span><span class="n">runGTM</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+
+<span class="c1"># ex. plot gtm object, pdf: no labels</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout6&quot;</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># ex. plot gtm object with landscape, pdf: labels are discrete</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout7&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># ex. plot gtm object with landscape, pdf: labels are continuous</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout8&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-multipanel-views-only-if-labels-or-activities-are-provided">
+<h2>5. Plot multipanel views (only if labels or activities are provided)<a class="headerlink" href="#plot-multipanel-views-only-if-labels-or-activities-are-provided" title="Permalink to this headline">¶</a></h2>
+<p>Call the plot_multipanel() function on the gtm object.
+This plots a general model view, showing means, modes, landscape with or without points.
+The plot_multipanel function only works if you have defined labels:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#run model on train</span>
+<span class="n">gtm</span> <span class="o">=</span> <span class="n">ugtm</span><span class="o">.</span><span class="n">runGTM</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+
+<span class="c1"># ex. with discrete labels and inter-node interpolation</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_multipanel</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout2&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># ex. with continuous labels and inter-node interpolation</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_multipanel</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout3&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># ex. with discrete labels and no inter-node interpolation</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_multipanel</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout4&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> \
+                    <span class="n">do_interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># ex. with continuous labels and no inter-node interpolation</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_multipanel</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout5&quot;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> \
+                    <span class="n">do_interpolate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="project-new-data-onto-existing-gtm-map">
+<h2>6. Project new data onto existing GTM map<a class="headerlink" href="#project-new-data-onto-existing-gtm-map" title="Permalink to this headline">¶</a></h2>
+<p>New data can be projected on the GTM map by using the transform() function, which takes as input the gtm model, a training and test set. The train set is then only used to perform data preprocessing on the test set based on the train (for example: apply the same PCA transformation to the train and test sets before running the algorithm):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#run model on train</span>
+<span class="n">gtm</span> <span class="o">=</span> <span class="n">ugtm</span><span class="o">.</span><span class="n">runGTM</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="n">doPCA</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#test new data (test)</span>
+<span class="n">transformed</span><span class="o">=</span><span class="n">ugtm</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">=</span><span class="n">gtm</span><span class="p">,</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span><span class="n">doPCA</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#plot transformed test (html)</span>
+<span class="n">transformed</span><span class="o">.</span><span class="n">plot_html</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout14&quot;</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1">#plot transformed test (pdf)</span>
+<span class="n">transformed</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout15&quot;</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1">#plot transformed data on existing classification model,</span>
+<span class="c1">#using training set labels</span>
+<span class="n">gtm</span><span class="o">.</span><span class="n">plot_html_projection</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;testout16&quot;</span><span class="p">,</span><span class="n">projections</span><span class="o">=</span><span class="n">transformed</span><span class="p">,</span>\
+                         <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> \
+                         <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="output-predictions-for-a-test-set-gtm-regression-gtr-and-classification-gtc">
+<h2>7. Output predictions for a test set: GTM regression (GTR) and classification (GTC)<a class="headerlink" href="#output-predictions-for-a-test-set-gtm-regression-gtr-and-classification-gtc" title="Permalink to this headline">¶</a></h2>
+<p>The GTR() function implements the GTM regression model (cf. references) and GTC() function a GTM classification model (cf. references):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#continuous labels (prediction by GTM regression model)</span>
+<span class="n">predicted</span><span class="o">=</span><span class="n">ugtm</span><span class="o">.</span><span class="n">GTR</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">)</span>
+
+<span class="c1">#discrete labels (prediction by GTM classification model)</span>
+<span class="n">predicted</span><span class="o">=</span><span class="n">ugtm</span><span class="o">.</span><span class="n">GTC</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="advanced-gtm-predictions-with-per-class-probabilities">
+<h2>8. Advanced GTM predictions with per-class probabilities<a class="headerlink" href="#advanced-gtm-predictions-with-per-class-probabilities" title="Permalink to this headline">¶</a></h2>
+<p>Per-class probabilities for a test set can be given by the advancedGTC() function (you can set the m, k, l, s parameters just as with runGTM):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#get whole output model and label predictions for test set</span>
+<span class="n">predicted_model</span><span class="o">=</span><span class="n">ugtm</span><span class="o">.</span><span class="n">advancedGTC</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="c1">#write whole predicted model with per-class probabilities</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">printClassPredictions</span><span class="p">(</span><span class="n">predicted_model</span><span class="p">,</span><span class="s2">&quot;testout17&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="crossvalidation-experiments">
+<h2>9. Crossvalidation experiments<a class="headerlink" href="#crossvalidation-experiments" title="Permalink to this headline">¶</a></h2>
+<p>Different crossvalidation experiments were implemented to compare GTC and GTR models to classical machine learning methods:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#crossvalidation experiment: GTM classification model implemented in ugtm,</span>
+<span class="c1">#here: set hyperparameters s=1 and l=1 (set to -1 to optimize)</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateGTC</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n_repetitions</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">n_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1">#crossvalidation experiment: GTM regression model</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateGTR</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#you can also run the following functions to compare</span>
+<span class="c1">#with other classification/regression algorithms:</span>
+
+<span class="c1">#crossvalidation experiment, k-nearest neighbours classification</span>
+<span class="c1">#on 2D PCA map with 7 neighbors (set to -1 to optimize number of neighbours)</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidatePCAC</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1">#crossvalidation experiment, SVC rbf classification model (sklearn implementation):</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateSVCrbf</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#crossvalidation experiment, linear SVC classification model (sklearn implementation):</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateSVCrbf</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#crossvalidation experiment, linear SVC regression model (sklearn implementation):</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateSVR</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">epsilon</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#crossvalidation experiment, k-nearest neighbours regression on 2D PCA map with 7 neighbors:</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidatePCAR</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="links-references">
+<h2>10. Links &amp; references<a class="headerlink" href="#links-references" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>GTM algorithm by Bishop et al: <a class="reference external" href="https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf">https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf</a></li>
+<li>kernel GTM: <a class="reference external" href="https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es2010-44.pdf">https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es2010-44.pdf</a></li>
+<li>GTM classification models: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/24320683">https://www.ncbi.nlm.nih.gov/pubmed/24320683</a></li>
+<li>GTM regression models: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/27490381">https://www.ncbi.nlm.nih.gov/pubmed/27490381</a></li>
+<li>github: <a class="reference external" href="https://github.com/hagax8/ugtm">https://github.com/hagax8/ugtm</a></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="ugtm documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Helena A. Gaspar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

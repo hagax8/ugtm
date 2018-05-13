@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ugtm.ugtm_preprocess &mdash; ugtm v1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ugtm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">ugtm</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ugtm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ugtm.ugtm_preprocess</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ugtm.ugtm_preprocess</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">pairwise_distances</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">pairwise</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">distance</span> 
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">KernelCenterer</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">Imputer</span>
+
+
+<div class="viewcode-block" id="ProcessedTrainTest"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.ProcessedTrainTest">[docs]</a><span class="k">class</span> <span class="nc">ProcessedTrainTest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">train</span> <span class="o">=</span> <span class="n">train</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">test</span></div>
+
+
+<div class="viewcode-block" id="pcaPreprocess"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.pcaPreprocess">[docs]</a><span class="k">def</span> <span class="nf">pcaPreprocess</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> \
+                  <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+		<span class="n">imp</span> <span class="o">=</span> <span class="n">Imputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">missing_strategy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="n">data</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+	<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+	<span class="n">data</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">n_components</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+	    <span class="n">n_components</span> <span class="o">=</span> <span class="mf">0.80</span>
+	<span class="k">if</span> <span class="n">doPCA</span><span class="p">:</span>
+		<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
+		<span class="n">data</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+		<span class="n">n_components</span><span class="o">=</span><span class="n">pca</span><span class="o">.</span><span class="n">n_components_</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Used </span><span class="si">%s</span><span class="s2"> components explaining </span><span class="si">%s%%</span><span class="s2"> of the variance</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> \
+                      <span class="p">(</span><span class="n">n_components</span><span class="p">,</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()[</span><span class="n">n_components</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+	<span class="k">return</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="processTrainTest"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.processTrainTest">[docs]</a><span class="k">def</span> <span class="nf">processTrainTest</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="n">test</span><span class="p">,</span><span class="n">doPCA</span><span class="p">,</span><span class="n">n_components</span><span class="p">,</span><span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> \
+                     <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+		<span class="n">imp</span> <span class="o">=</span> <span class="n">Imputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">missing_strategy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="n">train</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+		<span class="n">test</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+	<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+	<span class="n">train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+	<span class="n">test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">n_components</span><span class="o">==-</span><span class="mi">1</span><span class="p">):</span>
+	    <span class="n">n_components</span><span class="o">=</span><span class="mf">0.80</span>
+	<span class="k">if</span> <span class="n">doPCA</span><span class="p">:</span>
+		<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
+		<span class="n">train</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+		<span class="n">test</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+	<span class="k">return</span><span class="p">(</span><span class="n">ProcessedTrainTest</span><span class="p">(</span><span class="n">train</span><span class="p">,</span><span class="n">test</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="chooseKernel"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.chooseKernel">[docs]</a><span class="k">def</span> <span class="nf">chooseKernel</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">kerneltype</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">:</span>
+		<span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="mi">1</span><span class="o">+</span><span class="n">pairwise_distances</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)))</span>
+	<span class="k">elif</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;cosine&#39;</span><span class="p">:</span>
+		<span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="n">pairwise</span><span class="o">.</span><span class="n">cosine_kernel</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;laplacian&#39;</span><span class="p">:</span>
+		<span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="n">pairwise</span><span class="o">.</span><span class="n">laplacian_kernel</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+		<span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="n">pairwise</span><span class="o">.</span><span class="n">linear_kernel</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;polynomial_kernel&#39;</span><span class="p">:</span>
+		<span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="n">pairwise</span><span class="o">.</span><span class="n">polynomial_kernel</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+	<span class="k">elif</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;jaccard&#39;</span><span class="p">:</span>
+		<span class="n">K</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">metric</span><span class="o">=</span><span class="s1">&#39;jaccard&#39;</span><span class="p">)</span>
+	<span class="n">scaler</span> <span class="o">=</span> <span class="n">KernelCenterer</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+	<span class="k">return</span><span class="p">(</span><span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">K</span><span class="p">))</span></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Helena A. Gaspar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'v1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
