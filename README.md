@@ -1,12 +1,9 @@
-# uGTM v1.0 beta: Generative Topographic Mapping with Python.
+# ugtm v1.0: Generative Topographic Mapping with Python.
 
-Generative Topographic Maps (GTMs) are probabilistic Kohonen maps. GTM is a dimensionality reduction algorithm (as t-SNE, LLE, etc).
+GTM (Generative Topographic Mapping) is a dimensionality reduction algorithm (as t-SNE, LLE, etc) created by Bishop et al. (https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf) and a probabilistic counterpart of Kohonen maps.
 
-This is a python implementation of GTMs, using sklearn, d3 and numpy.
+ugtm is a python package implementing GTM and GTM prediction algorithms. ugtm contains the core functions and runGTM.py is an easy-to-use program. The kernel version of the algorithm (kGTM) is also implemented. You can also generate regression or classification maps, or evaluate the predictive accuracy (classification) or RMSE/R2 (regression) in repeated cross-validation experiments.
 
-uGTM.py contains the core functions and runGTM.py is an easy-to-use program. The kernel version of the algorithm (kGTM) is also implemented. You can also generate regression or classification maps, or evaluate the predictive accuracy (classification) or RMSE/R2 (regression) in repeated cross-validation experiments - all the workflows were implemented in runGTM.py, which uses the uGTM.py core functions.
-
-GTM is a dimensionality reduction algorithm created by Bishop et al. (https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf)
 
 
 ## Prerequisites
@@ -16,9 +13,8 @@ and following packages:
 sklearn
 numpy 
 matplotlib
-pandas
 scipy
-mpl_toolkits
+mpld3
 
 ## Examples
 
