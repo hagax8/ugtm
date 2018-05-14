@@ -8,7 +8,8 @@ ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (k
     #!/usr/bin/env python
 
     import ugtm 
-
+    import numpy as np
+    
     #generate sample data and labels: replace this with your own data
     data=np.random.randn(100,50)
     labels=np.random.choice([1,2],size=100)
