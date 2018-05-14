@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
-#from sphinx.setup_command import BuildDoc
-#cmdclass = {'build_sphinx': BuildDoc}
+from sphinx.setup_command import BuildDoc
+cmdclass = {'build_sphinx': BuildDoc}
 
 setup(name='ugtm',
 	version='1.1.2',
