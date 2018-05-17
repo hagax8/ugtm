@@ -8,6 +8,10 @@ docs/build/html/_sources/index.rst.txt
 docs/build/html/_sources/modules.rst.txt
 docs/build/html/_sources/readme.rst.txt
 docs/build/html/_sources/ugtm.rst.txt
+docs/source/_build/html/_sources/index.rst.txt
+docs/source/_build/html/_sources/modules.rst.txt
+docs/source/_build/html/_sources/readme.rst.txt
+docs/source/_build/html/_sources/ugtm.rst.txt
 ugtm/__init__.py
 ugtm/ugtm_classes.py
 ugtm/ugtm_core.py
