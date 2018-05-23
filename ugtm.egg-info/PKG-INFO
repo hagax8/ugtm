@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: ugtm
-Version: 1.1.dev3
+Version: 1.1.3
 Summary: Generative Topographic Mapping (GTM) for python, GTM classification and GTM regression
 Home-page: http://github.com/hagax8/ugtm
 Author: Helena A. Gaspar
