@@ -16,7 +16,8 @@ pip install ugtm
 
 
 ## Prerequisites
-python 2.7
+
+Python 2.7 or + (tested on Python 3.4.6 and Python 2.7.14)
 
 and following packages:
 - sklearn>=0.0
