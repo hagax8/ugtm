@@ -252,16 +252,21 @@ elif args.usetest == 'iris':
     iris = sklearn.datasets.load_iris()
     data = iris.data
     labels = iris.target_names[iris.target]
+    discrete = 1
 # if it's not test data, then load provided data files
-elif args.filenamedat and args.filenamelbls:
+elif args.filenamedat:
     data = np.genfromtxt(args.filenamedat, delimiter=",", dtype=np.float64)
+
+if args.filenamelbls:
     if discrete == 1:
         labels = np.genfromtxt(args.filenamelbls, delimiter="\t", dtype=str)
     else:
         labels = np.genfromtxt(args.filenamelbls, delimiter="\t", dtype=float)
-
+else:
+    labels = None
 # save label name
-savelabelname = np.copy(labels)
+if args.filenamelbls:
+    savelabelname = np.copy(labels)
 
 # load ids for data points if there are provides
 if args.filenameids is not None:
