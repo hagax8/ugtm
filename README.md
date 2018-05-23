@@ -23,7 +23,7 @@ sklearn
 numpy 
 matplotlib
 scipy
-mpld3
+mpld3>=0.3
 
 
 ## Author
