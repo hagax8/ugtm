@@ -241,18 +241,27 @@ else:
     print("")
     exit
 
+
+
+labels = None
+data = None
+ids = None
+
 # load test examples if we choose to use default data from sklearn
 if args.usetest == 's':
     data, labels = sklearn.datasets.samples_generator.make_s_curve(
         500, random_state=args.random_state)
+#    ids = np.copy(labels)
 elif args.usetest == 'swiss':
     data, labels = sklearn.datasets.make_swiss_roll(
         n_samples=2000, random_state=args.random_state)
+#    ids = np.copy(labels)
 elif args.usetest == 'iris':
     iris = sklearn.datasets.load_iris()
     data = iris.data
     labels = iris.target_names[iris.target]
     discrete = 1
+#    ids = np.copy(labels)
 # if it's not test data, then load provided data files
 elif args.filenamedat:
     data = np.genfromtxt(args.filenamedat, delimiter=",", dtype=np.float64)
@@ -262,17 +271,11 @@ if args.filenamelbls:
         labels = np.genfromtxt(args.filenamelbls, delimiter="\t", dtype=str)
     else:
         labels = np.genfromtxt(args.filenamelbls, delimiter="\t", dtype=float)
-else:
-    labels = None
-# save label name
-if args.filenamelbls:
-    savelabelname = np.copy(labels)
+#    ids = np.copy(labels)
 
 # load ids for data points if there are provides
 if args.filenameids is not None:
     ids = np.genfromtxt(args.filenameids, delimiter="\t", dtype=str)
-else:
-    ids = ""
 
 
 # define type of experiment
@@ -349,7 +352,7 @@ elif type_of_experiment == 'traintest':
 elif type_of_experiment == 'visualization':
 
     if args.model != 'GTM' and args.model != 'kGTM':
-        data = ugtm.pcaPreprocess(data=data, doPCA=args.pca,
+        data = ugtm.ugtm_preprocess.pcaPreprocess(data=data, doPCA=args.pca,
                                   n_components=args.n_components,
                                   missing=args.missing,
                                   missing_strategy=args.missing_strategy,
