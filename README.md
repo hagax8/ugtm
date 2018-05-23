@@ -16,14 +16,15 @@ pip install ugtm
 
 
 ## Prerequisites
-python 2.7
+
+Python 2.7 or + (tested on Python 3.4.6 and Python 2.7.14)
 
 and following packages:
-sklearn
-numpy 
-matplotlib
-scipy
-mpld3
+- sklearn>=0.0
+- numpy>=1.14.1 
+- matplotlib>=2.0.2
+- scipy>=0.19.1
+- mpld3>=0.3
 
 
 ## Author
