@@ -10,13 +10,13 @@ import math
 
 
 # argument parsing
-parser = argparse.ArgumentParser(description='Generate and assess GTM maps \
-                                              for classification \
-                                              or regression.')
+parser = argparse.ArgumentParser(description='Generate and assess GTM maps '
+                                             'for classification '
+                                             'or regression.')
 parser.add_argument('--data',
-                    help='data file in csv format without header \
-                          (must be a similarity matrix \
-                          if --model kGTM is set, otherwise not)',
+                    help='data file in csv format without header '
+                         '(must be a similarity matrix '
+                         'if --model kGTM is set, otherwise not)',
                     dest='filenamedat')
 parser.add_argument('--labels',
                     help='label file in csv format without header',
@@ -36,14 +36,14 @@ parser.add_argument('--usetest',
                     dest='usetest',
                     choices=['s', 'swiss', 'iris'])
 parser.add_argument('--model',
-                    help='GTM model, kernel GTM model, SVM, PCA or \
-                          comparison between: \
-                          GTM, kGTM, LLE and tSNE for simple visualization, \
-                          GTM and SVM for regression or \
-                          classification (--crossvalidate); \
-                          benchmarked parameters for GTM are \
-                          regularization and rbf_width_factor \
-                          for given grid_size and rbf_grid_size',
+                    help='GTM model, kernel GTM model, SVM, PCA or '
+                         'comparison between: '
+                         'GTM, kGTM, LLE and tSNE for simple visualization, '
+                         'GTM and SVM for regression or '
+                         'classification (--crossvalidate); '
+                         'benchmarked parameters for GTM are '
+                         'regularization and rbf_width_factor '
+                         'for given grid_size and rbf_grid_size',
                     dest='model',
                     choices=['GTM', 'kGTM', 'SVM',
                              'PCA', 't-SNE', 'SVMrbf', 'compare'])
@@ -51,34 +51,34 @@ parser.add_argument('--output',
                     help='output name',
                     dest='output')
 parser.add_argument('--crossvalidate',
-                    help='show best l (regularization coefficient) \
-                          and s (RBF width factor) \
-                          for classification or regression, \
-                          with default grid size parameter \
-                          k = sqrt(5*sqrt(Nfeatures))+2) \
-                          and RBF grid size parameter m = sqrt(k); \
-                          you can also set the 4 parameters \
-                          and run only one model with \
-                          --rbf_width_factor, --regularization, \
-                          --grid_size and --rbf_grid_size',
+                    help='show best l (regularization coefficient) '
+                         'and s (RBF width factor) '
+                         'for classification or regression, '
+                         'with default grid size parameter '
+                         'k = sqrt(5*sqrt(Nfeatures))+2) '
+                         'and RBF grid size parameter m = sqrt(k); '
+                         'you can also set the 4 parameters '
+                         'and run only one model with '
+                         '--rbf_width_factor, --regularization, '
+                         '--grid_size and --rbf_grid_size',
                     action='store_true')
 parser.add_argument('--pca',
-                    help='do PCA preprocessing; if --n_components is not set, \
-                          will use number of PCs explaining 80%% of variance',
+                    help='do PCA preprocessing; if --n_components is not set, '
+                         'will use number of PCs explaining 80%% of variance',
                     action='store_true')
 parser.add_argument('--missing',
                     help='there is missing data (encoded by NA)',
                     action='store_true')
 parser.add_argument('--test',
-                    help='test data; only available for \
-                          GTM classification in this script \
-                          (define training data with --data and \
-                          training labels with --labels \
-                          with --labeltype discrete)',
+                    help='test data; only available for '
+                         'GTM classification in this script '
+                         '(define training data with --data and '
+                         'training labels with --labels '
+                         'with --labeltype discrete)',
                     dest='test')
 parser.add_argument('--missing_strategy',
-                    help='missing data strategy, \
-                          missing values encoded by NA; default is median',
+                    help='missing data strategy, '
+                         'default is median',
                     const='median',
                     type=str,
                     default='median',
@@ -86,13 +86,13 @@ parser.add_argument('--missing_strategy',
                     dest='missing_strategy',
                     choices=['mean', 'median', 'most_frequent'])
 parser.add_argument('--predict_mode',
-                    help='predict mode for GTM classification: \
-                          default is bayes for an equiprobable \
-                          class prediction, \
-                          you can change this to knn; \
-                          knn is the only one available \
-                          for PCA and t-SNE, \
-                          this option is only useful for GTM',
+                    help='predict mode for GTM classification: '
+                         'default is bayes for an equiprobable '
+                         'class prediction, '
+                         'you can change this to knn; '
+                         'knn is the only one available '
+                         'for PCA and t-SNE, '
+                         'this option is only useful for GTM',
                     const='bayes',
                     type=str,
                     default='bayes',
@@ -100,14 +100,14 @@ parser.add_argument('--predict_mode',
                     dest='predict_mode',
                     choices=['bayes', 'knn'])
 parser.add_argument('--prior',
-                    help='type of prior for GTM classification map \
-                          and prediction model: \
-                          you can choose equiprobable classes \
-                          (prior any class=1/nClasses) \
-                          or to estimate classes from the training set \
-                          (prior class 1 = \
-                          sum(class 1 instances in train)/sum(instances \
-                          in train))',
+                    help='type of prior for GTM classification map '
+                         'and prediction model: '
+                         'you can choose equiprobable classes '
+                         '(prior any class=1/nClasses) '
+                         'or to estimate classes from the training set '
+                         '(prior class 1 = '
+                         'sum(class 1 instances in train)/sum(instances '
+                         'in train))',
                     const='equiprobable',
                     type=str,
                     default='equiprobable',
@@ -115,35 +115,35 @@ parser.add_argument('--prior',
                     dest='prior',
                     choices=['equiprobable', 'estimated'])
 parser.add_argument('--n_components',
-                    help='set number of components for PCA pre-processing, \
-                          if --pca flag is present',
+                    help='set number of components for PCA pre-processing, '
+                         'if --pca flag is present',
                     const=-1,
                     type=int,
                     default=-1,
                     nargs='?',
                     dest='n_components')
 parser.add_argument('--percentage_components',
-                    help='set number of components for PCA pre-processing, \
-                          if --pca flag is present',
+                    help='set number of components for PCA pre-processing, '
+                         'if --pca flag is present',
                     const=0.80,
                     type=float,
                     default=0.80,
                     nargs='?',
                     dest='n_components')
 parser.add_argument('--regularization',
-                    help='set regularization factor, default: 0.1; \
-                          set this to -1 to crossvalidate \
-                          when using --crossvalidate',
+                    help='set regularization factor, default: 0.1; '
+                         'set this to -1 to crossvalidate '
+                         'when using --crossvalidate',
                     type=float,
                     dest='regularization',
                     default=0.1,
                     nargs='?',
                     const=-1.0)
 parser.add_argument('--rbf_width_factor',
-                    help='set RBF (radial basis function) width factor, \
-                          default: 0.3; \
-                          set this to -1 to crossvalidate \
-                          when using --crossvalidate',
+                    help='set RBF (radial basis function) width factor, '
+                         'default: 0.3; '
+                         'set this to -1 to crossvalidate '
+                         'when using --crossvalidate',
                     type=float,
                     dest='rbf_width_factor',
                     default=0.3,
@@ -163,6 +163,20 @@ parser.add_argument('--svm_epsilon',
                     default=1.0,
                     nargs='?',
                     dest='svm_epsilon')
+parser.add_argument('--point_size',
+                    help='point size',
+                    const=1.0,
+                    type=float,
+                    default=1.0,
+                    nargs='?',
+                    dest='pointsize')
+parser.add_argument('--alpha',
+                    help='alpha for scatter plots',
+                    const=0.5,
+                    type=float,
+                    default=0.5,
+                    nargs='?',
+                    dest='alpha')
 parser.add_argument('--svm_gamma',
                     help='set gamma parameter for SVM',
                     const=1.0,
@@ -171,14 +185,14 @@ parser.add_argument('--svm_gamma',
                     nargs='?',
                     dest='svm_gamma')
 parser.add_argument('--grid_size',
-                    help='grid size (if k: the map will be kxk, \
-                          default k = sqrt(5*sqrt(Nfeatures))+2)',
+                    help='grid size (if k: the map will be kxk, '
+                         'default k = sqrt(5*sqrt(Nfeatures))+2)',
                     type=int,
                     dest='grid_size',
                     default=0)
 parser.add_argument('--rbf_grid_size',
-                    help='RBF grid size (if m: the RBF grid will be mxm, \
-                           default m = sqrt(grid_size))',
+                    help='RBF grid size (if m: the RBF grid will be mxm, '
+                          'default m = sqrt(grid_size))',
                     type=int,
                     dest='rbf_grid_size',
                     default=0)
@@ -190,16 +204,16 @@ parser.add_argument('--n_neighbors',
                     nargs='?',
                     dest='n_neighbors')
 parser.add_argument('--random_state',
-                    help='change random state for map initialization \
-                          (default is 5)',
+                    help='change random state for map initialization '
+                         '(default is 5)',
                     const=1234,
                     type=int,
                     default=1234,
                     nargs='?',
                     dest='random_state')
 parser.add_argument('--representation',
-                    help='type of representation used for GTM: \
-                          modes or means',
+                    help='type of representation used for GTM: '
+                         'modes or means',
                     dest='representation',
                     const='modes',
                     type=str,
@@ -207,8 +221,8 @@ parser.add_argument('--representation',
                     nargs='?',
                     choices=['means', 'modes'])
 parser.add_argument('--kernel',
-                    help='type of kernel for Kernel GTM - \
-                          default is euclidean',
+                    help='type of kernel for Kernel GTM - '
+                         'default is euclidean',
                     dest='kernel',
                     const='euclidean',
                     type=str,
@@ -216,6 +230,59 @@ parser.add_argument('--kernel',
                     nargs='?',
                     choices=['euclidean', 'laplacian',
                              'jaccard', 'cosine', 'linear'])
+parser.add_argument('--cmap',
+                    help='matplotlib color map - '
+                         'default is Spectral_r',
+                    dest='cname',
+                    const='Spectral_r',
+                    type=str,
+                    default='Spectral_r',
+                    nargs='?',
+                    choices=['Greys', 'Purples', 'Blues', 'Greens',
+                             'Blues', 'BuGn', 'BuPu',
+                             'GnBu', 'Greens', 'Greys', 'Oranges', 'OrRd',
+                             'PuBu', 'PuBuGn', 'PuRd', 'Purples', 'RdPu',
+                             'Reds', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd',
+                             'afmhot', 'autumn', 'bone', 'cool', 'copper',
+                             'gist_heat', 'gray', 'hot', 'pink',
+                             'spring', 'summer', 'winter',
+                             'BrBG', 'bwr', 'coolwarm', 'PiYG', 'PRGn', 'PuOr',
+                             'RdBu', 'RdGy', 'RdYlBu', 'RdYlGn', 'Spectral',
+                             'seismic',
+                             'Accent', 'Dark2', 'Paired', 'Pastel1',
+                             'Pastel2', 'Set1', 'Set2', 'Set3',
+                             'gist_earth', 'terrain', 'ocean', 'gist_stern',
+                             'brg', 'CMRmap', 'cubehelix',
+                             'gnuplot', 'gnuplot2', 'gist_ncar',
+                             'nipy_spectral', 'jet', 'rainbow',
+                             'gist_rainbow', 'hsv', 'flag', 'prism',
+                             'Greys_r', 'Purples_r', 'Blues_r', 'Greens_r',
+                             'Blues_r', 'BuGn_r', 'BuPu_r',
+                             'GnBu_r', 'Greens_r', 'Greys_r', 'Oranges_r',
+                             'OrRd_r',
+                             'PuBu_r', 'PuBuGn_r', 'PuRd_r', 'Purples_r',
+                             'RdPu_r',
+                             'Reds_r', 'YlGn_r', 'YlGnBu_r', 'YlOrBr_r',
+                             'YlOrRd_r',
+                             'afmhot_r', 'autumn_r', 'bone_r', 'cool_r',
+                             'copper_r',
+                             'gist_heat_r', 'gray_r', 'hot_r', 'pink_r',
+                             'spring_r', 'summer_r', 'winter_r',
+                             'BrBG_r', 'bwr_r', 'coolwarm_r', 'PiYG_r',
+                             'PRGn_r', 'PuOr',
+                             'RdBu_r', 'RdGy_r', 'RdYlBu_r', 'RdYlGn_r',
+                             'Spectral_r',
+                             'seismic_r',
+                             'Accent_r', 'Dark2_r', 'Paired_r', 'Pastel1_r',
+                             'Pastel2_r', 'Set1_r', 'Set2_r', 'Set3_r',
+                             'gist_earth_r', 'terrain_r', 'ocean_r',
+                             'gist_stern_r',
+                             'brg_r', 'CMRmap_r', 'cubehelix_r',
+                             'gnuplot_r', 'gnuplot2_r', 'gist_ncar_r',
+                             'nipy_spectral_r', 'jet_r', 'rainbow_r',
+                             'gist_rainbow_r', 'hsv_r', 'flag_r', 'prism_r'])
+
+
 args = parser.parse_args()
 print('')
 print(args)
@@ -226,9 +293,9 @@ print('')
 if args.model == 'PCA':
     args.pca = True
     args.n_components = 2
-discrete = 0
+discrete = False
 if args.labeltype == "discrete":
-    discrete = 1
+    discrete = True
 
 if args.model and ((args.filenamedat and args.filenamelbls)):
     print("User provided model, data file and label names.")
@@ -241,8 +308,6 @@ else:
     print("")
     exit
 
-
-
 labels = None
 data = None
 ids = None
@@ -254,20 +319,20 @@ if args.usetest == 's':
 #    ids = np.copy(labels)
 elif args.usetest == 'swiss':
     data, labels = sklearn.datasets.make_swiss_roll(
-        n_samples=2000, random_state=args.random_state)
+        n_samples=500, random_state=args.random_state)
 #    ids = np.copy(labels)
 elif args.usetest == 'iris':
     iris = sklearn.datasets.load_iris()
     data = iris.data
     labels = iris.target_names[iris.target]
-    discrete = 1
+    discrete = True
 #    ids = np.copy(labels)
 # if it's not test data, then load provided data files
 elif args.filenamedat:
     data = np.genfromtxt(args.filenamedat, delimiter=",", dtype=np.float64)
 
 if args.filenamelbls:
-    if discrete == 1:
+    if discrete is True:
         labels = np.genfromtxt(args.filenamelbls, delimiter="\t", dtype=str)
     else:
         labels = np.genfromtxt(args.filenamelbls, delimiter="\t", dtype=float)
@@ -281,7 +346,7 @@ if args.filenameids is not None:
 # define type of experiment
 if (args.crossvalidate is True):
     type_of_experiment = 'crossvalidate'
-elif (args.test is not None and discrete == 1 and args.model == 'GTM'):
+elif (args.test is not None and discrete is True and args.model == 'GTM'):
     type_of_experiment = 'traintest'
 else:
     type_of_experiment = 'visualization'
@@ -330,14 +395,20 @@ elif type_of_experiment == 'traintest':
     prediction['optimizedModel'].plot_html(ids=ids, plot_arrows=True,
                                            title="GTM",
                                            discrete=discrete,
-                                           output=args.output)
+                                           output=args.output,
+                                           cname=args.cname,
+                                           pointsize=args.pointsize,
+                                           alpha=args.alpha)
     ugtm.printClassPredictions(prediction, output=args.output)
     prediction['optimizedModel'].plot_html_projection(labels=labels,
                                                       projections=prediction["indiv_projections"],
                                                       ids=testids,
                                                       plot_arrows=True,
                                                       title="GTM_projection",
-                                                      discrete=discrete)
+                                                      discrete=discrete,
+                                                      cname=args.cname,
+                                                      pointsize=args.pointsize,
+                                                      alpha=args.alpha)
     exit
 
 
@@ -351,12 +422,12 @@ elif type_of_experiment == 'traintest':
 
 elif type_of_experiment == 'visualization':
 
-    if args.model != 'GTM' and args.model != 'kGTM':
-        data = ugtm.ugtm_preprocess.pcaPreprocess(data=data, doPCA=args.pca,
-                                  n_components=args.n_components,
-                                  missing=args.missing,
-                                  missing_strategy=args.missing_strategy,
-                                  random_state=args.random_state)
+    if args.model != 'GTM':
+        data = ugtm.pcaPreprocess(data=data, doPCA=args.pca,
+                                                  n_components=args.n_components,
+                                                  missing=args.missing,
+                                                  missing_strategy=args.missing_strategy,
+                                                  random_state=args.random_state)
 
     # set default parameters
     k = int(math.sqrt(5*math.sqrt(data.shape[0])))+2
@@ -381,7 +452,8 @@ elif type_of_experiment == 'visualization':
         if discrete:
             uniqClasses, labels = np.unique(labels, return_inverse=True)
         ugtm.plot_html(labels=labels, coordinates=data, ids=ids,
-                       title="PCA", output=args.output)
+                       title="PCA", output=args.output, cname=args.cname,
+                       pointsize=args.pointsize, alpha=args.alpha)
         exit
 
     # if it's for t-SNE visualization
@@ -392,7 +464,8 @@ elif type_of_experiment == 'visualization':
                              random_state=args.random_state)
         data_r = tsne.fit_transform(data)
         ugtm.plot_html(labels=labels, coordinates=data_r, ids=ids,
-                       title="t-SNE", output=args.output)
+                       title="t-SNE", output=args.output, cname=args.cname,
+                       pointsize=args.pointsize, alpha=args.alpha)
         exit
 
     # if it's for GTM visualization
@@ -403,24 +476,28 @@ elif type_of_experiment == 'visualization':
                           missing=args.missing,
                           missing_strategy=args.missing_strategy,
                           random_state=args.random_state)
+        print("k:%s, m:%s, l:%s, s:%s" % (k, m, l, s))
         end = time.time()
         elapsed = end - start
         print("time taken for GTM: ", elapsed)
         gtm.plot_multipanel(
-            labels=labels, output=args.output, discrete=discrete)
+            labels=labels, output=args.output, discrete=discrete,
+            cname=args.cname, pointsize=args.pointsize, alpha=args.alpha)
         gtm.plot_html(labels=labels, ids=ids,
-                      discrete=discrete, output=args.output)
+                      discrete=discrete, output=args.output,
+                      cname=args.cname, pointsize=args.pointsize,
+                      alpha=args.alpha)
         exit
 
     # if it's for kGTM visualization
     elif args.model == 'kGTM':
         # kGTM embedding
+        print("k:%s, m:%s, l:%s, s:%s" % (k, m, l, s))
         matK = ugtm.chooseKernel(data, args.kernel)
         start = time.time()
         kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, l=l,
                             niter=niter, doKernel=False, maxdim=maxdim,
-                            doPCA=args.pca,
-                            n_components=args.n_components,
+                            doPCA=False,
                             missing=args.missing,
                             missing_strategy=args.missing_strategy,
                             random_state=args.random_state)
@@ -429,10 +506,12 @@ elif type_of_experiment == 'visualization':
         print("time taken for kGTM: ", elapsed)
         # make pdf
         kgtm.plot_multipanel(
-            labels=labels, output=args.output, discrete=discrete)
+            labels=labels, output=args.output, discrete=discrete,
+            cname=args.cname, pointsize=args.pointsize, alpha=args.alpha)
         # interactive plot
         kgtm.plot_html(labels=labels, ids=ids, plot_arrows=True, title="kGTM",
-                       discrete=discrete, output=args.output)
+                       discrete=discrete, output=args.output, cname=args.cname,
+                       pointsize=args.pointsize, alpha=args.alpha)
         exit
 
     # if it's to compare GTM, PCA, LLE and t_SNE visualizations
@@ -451,7 +530,9 @@ elif type_of_experiment == 'visualization':
         print("time taken for GTM: ", elapsed)
         fig = plt.figure(figsize=(12, 10))
         ax = fig.add_subplot(331)
-        ax.scatter(data[:, 0], data[:, 1], c=labels, cmap=plt.cm.Spectral)
+        ax.scatter(data[:, 0], data[:, 1], c=labels,
+                   cmap=plt.get_cmap(args.cname), s=20*args.pointsize,
+                   alpha=args.alpha)
         plt.axis('tight')
         plt.xticks([]), plt.yticks([])
         if args.pca:
@@ -460,21 +541,23 @@ elif type_of_experiment == 'visualization':
             plt.title('Original data')
         ax = fig.add_subplot(334)
         ax.scatter(gtm.matMeans[:, 0], gtm.matMeans[:, 1],
-                   c=labels, cmap=plt.cm.Spectral)
+                   alpha=args.alpha, s=20*args.pointsize,
+                   c=labels, cmap=plt.get_cmap(args.cname))
         plt.axis('tight')
         plt.xticks([]), plt.yticks([])
         plt.title('GTM')
         ax = fig.add_subplot(337)
         if discrete:
-            ugtm.plotClassMap(gtm, labels)
+            ugtm.plotClassMap(gtm, labels, cname=args.cname,
+                              pointsize=args.pointsize, alpha=args.alpha)
         else:
-            ugtm.plotLandscape(gtm, labels)
+            ugtm.plotLandscape(gtm, labels, cname=args.cname, alpha=args.alpha,
+                               pointsize=args.pointsize)
         matK = ugtm.chooseKernel(data, 'laplacian')
         print("Computing kGTM embedding (laplacian)")
         start = time.time()
         kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, l=l, niter=niter,
-                            maxdim=maxdim, doPCA=args.pca, doKernel=False,
-                            n_components=args.n_components,
+                            maxdim=maxdim, doPCA=False, doKernel=False,
                             missing=args.missing,
                             missing_strategy=args.missing_strategy,
                             random_state=args.random_state)
@@ -485,21 +568,23 @@ elif type_of_experiment == 'visualization':
         print("time taken for kGTM: ", elapsed)
         ax = fig.add_subplot(335)
         ax.scatter(kgtm.matMeans[:, 0], kgtm.matMeans[:, 1], c=labels,
-                   cmap=plt.cm.Spectral)
+                   cmap=plt.get_cmap(args.cname), s=20*args.pointsize,
+                   alpha=args.alpha)
         plt.axis('tight')
         plt.xticks([]), plt.yticks([])
         plt.title('kGTM (laplacian)')
         ax = fig.add_subplot(338)
         if discrete:
-            ugtm.plotClassMap(kgtm, labels)
+            ugtm.plotClassMap(kgtm, labels, cname=args.cname, alpha=args.alpha,
+                              pointsize=args.pointsize)
         else:
-            ugtm.plotLandscape(kgtm, labels)
+            ugtm.plotLandscape(kgtm, labels, cname=args.cname, alpha=args.alpha,
+                               pointsize=args.pointsize)
         matK = ugtm.chooseKernel(data, 'euclidean')
         print("Computing kGTM embedding (euclidean)")
         start = time.time()
         kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, l=l, niter=niter,
-                            maxdim=maxdim, doPCA=args.pca, doKernel=False,
-                            n_components=args.n_components,
+                            maxdim=maxdim, doKernel=False,
                             missing=args.missing,
                             missing_strategy=args.missing_strategy,
                             random_state=args.random_state)
@@ -510,15 +595,18 @@ elif type_of_experiment == 'visualization':
         print("time taken for kGTM: ", elapsed)
         ax = fig.add_subplot(336)
         ax.scatter(kgtm.matMeans[:, 0], kgtm.matMeans[:, 1],
-                   c=labels, cmap=plt.cm.Spectral)
+                   c=labels, cmap=plt.get_cmap(args.cname), alpha=args.alpha,
+                   s=20*args.pointsize)
         plt.axis('tight')
         plt.xticks([]), plt.yticks([])
         plt.title('kGTM (euclidean)')
         ax = fig.add_subplot(339)
         if discrete:
-            ugtm.plotClassMap(kgtm, labels)
+            ugtm.plotClassMap(kgtm, labels, cname=args.cname, alpha=args.alpha,
+                              pointsize=args.pointsize)
         else:
-            ugtm.plotLandscape(kgtm, labels)
+            ugtm.plotLandscape(kgtm, labels, cname=args.cname, alpha=args.alpha,
+                               pointsize=args.pointsize)
         print("Computing LLE embedding")
         start = time.time()
         data_r, err = manifold.locally_linear_embedding(
@@ -528,7 +616,9 @@ elif type_of_experiment == 'visualization':
         print("time taken for LLE: ", elapsed)
         print("Done. Reconstruction error: %g" % err)
         ax = fig.add_subplot(332)
-        ax.scatter(data_r[:, 0], data_r[:, 1], c=labels, cmap=plt.cm.Spectral)
+        ax.scatter(data_r[:, 0], data_r[:, 1], c=labels,
+                   cmap=plt.get_cmap(args.cname),
+                   s=20*args.pointsize, alpha=args.alpha)
         plt.axis('tight')
         plt.xticks([]), plt.yticks([])
         plt.title('LLE')
@@ -542,7 +632,9 @@ elif type_of_experiment == 'visualization':
         print("time taken for TSNE: ", elapsed)
         print("Done. Reconstruction error: %g" % err)
         ax = fig.add_subplot(333)
-        ax.scatter(data_r[:, 0], data_r[:, 1], c=labels, cmap=plt.cm.Spectral)
+        ax.scatter(data_r[:, 0], data_r[:, 1], c=labels,
+                   cmap=plt.get_cmap(args.cname),
+                   s=20*args.pointsize, alpha=args.alpha)
         plt.axis('tight')
         plt.xticks([]), plt.yticks([])
         plt.title('t-SNE')
@@ -553,7 +645,7 @@ elif type_of_experiment == 'visualization':
         print("Sorry. Model not recognized.")
         exit
 else:
-    print("Sorry. Could not guess what you wanted. \
-           Remember to define --model \
-           and (--data and --labels) or --model and --usetest.")
+    print('Sorry. Could not guess what you wanted. '
+          'Remember to define --model '
+          'and (--data and --labels) or --model and --usetest.')
     exit

@@ -22,15 +22,15 @@ _display.NumpyEncoder = NumpyEncoder
 
 
 def plot_pdf(coordinates, labels=None, title="", output="output",
-             discrete=False, pointsize=1.0, alpha=0.3):
+             discrete=False, pointsize=1.0, alpha=0.3,cname="Spectral_r"):
     if labels is None:
         colvec = "black"
     elif discrete:
         uniqClasses, label_numeric = np.unique(labels, return_inverse=True)
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     elif not discrete:
         label_numeric = labels
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     fig, ax = plt.subplots()
     ax.grid(color='white', linestyle='solid')
     ax.set_axisbelow(True)
@@ -38,7 +38,7 @@ def plot_pdf(coordinates, labels=None, title="", output="output",
     scatter = ax.scatter(coordinates[:, 0].tolist(),
                          coordinates[:, 1].tolist(),
                          c=colvec, s=20*pointsize, alpha=alpha,
-                         cmap=plt.cm.Spectral,
+                         cmap=plt.get_cmap(cname),
                          edgecolor='black')
     plt.xlim(-1.1, 1.1)
     plt.ylim(-1.1, 1.1)
@@ -52,22 +52,23 @@ def plot_pdf(coordinates, labels=None, title="", output="output",
 
 
 def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
-                      pointsize=1.0, alpha=0.3, do_interpolate=True):
+                      pointsize=1.0, alpha=0.3, do_interpolate=True,
+                      cname="Spectral_r"):
     if labels is None:
         colvec = "black"
     elif labels is not None and discrete:
         uniqClasses, label_numeric = np.unique(labels, return_inverse=True)
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     elif not discrete:
         label_numeric = labels
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     fig = plt.figure(figsize=(10, 10))
     means = optimizedModel.matMeans
     modes = optimizedModel.matModes
     # plot1: GTM means visualization
     ax = fig.add_subplot(221)
     ax.scatter(means[:, 0], means[:, 1], c=colvec,
-               cmap=plt.cm.Spectral, s=20*pointsize, alpha=alpha,
+               cmap=plt.get_cmap(cname), s=20*pointsize, alpha=alpha,
                edgecolor="black")
     plt.axis('tight')
     plt.xticks([])
@@ -76,7 +77,7 @@ def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
     # plot2: GTM modes visualization
     ax2 = fig.add_subplot(222)
     ax2.scatter(modes[:, 0], modes[:, 1], c=colvec,
-                cmap=plt.cm.Spectral, s=20*pointsize, alpha=alpha,
+                cmap=plt.get_cmap(cname), s=20*pointsize, alpha=alpha,
                 edgecolor="black")
     plt.axis('tight')
     plt.xticks([]), plt.yticks([])
@@ -87,11 +88,12 @@ def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
     # otherwise, it is a continuous landscape
     if labels is not None and discrete:
         plotClassMapNoPoints(optimizedModel, label_numeric,
-                             do_interpolate=do_interpolate)
+                             do_interpolate=do_interpolate, cname=cname)
     elif labels is not None:
         plotLandscapeNoPoints(optimizedModel, label_numeric,
-                              do_interpolate=do_interpolate)
-    ax3.scatter(means[:, 0], means[:, 1], c=colvec, cmap=plt.cm.Spectral,
+                              do_interpolate=do_interpolate, cname=cname)
+    ax3.scatter(means[:, 0], means[:, 1], c=colvec,
+                cmap=plt.get_cmap(cname),
                 s=20*pointsize, alpha=alpha, edgecolor="black")
     plt.axis('tight')
     plt.xticks([])
@@ -106,10 +108,10 @@ def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
     fig.add_subplot(224)
     if discrete and labels is not None:
         plotClassMapNoPoints(optimizedModel, label_numeric,
-                             do_interpolate=do_interpolate)
+                             do_interpolate=do_interpolate, cname=cname)
     elif labels is not None:
         plotLandscapeNoPoints(optimizedModel, label_numeric,
-                              do_interpolate=do_interpolate)
+                              do_interpolate=do_interpolate,cname=cname)
     fig.set_size_inches(16, 13)
     fig.savefig(output+".pdf", format='pdf', dpi=500)
     plt.close(fig)
@@ -117,15 +119,16 @@ def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
 
 
 def plot_html(coordinates, labels=None, ids=None, title="plot",
-              discrete=False, output="output", pointsize=1.0, alpha=0.3):
+              discrete=False, output="output", pointsize=1.0, alpha=0.3,
+              cname="Spectral_r"):
     if labels is None:
         colvec = "black"
     elif discrete:
         uniqClasses, label_numeric = np.unique(labels, return_inverse=True)
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     elif not discrete:
         label_numeric = labels
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
     ax.grid(color='white', linestyle='solid')
     ax.set_title(title, size=30)
@@ -134,7 +137,7 @@ def plot_html(coordinates, labels=None, ids=None, title="plot",
     scatter = ax.scatter(coordinates[:, 0].tolist(),
                          coordinates[:, 1].tolist(),
                          c=colvec, s=20*pointsize, alpha=alpha,
-                         cmap=plt.cm.Spectral,
+                         cmap=plt.get_cmap(cname),
                          edgecolor='black')
     if ids is not None and labels is not None:
         tooltipstr = ["%s: label=%s" % t for t in zip(ids, labels)]
@@ -153,29 +156,32 @@ def plot_html(coordinates, labels=None, ids=None, title="plot",
 
 def plot_html_GTM(optimizedModel, labels=None, ids=None, plot_arrows=True,
                   title="GTM", discrete=False, output="output",
-                  pointsize=1.0, alpha=0.3, do_interpolate=True):
+                  pointsize=1.0, alpha=0.3, do_interpolate=True,
+                  cname="Spectral_r"):
     if labels is None:
         colvec = "black"
     elif discrete:
         uniqClasses, label_numeric = np.unique(labels, return_inverse=True)
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     elif not discrete:
         label_numeric = labels
-        colvec = label_numeric
+        colvec = np.squeeze(label_numeric)
     fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
     if discrete and labels is not None:
         plotClassMapNoPoints(optimizedModel, label_numeric,
-                             do_interpolate=do_interpolate)
+                             do_interpolate=do_interpolate, cname=cname)
     elif labels is not None:
         plotLandscapeNoPoints(optimizedModel, label_numeric,
-                              do_interpolate=do_interpolate)
+                              do_interpolate=do_interpolate, cname=cname)
     means = optimizedModel.matMeans
     modes = optimizedModel.matModes
     ax.grid(color='white', linestyle='solid')
     ax.set_title(title, size=30)
     pointsidx = ['point {0}'.format(i + 1) for i in range(means.shape[0])]
-    scatter = ax.scatter(means[:, 0], means[:, 1], c=colvec, s=20*pointsize,
-                         alpha=alpha, cmap=plt.cm.Spectral, edgecolor='black')
+    scatter = ax.scatter(means[:, 0], means[:, 1], c=colvec,
+                         s=20*pointsize,
+                         alpha=alpha, cmap=plt.get_cmap(cname),
+                         edgecolor='black')
     if plot_arrows:
         for i in range(means.shape[0]):
             plt.plot([means[i, 0], modes[i, 0]],
@@ -200,18 +206,20 @@ def plot_html_GTM_projection(optimizedModel, projections, labels=None,
                              title="GTM_projection",
                              discrete=False, output="output",
                              pointsize=1, alpha=0.3,
-                             do_interpolate=True):
+                             do_interpolate=True, cname="Spectral_r"):
     if discrete:
         uniqClasses, label_numeric = np.unique(labels, return_inverse=True)
     elif not discrete:
         label_numeric = labels
     fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
     if discrete and labels is not None:
-        plotClassMap(optimizedModel, label_numeric,
-                     do_interpolate=do_interpolate)
+        plotClassMap(optimizedModel, np.squeeze(label_numeric),
+                     do_interpolate=do_interpolate, cname=cname,
+                     pointsize=pointsize, alpha=alpha)
     elif labels is not None:
-        plotLandscape(optimizedModel, label_numeric,
-                      do_interpolate=do_interpolate)
+        plotLandscape(optimizedModel, np.squeeze(label_numeric),
+                      do_interpolate=do_interpolate, cname=cname,
+                      pointsize=pointsize, alpha=alpha)
     means = projections.matMeans
     modes = projections.matModes
     ax.grid(color='white', linestyle='solid')
@@ -234,7 +242,8 @@ def plot_html_GTM_projection(optimizedModel, projections, labels=None,
     print("\nWrote html plot to disk: %s\n" % (output+".html"))
 
 
-def plotLandscape(optimizedModel, labels, do_interpolate=True):
+def plotLandscape(optimizedModel, labels, do_interpolate=True,
+                  cname="Spectral_r", pointsize=1.0, alpha=0.3):
     k = math.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
@@ -245,10 +254,11 @@ def plotLandscape(optimizedModel, labels, do_interpolate=True):
         XI, YI = np.meshgrid(ti, ti)
         f = interpolate.NearestNDInterpolator(optimizedModel.matX, z)
         ZI = f(XI, YI)
-        plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
-    plt.scatter(x, y, 50*(10/k), z, cmap=plt.cm.Spectral, marker="s")
+        plt.pcolor(XI, YI, ZI, cmap=plt.get_cmap(cname))
+    else:
+        plt.scatter(x, y, 50*(10/k), z, cmap=plt.get_cmap(cname), marker="s")
     plt.scatter(optimizedModel.matMeans[:, 0], optimizedModel.matMeans[:, 1],
-                20, labels, cmap=plt.cm.Spectral,
+                s=pointsize*20, c=np.squeeze(labels), cmap=plt.get_cmap(cname),
                 edgecolor='black', marker="o")
     plt.title('Landscape')
     plt.xlim(-1.1, 1.1)
@@ -258,7 +268,8 @@ def plotLandscape(optimizedModel, labels, do_interpolate=True):
     plt.xticks([]), plt.yticks([])
 
 
-def plotLandscapeNoPoints(optimizedModel, labels, do_interpolate=True):
+def plotLandscapeNoPoints(optimizedModel, labels, do_interpolate=True,
+                          cname="Spectral_r"):
     k = math.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
@@ -269,8 +280,9 @@ def plotLandscapeNoPoints(optimizedModel, labels, do_interpolate=True):
         XI, YI = np.meshgrid(ti, ti)
         f = interpolate.NearestNDInterpolator(optimizedModel.matX, z)
         ZI = f(XI, YI)
-        plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
-    plt.scatter(x, y, 50*(10/k), z, cmap=plt.cm.Spectral, marker="s")
+        plt.pcolor(XI, YI, ZI, cmap=plt.get_cmap(cname))
+    else:
+        plt.scatter(x, y, 50*(10/k), z, cmap=plt.get_cmap(cname), marker="s")
     plt.title('Landscape')
     plt.xlim(-1.1, 1.1)
     plt.ylim(-1.1, 1.1)
@@ -280,7 +292,8 @@ def plotLandscapeNoPoints(optimizedModel, labels, do_interpolate=True):
 
 
 def plotClassMap(optimizedModel, labels, prior="equiprobable",
-                 do_interpolate=True):
+                 do_interpolate=True, cname="Spectral_r", pointsize=1.0,
+                 alpha=0.3):
     k = math.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
@@ -293,11 +306,13 @@ def plotClassMap(optimizedModel, labels, prior="equiprobable",
         XI, YI = np.meshgrid(ti, ti)
         f = interpolate.NearestNDInterpolator(optimizedModel.matX, z)
         ZI = f(XI, YI)
-        plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
-    plt.scatter(x, y, 175*(10/k), z, cmap=plt.cm.Spectral,
-                marker="s", alpha=0.3)
+        plt.pcolor(XI, YI, ZI, cmap=plt.get_cmap(cname))
+    else:
+        plt.scatter(x, y, 175*(10/k), z, cmap=plt.get_cmap(cname),
+                    marker="s", alpha=0.3)
     plt.scatter(optimizedModel.matMeans[:, 0], optimizedModel.matMeans[:, 1],
-                20, label_numeric, cmap=plt.cm.Spectral,
+                s=20*pointsize, c=np.squeeze(label_numeric),
+                cmap=plt.get_cmap(cname),
                 edgecolor='black', marker="o")
     plt.title('Class Map')
     plt.xlim(-1.1, 1.1)
@@ -307,7 +322,7 @@ def plotClassMap(optimizedModel, labels, prior="equiprobable",
 
 
 def plotClassMapNoPoints(optimizedModel, labels, prior="equiprobable",
-                         do_interpolate=True):
+                         do_interpolate=True, cname="Spectral_r"):
     k = math.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
@@ -320,9 +335,10 @@ def plotClassMapNoPoints(optimizedModel, labels, prior="equiprobable",
         XI, YI = np.meshgrid(ti, ti)
         f = interpolate.NearestNDInterpolator(optimizedModel.matX, z)
         ZI = f(XI, YI)
-        plt.pcolor(XI, YI, ZI, cmap=plt.cm.Spectral)
-    plt.scatter(x, y, 175*(10/k), z, cmap=plt.cm.Spectral,
-                marker="s", alpha=0.3)
+        plt.pcolor(XI, YI, ZI, cmap=plt.get_cmap(cname))
+    else:
+        plt.scatter(x, y, 175*(10/k), z, cmap=plt.get_cmap(cname),
+                    marker="s", alpha=0.3)
     plt.title('Class Map')
     plt.xlim(-1.1, 1.1)
     plt.ylim(-1.1, 1.1)

@@ -21,14 +21,17 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
                      random_state=1234, predict_mode="bayes",
                      prior="equiprobable",
                      l=-1.0, s=-1.0, n_folds=5, n_repetitions=10):
-    print('k = sqrt(grid size), m = sqrt(radial basis function grid size), \
-               l = regularization, s = RBF width factor')
+    print("")
+    print("k = sqrt(grid size), m = sqrt(radial basis function grid size), "
+          "l = regularization, s = RBF width factor")
+    print("")
     uniqClasses, labels = np.unique(labels, return_inverse=True)
     nClasses = len(uniqClasses)
     print("Classes: ", uniqClasses)
-    print("nClasses: ", nClasses)
+    print("nClasses: %s" %(nClasses))
     print("")
-    print("model\tparameters=k:m:s:l\trecall with CI\tprecision with CI\tF1-score with CI")
+    print("model\tparameters=k:m:s:l\t"
+          "recall with CI\tprecision with CI\tF1-score with CI")
     print("")
     if k == 0:
         k = int(math.sqrt(5*math.sqrt(data.shape[0])))+2
@@ -39,8 +42,8 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
         pca.fit(data)
         n_components = np.searchsorted(
             pca.explained_variance_ratio_.cumsum(), 0.8)+1
-        print("Used number of components explaining 80%% of \
-                       the variance in whole data set = %s\n" %
+        print("Used number of components explaining 80%% of "
+              "the variance in whole data set = %s\n" %
               n_components)
     if l < 0.0:
         lvec = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100]
@@ -81,13 +84,18 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
                     test = np.copy(data[test_index])
                     prediction = ugtm_predictions.GTC(train=train,
                                                       labels=labels[train_index],
-                                                      test=test, k=k, m=m, s=s, l=l,
-                                                      n_neighbors=n_neighbors, niter=niter,
+                                                      test=test, k=k,
+                                                      m=m, s=s, l=l,
+                                                      n_neighbors=n_neighbors,
+                                                      niter=niter,
                                                       representation=representation,
-                                                      doPCA=doPCA, n_components=n_components,
-                                                      random_state=random_state, missing=missing,
+                                                      doPCA=doPCA,
+                                                      n_components=n_components,
+                                                      random_state=random_state,
+                                                      missing=missing,
                                                       missing_strategy=missing_strategy,
-                                                      predict_mode=predict_mode, prior=prior)
+                                                      predict_mode=predict_mode,
+                                                      prior=prior)
                     y_true = np.append(y_true, labels[test_index])
                     y_pred = np.append(y_pred, prediction)
                 recall = recall_score(y_true, y_pred, average='weighted')
@@ -122,7 +130,7 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
                 savemodel = "Model "+str(nummodel)
             for i in range(0, nClasses):
                 meanclass[i] = np.mean(recallclassvec[:, i])
-                seclass[i] = np.mean(recallclassvec[:, i])
+                seclass[i] = st.sem(recallclassvec[:, i])
                 meanf1class[i] = np.mean(f1classvec[:, i])
                 sef1class[i] = st.sem(f1classvec[:, i])
                 meanprecisionclass[i] = np.mean(precisionclassvec[:, i])
@@ -133,10 +141,11 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
                     * t._ppf((1+0.95)/2., len(precisionclassvec[:, i])-1)
                 hf1class[i] = sef1class[i] * \
                     t._ppf((1+0.95)/2., len(f1classvec[:, i])-1)
-            print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
-                  % (nummodel, modelstring, mean, h, meanprecision, hprecision, meanf1, hf1))
+            print("Model %s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
+                  % (nummodel, modelstring, mean, h,
+                     meanprecision, hprecision, meanf1, hf1))
             for i in range(nClasses):
-                print("Class=%s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
+                print("Class=%s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
                       % (uniqClasses[i], modelstring, meanclass[i],
                          hclass[i], meanprecisionclass[i],
                          hprecisionclass[i], meanf1class[i], hf1class[i]))
@@ -152,8 +161,10 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
                      niter=200, k=0, m=0, doPCA=False, n_components=-1,
                      missing=False, missing_strategy='most_frequent',
                      random_state=1234, l=-1, s=-1, n_folds=5, n_repetitions=10):
-    print('k = sqrt(grid size), m = sqrt(radial basis function grid size), \
-               l = regularization, s = RBF width factor')
+    print("")
+    print("k = sqrt(grid size), m = sqrt(radial basis function grid size), "
+          "l = regularization, s = RBF width factor")
+    print("")
     if k == 0:
         k = int(math.sqrt(5*math.sqrt(data.shape[0])))+2
     if m == 0:
@@ -178,6 +189,7 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
     modelvec = ""
     savemeanr2 = 0.0
     savehr2 = 0.0
+    print("k:m:s:l\tRMSE with CI\tR2 with CI\t")
     for s in svec:
         for l in lvec:
             modelstring = str(s)+":"+str(l)
@@ -192,10 +204,13 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
                     test = np.copy(data[test_index])
                     prediction = ugtm_predictions.GTR(train=train,
                                                       labels=labels[train_index],
-                                                      test=test, k=k, m=m, s=s, l=l,
-                                                      n_neighbors=n_neighbors, niter=niter,
+                                                      test=test, k=k,
+                                                      m=m, s=s, l=l,
+                                                      n_neighbors=n_neighbors,
+                                                      niter=niter,
                                                       representation=representation,
-                                                      doPCA=doPCA, n_components=n_components,
+                                                      doPCA=doPCA,
+                                                      n_components=n_components,
                                                       random_state=random_state,
                                                       missing=missing,
                                                       missing_strategy=missing_strategy)
@@ -215,34 +230,38 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
                 modelvec = modelstring
                 savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
                 savehr2 = saveser2 * t._ppf((1+0.95)/2., len(r2vec)-1)
-            print("k:m:s:l\t", str(k)+':'+str(m)+':'+modelstring,
-                  "\trmse\t", mean, "\t+/-\t", h, "\tR2\t", meanr2, "\t+/-\t", hr2)
+            print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
+                  %(str(k)+':'+str(m)+':'+modelstring, mean, h, meanr2, hr2))
     print('')
     print("########best GTR model##########")
-    print(modelvec, "rmse", savemean, "+/-",
-          saveh, "r2", savemeanr2, "+/-", savehr2)
+    print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
+          %(str(k)+':'+str(m)+':'+modelvec,
+            savemean, saveh, savemeanr2, savehr2))
     print("")
 
 
 def crossvalidatePCAC(data, labels, doPCA=False, n_components=-1, missing=False,
                       missing_strategy='most_frequent', random_state=1234,
-                      n_neighbors=1, n_folds=5, n_repetitions=10):
+                      n_neighbors=1, n_folds=5, n_repetitions=10,
+                      maxneighbours=11):
     if n_components == -1 and doPCA is True:
         pca = PCA(random_state=random_state)
         pca.fit(data)
         n_components = np.searchsorted(
             pca.explained_variance_ratio_.cumsum(), 0.8)+1
-        print("Used number of components explaining 80%% of the variance = %s\n"
+        print("Used number of components "
+              "explaining 80%% of the variance = %s\n"
               % n_components)
     uniqClasses, labels = np.unique(labels, return_inverse=True)
     nClasses = len(uniqClasses)
     print("Classes: ", uniqClasses)
     print("nClasses: ", nClasses)
     print("")
-    print("model\tparameters=k_for_kNN\trecall with CI\tprecision with CI\tF1-score with CI")
+    print("model\tparameters=k_for_kNN\trecall with CI\t"
+          "precision with CI\tF1-score with CI")
     print("")
     if n_neighbors <= 0:
-        Kvec = np.arange(start=1, stop=31, step=1, dtype=np.int32)
+        Kvec = np.arange(start=1, stop=maxneighbours, step=1, dtype=np.int32)
     else:
         Kvec = [n_neighbors]
 
@@ -329,10 +348,11 @@ def crossvalidatePCAC(data, labels, doPCA=False, n_components=-1, missing=False,
             hf1class[i] = sef1class[i] * \
                 t._ppf((1+0.95)/2., len(f1classvec[:, i])-1)
 
-        print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
-              % (nummodel, modelstring, mean, h, meanprecision, hprecision, meanf1, hf1))
+        print("Model %s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
+              % (nummodel, modelstring,
+                 mean, h, meanprecision, hprecision, meanf1, hf1))
         for i in range(nClasses):
-            print("Class=%s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
+            print("Class=%s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
                   % (uniqClasses[i], modelstring, meanclass[i], hclass[i],
                       meanprecisionclass[i], hprecisionclass[i],
                       meanf1class[i], hf1class[i]))
@@ -345,7 +365,8 @@ def crossvalidatePCAC(data, labels, doPCA=False, n_components=-1, missing=False,
 
 def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
                       missing_strategy='most_frequent',
-                      random_state=1234, n_neighbors=1, n_folds=5, n_repetitions=10):
+                      random_state=1234, n_neighbors=1,
+                      n_folds=5, n_repetitions=10, maxneighbours=11):
     if n_components == -1 and doPCA is True:
         pca = PCA(random_state=random_state)
         pca.fit(data)
@@ -356,7 +377,7 @@ def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
     print("")
     uniqClasses, labels = np.unique(labels, return_inverse=True)
     if n_neighbors <= 0:
-        Kvec = np.arange(start=1, stop=31, step=1, dtype=np.int32)
+        Kvec = np.arange(start=1, stop=maxneighbours, step=1, dtype=np.int32)
     else:
         Kvec = [n_neighbors]
 
@@ -366,7 +387,7 @@ def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
     savemeanr2 = 0.0
     savehr2 = 0.0
     nummodel = 0
-
+    print("k = number of nearest neighbours\tRMSE with CI\tR2 with CI\t")
     for c in Kvec:
         nummodel += 1
         modelstring = str(c)
@@ -380,8 +401,10 @@ def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
                 train = np.copy(data[train_index])
                 test = np.copy(data[test_index])
                 processed = ugtm_preprocess.processTrainTest(train, test,
-                                                             doPCA, n_components,
-                                                             missing, missing_strategy)
+                                                             doPCA,
+                                                             n_components,
+                                                             missing,
+                                                             missing_strategy)
                 y_pred = np.append(y_pred, ugtm_predictions.predictNNSimple(
                     processed.train,
                     processed.test,
@@ -402,12 +425,12 @@ def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
             modelvec = modelstring
             savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
             savehr2 = saveser2 * t._ppf((1+0.95)/2., len(r2vec)-1)
-        print("k\t", modelstring, "\trmse\t", mean,
-              "\t+/-\t", h, "\tr2\t", meanr2, "\t+/-\t", hr2)
+        print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
+              %(modelstring, mean, h, meanr2, hr2))
     print('')
     print("########best nearest neighbors model##########")
-    print("k = number of nearest neighbors", modelvec, "rmse", savemean, "+/-",
-          saveh, "r2", savemeanr2, "+/-", savehr2)
+    print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
+          %(modelvec, savemean, saveh, savemeanr2, savehr2))
     print("")
 
 
@@ -426,7 +449,8 @@ def crossvalidateSVC(data, labels, doPCA=False, n_components=-1, missing=False,
     print("Classes: ", uniqClasses)
     print("nClasses: ", nClasses)
     print("")
-    print("model\tparameters=C\trecall with CI\tprecision with CI\tF1-score with CI")
+    print("model\tparameters=C\trecall with CI\t"
+          "precision with CI\tF1-score with CI")
     print("")
     if C < 0.0:
         Cvec = np.power(2, np.arange(
@@ -511,10 +535,11 @@ def crossvalidateSVC(data, labels, doPCA=False, n_components=-1, missing=False,
                 t._ppf((1+0.95)/2., len(precisionclassvec[:, i])-1)
             hf1class[i] = sef1class[i] * \
                 t._ppf((1+0.95)/2., len(f1classvec[:, i])-1)
-        print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
-              % (nummodel, modelstring, mean, h, meanprecision, hprecision, meanf1, hf1))
+        print("Model %s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
+              % (nummodel, modelstring,
+                 mean, h, meanprecision, hprecision, meanf1, hf1))
         for i in range(nClasses):
-            print("Class=%s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
+            print("Class=%s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
                   % (uniqClasses[i], modelstring, meanclass[i], hclass[i],
                      meanprecisionclass[i], hprecisionclass[i],
                      meanf1class[i], hf1class[i]))
@@ -548,11 +573,13 @@ def crossvalidateSVR(data, labels, doPCA=False, n_components=-1, missing=False,
         pca.fit(data)
         n_components = np.searchsorted(
             pca.explained_variance_ratio_.cumsum(), 0.8)+1
-        print("Used number of components explaining 80%% of the variance = %s\n"
+        print("Used number of components explaining 80%%"
+              "of the variance = %s\n"
               % n_components)
+    print("C:epsilon\tRMSE with CI\tR2 with CI\t")
     for C in Cvec:
         for eps in EpsVec:
-            modelstring = str(C)+"-"+str(eps)
+            modelstring = str(C)+":"+str(eps)
             rmsevec = []
             r2vec = []
             for j in range(n_repetitions):
@@ -564,7 +591,8 @@ def crossvalidateSVR(data, labels, doPCA=False, n_components=-1, missing=False,
                     test = np.copy(data[test_index])
                     processed = ugtm_preprocess.processTrainTest(train, test,
                                                                  doPCA,
-                                                                 n_components, missing,
+                                                                 n_components,
+                                                                 missing,
                                                                  missing_strategy)
                     clf = SVR(kernel='linear', C=C, epsilon=eps)
                     clf.fit(processed.train, labels[train_index])
@@ -584,18 +612,20 @@ def crossvalidateSVR(data, labels, doPCA=False, n_components=-1, missing=False,
                 modelvec = modelstring
                 savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
                 savehr2 = saveser2 * t._ppf((1+0.95)/2., len(r2vec)-1)
-            print("C-epsilon\t", modelstring, "\trmse\t",
-                  mean, "\t+/-\t", h, "\tr2\t", meanr2, "\t+/-\t", hr2)
+            print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
+                  %(modelstring, mean, h, meanr2, hr2))
     print('')
     print("########best linear SVM model##########")
-    print(modelvec, "rmse", savemean, "+/-",
-          saveh, "r2", savemeanr2, "+/-", savehr2)
+    print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
+          %(modelvec, savemean, saveh, savemeanr2, savehr2))
     print("")
 
 
-def crossvalidateSVCrbf(data, labels, doPCA=False, n_components=-1, missing=False,
+def crossvalidateSVCrbf(data, labels, doPCA=False,
+                        n_components=-1, missing=False,
                         missing_strategy='most_frequent',
-                        random_state=1234, C=1, gamma=1, n_folds=5, n_repetitions=10):
+                        random_state=1234, C=1, gamma=1, n_folds=5,
+                        n_repetitions=10):
 
     if C < 0.0:
         Cvec = np.power(2, np.arange(
@@ -616,14 +646,16 @@ def crossvalidateSVCrbf(data, labels, doPCA=False, n_components=-1, missing=Fals
         pca.fit(data)
         n_components = np.searchsorted(
             pca.explained_variance_ratio_.cumsum(), 0.8)+1
-        print("Used number of components explaining 80%% of the variance = %s\n"
+        print("Used number of components explaining 80%% "
+              "of the variance = %s\n"
               % n_components)
     uniqClasses, labels = np.unique(labels, return_inverse=True)
     nClasses = len(uniqClasses)
     print("Classes: ", uniqClasses)
     print("nClasses: ", nClasses)
     print("")
-    print("model\tparameters=C:gamma\trecall with CI\tprecision with CI\tF1-score with CI")
+    print("model\tparameters=C:gamma\trecall with CI\t"
+          "precision with CI\tF1-score with CI")
     print("")
     for C in Cvec:
         for g in gvec:
@@ -691,6 +723,7 @@ def crossvalidateSVCrbf(data, labels, doPCA=False, n_components=-1, missing=Fals
                 savemean = meanf1
                 saveh = hf1
                 modelvec = modelstring
+                savemodel = "Model "+str(nummodel)
             for i in range(0, nClasses):
                 meanclass[i], seclass[i] = np.mean(recallclassvec[:, i]), \
                     st.sem(recallclassvec[:, i])
@@ -704,10 +737,11 @@ def crossvalidateSVCrbf(data, labels, doPCA=False, n_components=-1, missing=Fals
                     t._ppf((1+0.95)/2., len(precisionclassvec[:, i])-1)
                 hf1class[i] = sef1class[i] * \
                     t._ppf((1+0.95)/2., len(f1classvec[:, i])-1)
-            print("Model %s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
-                  % (nummodel, modelstring, mean, h, meanprecision, hprecision, meanf1, hf1))
+            print("Model %s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
+                  % (nummodel, modelstring, mean, h,
+                     meanprecision, hprecision, meanf1, hf1))
             for i in range(nClasses):
-                print("Class=%s\t%s\t%.2f +/- %.3f\t%.2f +/- %.3f\t%.2f +/- %.3f"
+                print("Class=%s\t%s\t%.4f +/- %.4f\t%.4f +/- %.4f\t%.4f +/- %.4f"
                       % (uniqClasses[i], modelstring, meanclass[i],
                          hclass[i], meanprecisionclass[i],
                          hprecisionclass[i], meanf1class[i],
@@ -716,7 +750,7 @@ def crossvalidateSVCrbf(data, labels, doPCA=False, n_components=-1, missing=Fals
     print("")
 
     print("########best RBF SVM model##########")
-    print(modelvec, "\t", savemean, "\t", saveh)
+    print(savemodel)
     print("")
 
 

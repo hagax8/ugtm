@@ -77,8 +77,7 @@ def advancedGTC(train, labels, test, n_neighbors=1, representation="modes",
         pca.fit(train)
         n_components = np.searchsorted(
             pca.explained_variance_ratio_.cumsum(), 0.8)+1
-        print("Used number of components explaining 80%% \
-                       of the variance in whole data set = %s\n"
+        print("Used n_components explaining 80%% of the variance = %s\n"
               % n_components)
     if l < 0.0:
         l = 0.1

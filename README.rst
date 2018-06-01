@@ -207,7 +207,7 @@ Different crossvalidation experiments were implemented to compare GTC and GTR mo
     ugtm.crossvalidateSVCrbf(data=train,labels=labels,C=1,gamma=1)
 
     #crossvalidation experiment, linear SVC classification model (sklearn implementation):
-    ugtm.crossvalidateSVCrbf(data=train,labels=labels,C=1)
+    ugtm.crossvalidateSVC(data=train,labels=labels,C=1)
 
     #crossvalidation experiment, linear SVC regression model (sklearn implementation):
     ugtm.crossvalidateSVR(data=train,labels=activity,C=1,epsilon=1)

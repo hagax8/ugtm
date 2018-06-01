@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
-from sphinx.setup_command import BuildDoc
-cmdclass = {'build_sphinx': BuildDoc}
+#from sphinx.setup_command import BuildDoc
+#cmdclass = {'build_sphinx': BuildDoc}
 
 setup(name='ugtm',
-      version='1.1.3',
+      version='1.1.4',
       description='Generative Topographic Mapping (GTM) for python, GTM classification and GTM regression',
       long_description=open('README.rst').read(),
       url='http://github.com/hagax8/ugtm',

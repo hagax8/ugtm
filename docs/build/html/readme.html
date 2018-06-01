@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm &mdash; ugtm v1.1.2 documentation</title>
+  <title>ugtm &mdash; ugtm v1.1.4 documentation</title>
   
 
   
@@ -162,6 +162,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">ugtm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1">#generate sample data and labels: replace this with your own data</span>
 <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
@@ -345,7 +346,7 @@ The plot_multipanel function only works if you have defined labels:</p>
 <span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateSVCrbf</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#crossvalidation experiment, linear SVC classification model (sklearn implementation):</span>
-<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateSVCrbf</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateSVC</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#crossvalidation experiment, linear SVC regression model (sklearn implementation):</span>
 <span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateSVR</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">epsilon</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -407,7 +408,7 @@ The plot_multipanel function only works if you have defined labels:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v1.1.2',
+            VERSION:'v1.1.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

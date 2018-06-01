@@ -183,8 +183,8 @@ def evalBetaInv(matY, betaInv, random_state=1234):
     if((myMin < betaInv) or (betaInv == 0)):
         betaInv = myMin
     if betaInv == 0.0:
-        print('bad initialization (0 variance), \
-               setting variance to random number...')
+        print("bad initialization (0 variance), "
+              "setting variance to random number...")
         betaInv = abs(r.uniform(-1, 1, size=1))
     return(betaInv)
 

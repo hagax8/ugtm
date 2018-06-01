@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm.ugtm_landscape &mdash; ugtm v1.1.2 documentation</title>
+  <title>ugtm.ugtm_landscape &mdash; ugtm v1.1.4 documentation</title>
   
 
   
@@ -145,60 +145,62 @@
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+
 <div class="viewcode-block" id="ClassMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.ClassMap">[docs]</a><span class="k">class</span> <span class="nc">ClassMap</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodeClassP</span><span class="p">,</span> <span class="n">nodeClassT</span><span class="p">,</span> <span class="n">activityModel</span><span class="p">,</span> <span class="n">uniqClasses</span><span class="p">):</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">nodeClassP</span> <span class="o">=</span> <span class="n">nodeClassP</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">nodeClassT</span> <span class="o">=</span> <span class="n">nodeClassT</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">activityModel</span> <span class="o">=</span> <span class="n">activityModel</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">uniqClasses</span> <span class="o">=</span> <span class="n">uniqClasses</span></div>
-
-<div class="viewcode-block" id="landscape"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.landscape">[docs]</a><span class="k">def</span> <span class="nf">landscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">activity</span><span class="p">):</span>
-	<span class="n">epsilon</span><span class="o">=</span><span class="mi">10</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span>
-	<span class="n">sums</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">+</span><span class="n">epsilon</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-	<span class="n">landscape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">activity</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">+</span><span class="n">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="n">sums</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span>
-	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">landscape</span><span class="p">)[</span><span class="mi">0</span><span class="p">,:]</span></div>
-
-<div class="viewcode-block" id="classMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.classMap">[docs]</a><span class="k">def</span> <span class="nf">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span><span class="n">activity</span><span class="p">,</span><span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
-	<span class="n">uniqClasses</span><span class="p">,</span> <span class="n">classVector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-	<span class="n">nClasses</span> <span class="o">=</span> <span class="n">uniqClasses</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="n">n_individuals</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="n">n_nodes</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-	<span class="c1">#posterior distribution</span>
-	<span class="n">nodeClassP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_nodes</span><span class="p">,</span><span class="n">nClasses</span><span class="p">])</span>
-	<span class="c1">#likelihood</span>
-	<span class="n">nodeClassT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_nodes</span><span class="p">,</span><span class="n">nClasses</span><span class="p">])</span>
-	<span class="n">sumClass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">nClasses</span><span class="p">])</span>
-	<span class="n">summe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_nodes</span><span class="p">])</span>
-	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
-	    <span class="n">sumClass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">classVector</span><span class="o">==</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-	<span class="k">if</span> <span class="n">prior</span><span class="o">==</span><span class="s2">&quot;estimated&quot;</span><span class="p">:</span>
-	    <span class="n">priors</span><span class="o">=</span><span class="n">sumClass</span><span class="o">/</span><span class="n">sumClass</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-	<span class="k">elif</span> <span class="n">prior</span><span class="o">==</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">:</span>
-	    <span class="n">priors</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">nClasses</span><span class="p">])</span><span class="o">+</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">nClasses</span><span class="p">)</span>
-
-	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
-		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
-			<span class="n">nodeClassT</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="p">[</span><span class="n">classVector</span><span class="o">==</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">sumClass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-
-	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
-		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
-			<span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">nodeClassT</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">priors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-			<span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">+=</span><span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodeClassP</span><span class="p">,</span> <span class="n">nodeClassT</span><span class="p">,</span> <span class="n">activityModel</span><span class="p">,</span> <span class="n">uniqClasses</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodeClassP</span> <span class="o">=</span> <span class="n">nodeClassP</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodeClassT</span> <span class="o">=</span> <span class="n">nodeClassT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activityModel</span> <span class="o">=</span> <span class="n">activityModel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uniqClasses</span> <span class="o">=</span> <span class="n">uniqClasses</span></div>
 
 
-	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
-		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
-			<span class="k">if</span> <span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">!=</span><span class="mf">0.0</span><span class="p">:</span>
-				<span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+<div class="viewcode-block" id="landscape"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.landscape">[docs]</a><span class="k">def</span> <span class="nf">landscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">activity</span><span class="p">):</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mi">10</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span>
+    <span class="n">sums</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">+</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">landscape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">activity</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                       <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">+</span><span class="n">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="n">sums</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">landscape</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span></div>
 
-	<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
-		<span class="k">if</span> <span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
-			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
-				<span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">nClasses</span>
-	
-	<span class="n">nodeClass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nodeClassP</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-	<span class="k">return</span><span class="p">(</span><span class="n">ClassMap</span><span class="p">(</span><span class="n">nodeClassP</span><span class="p">,</span><span class="n">nodeClassT</span><span class="p">,</span><span class="n">nodeClass</span><span class="p">,</span><span class="n">uniqClasses</span><span class="p">))</span></div>
 
+<div class="viewcode-block" id="classMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.classMap">[docs]</a><span class="k">def</span> <span class="nf">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
+    <span class="n">uniqClasses</span><span class="p">,</span> <span class="n">classVector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">nClasses</span> <span class="o">=</span> <span class="n">uniqClasses</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># posterior distribution</span>
+    <span class="n">nodeClassP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">nClasses</span><span class="p">])</span>
+    <span class="c1"># likelihood</span>
+    <span class="n">nodeClassT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">nClasses</span><span class="p">])</span>
+    <span class="n">sumClass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">nClasses</span><span class="p">])</span>
+    <span class="n">summe</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_nodes</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
+        <span class="n">sumClass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">classVector</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">prior</span> <span class="o">==</span> <span class="s2">&quot;estimated&quot;</span><span class="p">:</span>
+        <span class="n">priors</span> <span class="o">=</span> <span class="n">sumClass</span><span class="o">/</span><span class="n">sumClass</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">prior</span> <span class="o">==</span> <span class="s2">&quot;equiprobable&quot;</span><span class="p">:</span>
+        <span class="n">priors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">nClasses</span><span class="p">])</span><span class="o">+</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">nClasses</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+            <span class="n">nodeClassT</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="p">[</span><span class="n">classVector</span> <span class="o">==</span>
+                                                   <span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">sumClass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+            <span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodeClassT</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">priors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">summe</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nClasses</span><span class="p">):</span>
+                <span class="n">nodeClassP</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">nClasses</span>
+
+    <span class="n">nodeClass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">nodeClassP</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ClassMap</span><span class="p">(</span><span class="n">nodeClassP</span><span class="p">,</span> <span class="n">nodeClassT</span><span class="p">,</span> <span class="n">nodeClass</span><span class="p">,</span> <span class="n">uniqClasses</span><span class="p">))</span></div>
 </pre></div>
 
            </div>
@@ -233,7 +235,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'v1.1.2',
+            VERSION:'v1.1.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
