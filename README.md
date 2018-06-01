@@ -1,4 +1,4 @@
-# ugtm v1.1.2: Generative Topographic Mapping with Python.
+# ugtm: Generative Topographic Mapping with Python.
 
 Link to the package documentation: http://ugtm.readthedocs.io/en/latest/
 
