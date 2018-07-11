@@ -281,6 +281,9 @@ parser.add_argument('--cmap',
                              'gnuplot_r', 'gnuplot2_r', 'gist_ncar_r',
                              'nipy_spectral_r', 'jet_r', 'rainbow_r',
                              'gist_rainbow_r', 'hsv_r', 'flag_r', 'prism_r'])
+parser.add_argument('--verbose',
+                    help='verbose mode',
+                    action='store_true')
 
 
 args = parser.parse_args()
@@ -475,7 +478,7 @@ elif type_of_experiment == 'visualization':
                           doPCA=args.pca, n_components=args.n_components,
                           missing=args.missing,
                           missing_strategy=args.missing_strategy,
-                          random_state=args.random_state)
+                          random_state=args.random_state, verbose=args.verbose)
         print("k:%s, m:%s, l:%s, s:%s" % (k, m, l, s))
         end = time.time()
         elapsed = end - start
