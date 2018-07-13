@@ -21,7 +21,7 @@ class TestGTM(unittest.TestCase):
         gtm = ugtm.runGTM(data=self.data, k=self.k)
         self.assertEqual(gtm.converged, True)
         self.assertEqual(gtm.matR.shape, (self.n_individuals, self.n_nodes))
-        self.assertEqual(sum(gtm.matR[0, :]), 1.0)
+        self.assertAlmostEqual(sum(gtm.matR[0, :]), 1.0)
         self.assertEqual(gtm.matMeans.shape, (self.n_individuals, 2))
         self.assertEqual(gtm.matModes.shape, (self.n_individuals, 2))
 
@@ -30,7 +30,7 @@ class TestGTM(unittest.TestCase):
                            doPCA=True, doKernel=True)
         self.assertEqual(gtm.converged, True)
         self.assertEqual(gtm.matR.shape, (self.n_individuals, self.n_nodes))
-        self.assertEqual(sum(gtm.matR[0, :]), 1.0)
+        self.assertAlmostEqual(sum(gtm.matR[0, :]), 1.0)
         self.assertEqual(gtm.matMeans.shape, (self.n_individuals, 2))
         self.assertEqual(gtm.matModes.shape, (self.n_individuals, 2))
 

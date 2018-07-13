@@ -20,6 +20,7 @@ ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (k
     #plot GTM map (html)
     gtm.plot_html(output="out")
 
+For installation instructions, cf. https://github.com/hagax8/ugtm
 
 1. Import package
 =================

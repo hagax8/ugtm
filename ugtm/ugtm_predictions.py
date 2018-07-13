@@ -59,7 +59,7 @@ def predictBayes(optimizedModel, labels, new_data, prior="equiprobable"):
     activityModel = ugtm_landscape.classMap(optimizedModel,
                                             labels, prior).nodeClassP
     projected = projection(optimizedModel, new_data).matR
-    predicted = np.argmax(np.matmul(projected, activityModel), axis=1)
+    predicted = np.argmax(np.dot(projected, activityModel), axis=1)
     return predicted
 
 
@@ -102,11 +102,11 @@ def advancedPredictBayes(optimizedModel, labels,
     projected = projection(optimizedModel, new_data)
     predicted["optimizedModel"] = optimizedModel
     predicted["indiv_projections"] = projected
-    predicted["indiv_probabilities"] = np.matmul(projected.matR, activityModel)
+    predicted["indiv_probabilities"] = np.dot(projected.matR, activityModel)
     predicted["indiv_predictions"] = np.argmax(
         predicted["indiv_probabilities"], axis=1)
     predicted["group_projections"] = np.mean(projected.matR, axis=0)
-    predicted["group_probabilities"] = np.matmul(
+    predicted["group_probabilities"] = np.dot(
         predicted["group_projections"], activityModel)
     predicted["uniqClasses"] = cl.uniqClasses
     return predicted
