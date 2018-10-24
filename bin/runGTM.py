@@ -491,7 +491,7 @@ elif type_of_experiment == 'visualization':
         gtm.plot_multipanel(
             labels=labels, output=args.output, discrete=discrete,
             cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
-            priors=args.prior)
+            prior=args.prior)
         gtm.plot_html(labels=labels, ids=ids,
                       discrete=discrete, output=args.output,
                       cname=args.cname, pointsize=args.pointsize,
