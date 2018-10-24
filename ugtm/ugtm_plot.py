@@ -22,7 +22,7 @@ _display.NumpyEncoder = NumpyEncoder
 
 
 def plot_pdf(coordinates, labels=None, title="", output="output",
-             discrete=False, pointsize=1.0, alpha=0.3,cname="Spectral_r"):
+             discrete=False, pointsize=1.0, alpha=0.3, cname="Spectral_r"):
     if labels is None:
         colvec = "black"
     elif discrete:
@@ -53,7 +53,7 @@ def plot_pdf(coordinates, labels=None, title="", output="output",
 
 def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
                       pointsize=1.0, alpha=0.3, do_interpolate=True,
-                      cname="Spectral_r"):
+                      cname="Spectral_r", prior="equiprobable"):
     if labels is None:
         colvec = "black"
     elif labels is not None and discrete:
@@ -88,7 +88,8 @@ def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
     # otherwise, it is a continuous landscape
     if labels is not None and discrete:
         plotClassMapNoPoints(optimizedModel, label_numeric,
-                             do_interpolate=do_interpolate, cname=cname)
+                             do_interpolate=do_interpolate, cname=cname,
+                             prior=prior)
     elif labels is not None:
         plotLandscapeNoPoints(optimizedModel, label_numeric,
                               do_interpolate=do_interpolate, cname=cname)
@@ -108,10 +109,11 @@ def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
     fig.add_subplot(224)
     if discrete and labels is not None:
         plotClassMapNoPoints(optimizedModel, label_numeric,
-                             do_interpolate=do_interpolate, cname=cname)
+                             do_interpolate=do_interpolate, cname=cname,
+                             prior=prior)
     elif labels is not None:
         plotLandscapeNoPoints(optimizedModel, label_numeric,
-                              do_interpolate=do_interpolate,cname=cname)
+                              do_interpolate=do_interpolate, cname=cname)
     fig.set_size_inches(16, 13)
     fig.savefig(output+".pdf", format='pdf', dpi=500)
     plt.close(fig)
@@ -157,7 +159,7 @@ def plot_html(coordinates, labels=None, ids=None, title="plot",
 def plot_html_GTM(optimizedModel, labels=None, ids=None, plot_arrows=True,
                   title="GTM", discrete=False, output="output",
                   pointsize=1.0, alpha=0.3, do_interpolate=True,
-                  cname="Spectral_r"):
+                  cname="Spectral_r", prior="equiprobable"):
     if labels is None:
         colvec = "black"
     elif discrete:
@@ -168,7 +170,7 @@ def plot_html_GTM(optimizedModel, labels=None, ids=None, plot_arrows=True,
         colvec = np.squeeze(label_numeric)
     fig, ax = plt.subplots(subplot_kw=dict(facecolor='#EEEEEE'))
     if discrete and labels is not None:
-        plotClassMapNoPoints(optimizedModel, label_numeric,
+        plotClassMapNoPoints(optimizedModel, label_numeric, prior=prior,
                              do_interpolate=do_interpolate, cname=cname)
     elif labels is not None:
         plotLandscapeNoPoints(optimizedModel, label_numeric,
@@ -206,7 +208,8 @@ def plot_html_GTM_projection(optimizedModel, projections, labels=None,
                              title="GTM_projection",
                              discrete=False, output="output",
                              pointsize=1, alpha=0.3,
-                             do_interpolate=True, cname="Spectral_r"):
+                             do_interpolate=True, cname="Spectral_r",
+                             prior="equiprobable"):
     if discrete:
         uniqClasses, label_numeric = np.unique(labels, return_inverse=True)
     elif not discrete:
@@ -215,7 +218,7 @@ def plot_html_GTM_projection(optimizedModel, projections, labels=None,
     if discrete and labels is not None:
         plotClassMap(optimizedModel, np.squeeze(label_numeric),
                      do_interpolate=do_interpolate, cname=cname,
-                     pointsize=pointsize, alpha=alpha)
+                     pointsize=pointsize, alpha=alpha, prior=prior)
     elif labels is not None:
         plotLandscape(optimizedModel, np.squeeze(label_numeric),
                       do_interpolate=do_interpolate, cname=cname,

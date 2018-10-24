@@ -401,7 +401,8 @@ elif type_of_experiment == 'traintest':
                                            output=args.output,
                                            cname=args.cname,
                                            pointsize=args.pointsize,
-                                           alpha=args.alpha)
+                                           alpha=args.alpha,
+                                           prior=args.prior)
     ugtm.printClassPredictions(prediction, output=args.output)
     prediction['optimizedModel'].plot_html_projection(labels=labels,
                                                       projections=prediction["indiv_projections"],
@@ -411,7 +412,8 @@ elif type_of_experiment == 'traintest':
                                                       discrete=discrete,
                                                       cname=args.cname,
                                                       pointsize=args.pointsize,
-                                                      alpha=args.alpha)
+                                                      alpha=args.alpha,
+                                                      prior=args.prior)
     exit
 
 
@@ -457,6 +459,7 @@ elif type_of_experiment == 'visualization':
         ugtm.plot_html(labels=labels, coordinates=data, ids=ids,
                        title="PCA", output=args.output, cname=args.cname,
                        pointsize=args.pointsize, alpha=args.alpha)
+        np.savetxt(args.output+"_pca.csv", data[:,0:2], delimiter=',')
         exit
 
     # if it's for t-SNE visualization
@@ -469,6 +472,7 @@ elif type_of_experiment == 'visualization':
         ugtm.plot_html(labels=labels, coordinates=data_r, ids=ids,
                        title="t-SNE", output=args.output, cname=args.cname,
                        pointsize=args.pointsize, alpha=args.alpha)
+        np.savetxt(args.output+"_tsne.csv", data_r, delimiter=',')
         exit
 
     # if it's for GTM visualization
@@ -483,13 +487,16 @@ elif type_of_experiment == 'visualization':
         end = time.time()
         elapsed = end - start
         print("time taken for GTM: ", elapsed)
+        np.savetxt(args.output+"_matmeans.csv", gtm.matMeans, delimiter=',')
         gtm.plot_multipanel(
             labels=labels, output=args.output, discrete=discrete,
-            cname=args.cname, pointsize=args.pointsize, alpha=args.alpha)
+            cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
+            priors=args.prior)
         gtm.plot_html(labels=labels, ids=ids,
                       discrete=discrete, output=args.output,
                       cname=args.cname, pointsize=args.pointsize,
-                      alpha=args.alpha)
+                      alpha=args.alpha,
+                      prior=args.prior)
         exit
 
     # if it's for kGTM visualization
@@ -508,13 +515,16 @@ elif type_of_experiment == 'visualization':
         elapsed = end - start
         print("time taken for kGTM: ", elapsed)
         # make pdf
+        np.savetxt(args.output+"_matmeans.csv", kgtm.matMeans, delimiter=',')
         kgtm.plot_multipanel(
             labels=labels, output=args.output, discrete=discrete,
-            cname=args.cname, pointsize=args.pointsize, alpha=args.alpha)
+            cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
+            prior=args.prior)
         # interactive plot
         kgtm.plot_html(labels=labels, ids=ids, plot_arrows=True, title="kGTM",
                        discrete=discrete, output=args.output, cname=args.cname,
-                       pointsize=args.pointsize, alpha=args.alpha)
+                       pointsize=args.pointsize, alpha=args.alpha,
+                       prior=args.prior)
         exit
 
     # if it's to compare GTM, PCA, LLE and t_SNE visualizations
@@ -552,7 +562,8 @@ elif type_of_experiment == 'visualization':
         ax = fig.add_subplot(337)
         if discrete:
             ugtm.plotClassMap(gtm, labels, cname=args.cname,
-                              pointsize=args.pointsize, alpha=args.alpha)
+                              pointsize=args.pointsize, alpha=args.alpha,
+                              prior=args.prior)
         else:
             ugtm.plotLandscape(gtm, labels, cname=args.cname, alpha=args.alpha,
                                pointsize=args.pointsize)
@@ -579,7 +590,7 @@ elif type_of_experiment == 'visualization':
         ax = fig.add_subplot(338)
         if discrete:
             ugtm.plotClassMap(kgtm, labels, cname=args.cname, alpha=args.alpha,
-                              pointsize=args.pointsize)
+                              pointsize=args.pointsize, prior=args.prior)
         else:
             ugtm.plotLandscape(kgtm, labels, cname=args.cname, alpha=args.alpha,
                                pointsize=args.pointsize)
@@ -606,7 +617,7 @@ elif type_of_experiment == 'visualization':
         ax = fig.add_subplot(339)
         if discrete:
             ugtm.plotClassMap(kgtm, labels, cname=args.cname, alpha=args.alpha,
-                              pointsize=args.pointsize)
+                              pointsize=args.pointsize, prior=args.prior)
         else:
             ugtm.plotLandscape(kgtm, labels, cname=args.cname, alpha=args.alpha,
                                pointsize=args.pointsize)

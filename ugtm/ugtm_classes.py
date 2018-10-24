@@ -124,29 +124,32 @@ class OptimizedGTM(object):
     def plot_html(self, labels=None, ids=None, plot_arrows=True,
                   title="GTM", discrete=False, output="output",
                   pointsize=1.0, alpha=0.3, do_interpolate=True,
-                  cname="Spectral_r"):
+                  cname="Spectral_r", prior="equiprobable"):
         plot_html_GTM(optimizedModel=self, labels=labels, ids=ids,
                       plot_arrows=plot_arrows, title=title, discrete=discrete,
                       output=output, pointsize=pointsize, alpha=alpha,
-                      do_interpolate=do_interpolate, cname=cname)
+                      do_interpolate=do_interpolate, cname=cname,
+                      prior=prior)
 
     def plot_multipanel(self, labels, output="output", discrete=False,
                         pointsize=1.0, alpha=0.3, do_interpolate=True,
-                        cname="Spectral_r"):
+                        cname="Spectral_r", prior="equiprobable"):
         plotMultiPanelGTM(optimizedModel=self, labels=labels, output=output,
                           discrete=discrete, pointsize=pointsize, alpha=alpha,
-                          do_interpolate=do_interpolate, cname=cname)
+                          do_interpolate=do_interpolate, cname=cname,
+                          prior=prior)
 
     def plot_html_projection(self, projections, labels=None,
                              ids=None, plot_arrows=True,
                              title="GTM_projection", discrete=False,
                              output="output", pointsize=1.0,
                              alpha=0.3, do_interpolate=True,
-                             cname="Spectral_r"):
+                             cname="Spectral_r", prior="equiprobable"):
         plot_html_GTM_projection(optimizedModel=self, projections=projections,
                                  labels=labels, ids=ids,
                                  plot_arrows=plot_arrows,
                                  title=title, discrete=discrete,
                                  output=output,
                                  pointsize=pointsize, alpha=alpha,
-                                 do_interpolate=do_interpolate, cname=cname)
+                                 do_interpolate=do_interpolate, cname=cname,
+                                 prior=prior)
