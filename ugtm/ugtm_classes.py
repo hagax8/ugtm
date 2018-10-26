@@ -115,7 +115,7 @@ class OptimizedGTM(object):
         plot(coordinates=self.matMeans, labels=labels, title=title,
              output=output, discrete=discrete,
              pointsize=pointsize, alpha=alpha, cname=cname,
-             output_format="pdf")
+             output_format=output_format)
 
     def plot_modes(self, labels=None, title="", output="output",
                    discrete=False, pointsize=1, alpha=0.3, cname="Spectral_r",
