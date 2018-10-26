@@ -1,6 +1,6 @@
 from __future__ import print_function
 import numpy as np
-from .ugtm_plot import plot_pdf
+from .ugtm_plot import plot
 from .ugtm_plot import plotMultiPanelGTM
 from .ugtm_plot import plot_html_GTM
 from .ugtm_plot import plot_html_GTM_projection
@@ -110,16 +110,20 @@ class OptimizedGTM(object):
         print("")
 
     def plot(self, labels=None, title="", output="output",
-             discrete=False, pointsize=1, alpha=0.3, cname="Spectral_r"):
-        plot_pdf(coordinates=self.matMeans, labels=labels, title=title,
-                 output=output, discrete=discrete,
-                 pointsize=pointsize, alpha=alpha, cname=cname)
+             discrete=False, pointsize=1, alpha=0.3, cname="Spectral_r",
+             output_format="pdf"):
+        plot(coordinates=self.matMeans, labels=labels, title=title,
+             output=output, discrete=discrete,
+             pointsize=pointsize, alpha=alpha, cname=cname,
+             output_format="pdf")
 
     def plot_modes(self, labels=None, title="", output="output",
-                   discrete=False, pointsize=1, alpha=0.3, cname="Spectral_r"):
-        plot_pdf(coordinates=self.matModes, labels=labels, title=title,
-                 output=output, discrete=discrete,
-                 pointsize=pointsize, alpha=alpha, cname=cname)
+                   discrete=False, pointsize=1, alpha=0.3, cname="Spectral_r",
+                   output_format="pdf"):
+        plot(coordinates=self.matModes, labels=labels, title=title,
+             output=output, discrete=discrete,
+             pointsize=pointsize, alpha=alpha, cname=cname,
+             output_format=output_format)
 
     def plot_html(self, labels=None, ids=None, plot_arrows=True,
                   title="GTM", discrete=False, output="output",
