@@ -284,6 +284,9 @@ parser.add_argument('--cmap',
 parser.add_argument('--verbose',
                     help='verbose mode',
                     action='store_true')
+parser.add_argument('--interpolate',
+                    help='interpolate between GTM nodes in visualizations',
+                    action='store_true')
 
 
 args = parser.parse_args()
@@ -491,12 +494,12 @@ elif type_of_experiment == 'visualization':
         gtm.plot_multipanel(
             labels=labels, output=args.output, discrete=discrete,
             cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
-            prior=args.prior)
+            prior=args.prior,do_interpolate=args.interpolate)
         gtm.plot_html(labels=labels, ids=ids,
                       discrete=discrete, output=args.output,
                       cname=args.cname, pointsize=args.pointsize,
                       alpha=args.alpha,
-                      prior=args.prior)
+                      prior=args.prior,do_interpolate=args.interpolate)
         exit
 
     # if it's for kGTM visualization
@@ -519,12 +522,12 @@ elif type_of_experiment == 'visualization':
         kgtm.plot_multipanel(
             labels=labels, output=args.output, discrete=discrete,
             cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
-            prior=args.prior)
+            prior=args.prior, do_interpolate=args.interpolate)
         # interactive plot
         kgtm.plot_html(labels=labels, ids=ids, plot_arrows=True, title="kGTM",
                        discrete=discrete, output=args.output, cname=args.cname,
                        pointsize=args.pointsize, alpha=args.alpha,
-                       prior=args.prior)
+                       prior=args.prior, do_interpolate=args.interpolate)
         exit
 
     # if it's to compare GTM, PCA, LLE and t_SNE visualizations
