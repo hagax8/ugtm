@@ -21,8 +21,9 @@ class NumpyEncoder(json.JSONEncoder):
 _display.NumpyEncoder = NumpyEncoder
 
 
-def plot_pdf(coordinates, labels=None, title="", output="output",
-             discrete=False, pointsize=1.0, alpha=0.3, cname="Spectral_r"):
+def plot(coordinates, labels=None, title="", output="output",
+         discrete=False, pointsize=1.0, alpha=0.3, cname="Spectral_r",
+         output_format="pdf"):
     if labels is None:
         colvec = "black"
     elif discrete:
@@ -46,9 +47,23 @@ def plot_pdf(coordinates, labels=None, title="", output="output",
         plt.colorbar(scatter)
     plt.axis('tight')
     plt.xticks([]), plt.yticks([])
-    fig.savefig(output+".pdf", format='pdf', dpi=500)
+
+    if not output_format:
+         # Just show the plot, since no output format has been selected
+         fig.show()
+    else:
+        if output_format[0] == ".":
+            output_format = output_format[1:]
+        output_file = "%s.%s" % (output, output_format)
+        fig.savefig(output_file, format=output_format, dpi=500)
+        print("\nWrote %s to disk: %s\n" % (output_format, output_file))
     plt.close(fig)
-    print("\nWrote pdf to disk: %s\n" % (output+".pdf"))
+
+
+def plot_pdf(*args, **kwargs):
+    # This function is here for the sake of backwards compatibility
+    kwargs["output_format"] = "pdf"
+    return plot(*args, **kwargs)
 
 
 def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
