@@ -1,12 +1,12 @@
 from __future__ import print_function
 import numpy as np
+from sklearn.impute import SimpleImputer
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics import pairwise
 from scipy.spatial import distance
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import KernelCenterer
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import Imputer
 
 
 class ProcessedTrainTest(object):
@@ -18,7 +18,7 @@ class ProcessedTrainTest(object):
 def pcaPreprocess(data, doPCA=False, n_components=-1, missing=False,
                   missing_strategy='most_frequent', random_state=1234):
     if missing:
-        imp = Imputer(strategy=missing_strategy, axis=0)
+        imp = SimpleImputer(strategy=missing_strategy)
         data = imp.fit_transform(data)
     scaler = StandardScaler()
     data = scaler.fit_transform(data)
