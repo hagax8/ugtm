@@ -192,7 +192,7 @@ parser.add_argument('--grid_size',
                     default=0)
 parser.add_argument('--rbf_grid_size',
                     help='RBF grid size (if m: the RBF grid will be mxm, '
-                          'default m = sqrt(grid_size))',
+                    'default m = sqrt(grid_size))',
                     type=int,
                     dest='rbf_grid_size',
                     default=0)
@@ -400,25 +400,28 @@ elif type_of_experiment == 'traintest':
                                   s=args.rbf_width_factor)
     prediction['optimizedModel'].plot_html(ids=ids, plot_arrows=True,
                                            title="GTM",
+                                           labels=labels,
                                            discrete=discrete,
-                                           output=args.output,
+                                           output=args.output+"_trainedMap",
                                            cname=args.cname,
                                            pointsize=args.pointsize,
                                            alpha=args.alpha,
-                                           prior=args.prior)
+                                           prior=args.prior,
+                                           do_interpolate=args.interpolate)
     ugtm.printClassPredictions(prediction, output=args.output)
     prediction['optimizedModel'].plot_html_projection(labels=labels,
                                                       projections=prediction["indiv_projections"],
                                                       ids=testids,
                                                       plot_arrows=True,
-                                                      title="GTM_projection",
+                                                      title="GTM projection",
                                                       discrete=discrete,
                                                       cname=args.cname,
                                                       pointsize=args.pointsize,
+                                                      output=args.output,
                                                       alpha=args.alpha,
-                                                      prior=args.prior)
+                                                      prior=args.prior,
+                                                      do_interpolate=args.interpolate)
     exit
-
 
 # TYPE OF EXPERIMENT: 3: VISUALIZATION: CAN BE t-SNE, GTM, PCA
 ###################################################
@@ -427,15 +430,14 @@ elif type_of_experiment == 'traintest':
 ###################################################
 ###################################################
 
-
 elif type_of_experiment == 'visualization':
 
     if args.model != 'GTM':
         data = ugtm.pcaPreprocess(data=data, doPCA=args.pca,
-                                                  n_components=args.n_components,
-                                                  missing=args.missing,
-                                                  missing_strategy=args.missing_strategy,
-                                                  random_state=args.random_state)
+                                  n_components=args.n_components,
+                                  missing=args.missing,
+                                  missing_strategy=args.missing_strategy,
+                                  random_state=args.random_state)
 
     # set default parameters
     k = int(math.sqrt(5*math.sqrt(data.shape[0])))+2
@@ -455,30 +457,36 @@ elif type_of_experiment == 'visualization':
     if args.rbf_grid_size:
         m = args.rbf_grid_size
 
-    # if it's for PCA visualization
+    # PCA visualization
     if args.model == 'PCA':
-        if discrete:
-            uniqClasses, labels = np.unique(labels, return_inverse=True)
+        # if discrete:
+        #    uniqClasses, labels = np.unique(labels, return_inverse=True)
         ugtm.plot_html(labels=labels, coordinates=data, ids=ids,
-                       title="PCA", output=args.output, cname=args.cname,
-                       pointsize=args.pointsize, alpha=args.alpha)
-        np.savetxt(args.output+"_pca.csv", data[:,0:2], delimiter=',')
+                       title="", output=args.output, cname=args.cname,
+                       pointsize=args.pointsize, alpha=args.alpha,
+                       discrete=discrete)
+        np.savetxt(args.output+".csv", data[:, 0:2], delimiter=',')
         exit
 
-    # if it's for t-SNE visualization
+    # t-SNE visualization
     elif args.model == 't-SNE':
-        if discrete:
-            uniqClasses, labels = np.unique(labels, return_inverse=True)
+       #     if discrete:
+       #         uniqClasses, labels = np.unique(labels, return_inverse=True)
         tsne = manifold.TSNE(n_components=2, init='pca',
                              random_state=args.random_state)
         data_r = tsne.fit_transform(data)
         ugtm.plot_html(labels=labels, coordinates=data_r, ids=ids,
-                       title="t-SNE", output=args.output, cname=args.cname,
-                       pointsize=args.pointsize, alpha=args.alpha)
-        np.savetxt(args.output+"_tsne.csv", data_r, delimiter=',')
+                       discrete=discrete,
+                       output=args.output, cname=args.cname,
+                       pointsize=args.pointsize, alpha=args.alpha, title="")
+        ugtm.plot(labels=labels, coordinates=data_r, discrete=discrete,
+                  output=args.output, cname=args.cname,
+                  pointsize=args.pointsize, alpha=args.alpha,
+                  title="")
+        np.savetxt(args.output+".csv", data_r, delimiter=',')
         exit
 
-    # if it's for GTM visualization
+    # GTM visualization
     elif args.model == 'GTM':
         start = time.time()
         gtm = ugtm.runGTM(data=data, k=k, m=m, s=s, l=l, niter=niter,
@@ -490,16 +498,19 @@ elif type_of_experiment == 'visualization':
         end = time.time()
         elapsed = end - start
         print("time taken for GTM: ", elapsed)
-        np.savetxt(args.output+"_matmeans.csv", gtm.matMeans, delimiter=',')
+        np.savetxt(args.output+"_means.csv", gtm.matMeans, delimiter=',')
         gtm.plot_multipanel(
-            labels=labels, output=args.output, discrete=discrete,
+            labels=labels, output=args.output+"_multipanel", discrete=discrete,
             cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
-            prior=args.prior,do_interpolate=args.interpolate)
+            prior=args.prior, do_interpolate=args.interpolate)
         gtm.plot_html(labels=labels, ids=ids,
                       discrete=discrete, output=args.output,
                       cname=args.cname, pointsize=args.pointsize,
-                      alpha=args.alpha,
-                      prior=args.prior,do_interpolate=args.interpolate)
+                      alpha=args.alpha, title="",
+                      prior=args.prior, do_interpolate=args.interpolate)
+        gtm.plot(labels=labels, output=args.output, discrete=discrete,
+                 pointsize=args.pointsize, alpha=args.alpha,
+                 cname=args.cname)
         exit
 
     # if it's for kGTM visualization
@@ -518,16 +529,20 @@ elif type_of_experiment == 'visualization':
         elapsed = end - start
         print("time taken for kGTM: ", elapsed)
         # make pdf
-        np.savetxt(args.output+"_matmeans.csv", kgtm.matMeans, delimiter=',')
+        np.savetxt(args.output+"_means.csv", kgtm.matMeans, delimiter=',')
         kgtm.plot_multipanel(
             labels=labels, output=args.output, discrete=discrete,
             cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
             prior=args.prior, do_interpolate=args.interpolate)
         # interactive plot
-        kgtm.plot_html(labels=labels, ids=ids, plot_arrows=True, title="kGTM",
+        kgtm.plot_html(labels=labels, ids=ids, plot_arrows=True,
                        discrete=discrete, output=args.output, cname=args.cname,
                        pointsize=args.pointsize, alpha=args.alpha,
-                       prior=args.prior, do_interpolate=args.interpolate)
+                       prior=args.prior, do_interpolate=args.interpolate,
+                       title="")
+        kgtm.plot(labels=labels, output=args.output, discrete=discrete,
+                  pointsize=args.pointsize, alpha=args.alpha,
+                  cname=args.cname)
         exit
 
     # if it's to compare GTM, PCA, LLE and t_SNE visualizations
