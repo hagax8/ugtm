@@ -465,6 +465,10 @@ elif type_of_experiment == 'visualization':
                        title="", output=args.output, cname=args.cname,
                        pointsize=args.pointsize, alpha=args.alpha,
                        discrete=discrete)
+        ugtm.plot(labels=labels, coordinates=data, discrete=discrete,
+          output=args.output, cname=args.cname,
+          pointsize=args.pointsize, alpha=args.alpha,
+          title="")
         np.savetxt(args.output+".csv", data[:, 0:2], delimiter=',')
         exit
 
@@ -531,7 +535,7 @@ elif type_of_experiment == 'visualization':
         # make pdf
         np.savetxt(args.output+"_means.csv", kgtm.matMeans, delimiter=',')
         kgtm.plot_multipanel(
-            labels=labels, output=args.output, discrete=discrete,
+            labels=labels, output=args.output+"_multipanel", discrete=discrete,
             cname=args.cname, pointsize=args.pointsize, alpha=args.alpha,
             prior=args.prior, do_interpolate=args.interpolate)
         # interactive plot
