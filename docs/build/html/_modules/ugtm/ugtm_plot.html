@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm.ugtm_plot &mdash; ugtm v1.1.4 documentation</title>
+  <title>ugtm.ugtm_plot &mdash; ugtm v1.1.7 documentation</title>
   
 
   
@@ -165,8 +165,9 @@
 <span class="n">_display</span><span class="o">.</span><span class="n">NumpyEncoder</span> <span class="o">=</span> <span class="n">NumpyEncoder</span>
 
 
-<div class="viewcode-block" id="plot_pdf"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plot_pdf">[docs]</a><span class="k">def</span> <span class="nf">plot_pdf</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
-             <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="plot"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plot">[docs]</a><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
+         <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">,</span>
+         <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">colvec</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
     <span class="k">elif</span> <span class="n">discrete</span><span class="p">:</span>
@@ -190,9 +191,23 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">scatter</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([]),</span> <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wrote pdf to disk: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="o">+</span><span class="s2">&quot;.pdf&quot;</span><span class="p">))</span></div>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">output_format</span><span class="p">:</span>
+         <span class="c1"># Just show the plot, since no output format has been selected</span>
+         <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">output_format</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+            <span class="n">output_format</span> <span class="o">=</span> <span class="n">output_format</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">output_format</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wrote </span><span class="si">%s</span><span class="s2"> to disk: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output_format</span><span class="p">,</span> <span class="n">output_file</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_pdf"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plot_pdf">[docs]</a><span class="k">def</span> <span class="nf">plot_pdf</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># This function is here for the sake of backwards compatibility</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;output_format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
+    <span class="k">return</span> <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="plotMultiPanelGTM"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_plot.plotMultiPanelGTM">[docs]</a><span class="k">def</span> <span class="nf">plotMultiPanelGTM</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -525,7 +540,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'v1.1.4',
+            VERSION:'v1.1.7',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

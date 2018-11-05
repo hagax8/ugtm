@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm.ugtm_classes &mdash; ugtm v1.1.4 documentation</title>
+  <title>ugtm.ugtm_classes &mdash; ugtm v1.1.7 documentation</title>
   
 
   
@@ -144,7 +144,7 @@
   <h1>Source code for ugtm.ugtm_classes</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.ugtm_plot</span> <span class="k">import</span> <span class="n">plot_pdf</span>
+<span class="kn">from</span> <span class="nn">.ugtm_plot</span> <span class="k">import</span> <span class="n">plot</span>
 <span class="kn">from</span> <span class="nn">.ugtm_plot</span> <span class="k">import</span> <span class="n">plotMultiPanelGTM</span>
 <span class="kn">from</span> <span class="nn">.ugtm_plot</span> <span class="k">import</span> <span class="n">plot_html_GTM</span>
 <span class="kn">from</span> <span class="nn">.ugtm_plot</span> <span class="k">import</span> <span class="n">plot_html_GTM_projection</span>
@@ -254,16 +254,20 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OptimizedGTM.plot"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_classes.OptimizedGTM.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
-             <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">):</span>
-        <span class="n">plot_pdf</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matMeans</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-                 <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
-                 <span class="n">pointsize</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="n">cname</span><span class="p">)</span></div>
+             <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">,</span>
+             <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matMeans</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+             <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
+             <span class="n">pointsize</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="n">cname</span><span class="p">,</span>
+             <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OptimizedGTM.plot_modes"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_classes.OptimizedGTM.plot_modes">[docs]</a>    <span class="k">def</span> <span class="nf">plot_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
-                   <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">):</span>
-        <span class="n">plot_pdf</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matModes</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-                 <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
-                 <span class="n">pointsize</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="n">cname</span><span class="p">)</span></div>
+                   <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">,</span>
+                   <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matModes</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+             <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
+             <span class="n">pointsize</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="n">cname</span><span class="p">,</span>
+             <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OptimizedGTM.plot_html"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_classes.OptimizedGTM.plot_html">[docs]</a>    <span class="k">def</span> <span class="nf">plot_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_arrows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;GTM&quot;</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
@@ -331,7 +335,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'v1.1.4',
+            VERSION:'v1.1.7',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

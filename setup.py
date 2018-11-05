@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 #cmdclass = {'build_sphinx': BuildDoc}
 
 setup(name='ugtm',
-      version='1.1.7',
+      version='1.1.8',
       description='Generative Topographic Mapping (GTM) for python, GTM classification and GTM regression',
       long_description=open('README.rst').read(),
       url='http://github.com/hagax8/ugtm',

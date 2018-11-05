@@ -37,7 +37,7 @@ def pcaPreprocess(data, doPCA=False, n_components=-1, missing=False,
 def processTrainTest(train, test, doPCA, n_components, missing=False,
                      missing_strategy='most_frequent', random_state=1234):
     if missing:
-        imp = Imputer(strategy=missing_strategy, axis=0)
+        imp = SimpleImputer(strategy=missing_strategy)
         train = imp.fit_transform(train)
         test = imp.transform(test)
     scaler = StandardScaler()
