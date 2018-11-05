@@ -16,12 +16,12 @@ If you get error messages, try upgrading packages with one of these lines:
 - sudo pip install --upgrade pip numpy scikit-learn matplotlib scipy mpld3 jinja2
 
 If you have problems with anaconda packages, try to create a virtual env called "p2" for python 2.7.14:
-- conda create -n p2 python=2.7.14 numpy=1.14.5 scikit-learn=0.19 matplotlib=2.2.2 scipy=0.19.1 mpld3=0.3 jinja2=2.10
+- conda create -n p2 python=2.7.14 numpy=1.14.5 scikit-learn=0.20 matplotlib=2.2.2 scipy=0.19.1 mpld3=0.3 jinja2=2.10
 - source activate p2
 - pip install ugtm
 
 Or p3 for python 3.6.6:
-- conda create -n p3 python=3.6.6 numpy=1.14.5 scikit-learn=0.19 matplotlib=2.2.2 scipy=0.19.1 mpld3=0.3 jinja2=2.10
+- conda create -n p3 python=3.6.6 numpy=1.14.5 scikit-learn=0.20 matplotlib=2.2.2 scipy=0.19.1 mpld3=0.3 jinja2=2.10
 - source activate p3
 - pip install ugtm
 
@@ -36,7 +36,7 @@ Or p3 for python 3.6.6:
 Python 2.7 or + (tested on Python 3.4.6 and Python 2.7.14)
 
 and following packages:
-- scikit-learn>=0.19
+- scikit-learn>=0.20
 - numpy>=1.14.5
 - matplotlib>=2.2.2
 - scipy>=0.19.1
