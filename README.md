@@ -11,7 +11,7 @@ ugtm is a python package implementing GTM and GTM prediction algorithms. ugtm co
 Simple installation:
 - pip install ugtm
 
-If you get error messages, try upgrading packages with one of these lines:
+If you get error messages, try upgrading packages:
 - pip install --upgrade pip numpy scikit-learn matplotlib scipy mpld3 jinja2
 - sudo pip install --upgrade pip numpy scikit-learn matplotlib scipy mpld3 jinja2
 
