@@ -51,6 +51,8 @@ extensions = [
     'sphinx.ext.napoleon',
 ]
 
+mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True

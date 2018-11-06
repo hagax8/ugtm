@@ -1,3 +1,6 @@
+# Authors: Helena A. Gaspar <hagax8@gmail.com>
+# License: MIT
+
 from __future__ import print_function
 import numpy as np
 from scipy.spatial import distance

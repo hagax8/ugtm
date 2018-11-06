@@ -154,21 +154,142 @@
 <dt id="ugtm.ugtm_classes.InitialGTM">
 <em class="property">class </em><code class="descclassname">ugtm.ugtm_classes.</code><code class="descname">InitialGTM</code><span class="sig-paren">(</span><em>matX</em>, <em>matM</em>, <em>n_nodes</em>, <em>n_rbf_centers</em>, <em>rbfWidth</em>, <em>matPhiMPlusOne</em>, <em>matW</em>, <em>matY</em>, <em>betaInv</em>, <em>n_dimensions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_classes.html#InitialGTM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_classes.InitialGTM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Initial GTM model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>matX</strong> (<em>array of shape (n_nodes, 2)</em>) – Coordinates of nodes defining a grid in the 2D space.</li>
+<li><strong>matM</strong> (<em>array of shape (n_rbf_centers, 2)</em>) – Coordinates of radial basis function (RBF) centers,
+defining a grid in the 2D space.</li>
+<li><strong>n_nodes</strong> (<em>int</em>) – The number of nodes defining a grid in the 2D space.</li>
+<li><strong>n_rbf_centers</strong> (<em>int</em>) – The number of radial basis function (RBF) centers.</li>
+<li><strong>rbfWidth</strong> (<em>float</em>) – Initial radial basis function (RBF) width.
+This is set to the average of the minimum distance between RBF centers:
+<span class="math notranslate nohighlight">\(rbfWidth=\sigma \times average(\mathbf{distances(rbf)}_{min})\)</span>,
+where <span class="math notranslate nohighlight">\(sigma\)</span> is the GTM hyperparameter s.
+NB: if GTM hyperparameter s = 0 (not recommended),
+rbfWidth is set to the maximum distance between RBF centers.</li>
+<li><strong>matPhiMPlusOne</strong> (<em>array of shape (n_nodes, n_rbf_centers+1)</em>) – RBF matrix plus one dimension to include a term for bias.</li>
+<li><strong>matW</strong> (<em>array of shape (n_dimensions, n_rbf_centers+1)</em>) – Parameter matrix (PCA-initialized).</li>
+<li><strong>matY</strong> (<em>array of shape (n_dimensions, n_nodes)</em>) – Manifold in n-dimensional space (projection of matX in data space);
+A point matY[:,i] is a Gaussian component center in data space.
+<span class="math notranslate nohighlight">\(\mathbf{Y}=\mathbf{W}\mathbf{\Phi}^T\)</span></li>
+<li><strong>betaInv</strong> (<em>float</em>) – Noise variance parameter for the data distribution.
+Written as <span class="math notranslate nohighlight">\(\beta^{-1}\)</span> in the original paper.
+Initialized to be the larger between:
+(1) the 3rd eigenvalue of the data covariance matrix,
+(2) half the average distance between Gaussian component centers
+in the data space (matY matrix).</li>
+<li><strong>n_dimensions</strong> (<em>int</em>) – Data space dimensionality (number of variables).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="ugtm.ugtm_classes.OptimizedGTM">
 <em class="property">class </em><code class="descclassname">ugtm.ugtm_classes.</code><code class="descname">OptimizedGTM</code><span class="sig-paren">(</span><em>matW</em>, <em>matY</em>, <em>matP</em>, <em>matR</em>, <em>betaInv</em>, <em>matMeans</em>, <em>matModes</em>, <em>matX</em>, <em>n_dimensions</em>, <em>converged</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_classes.html#OptimizedGTM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_classes.OptimizedGTM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Optimized GTM model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>matX</strong> (<em>array of shape (n_nodes, 2)</em>) – Coordinates of nodes defining a grid in the 2D space.</li>
+<li><strong>matW</strong> (<em>array of shape (n_dimensions, n_rbf_centers+1)</em>) – Parameter matrix (PCA-initialized).</li>
+<li><strong>matY</strong> (<em>array of shape (n_dimensions, n_nodes)</em>) – Manifold in n-dimensional space (projection of matX in data space).
+matY = np.dot(matW, np.transpose(matPhiMPlusOne))</li>
+<li><strong>matP</strong> (<em>array of shape (n_instances, n_nodes)</em>) – Data distribution with inverse variance betaInv.</li>
+<li><strong>matR</strong> (<em>array of shape (n_instances, n_nodes)</em>) – Responsibilities (posterior probabilities),
+used to compute data representations:
+means (matMeans) and modes (matModes).
+Responsibilities are the main output of GTM.
+matR[i,:] represents the responsibility vector for an instance i.
+The columns in matR correspond to rows in matX (nodes).</li>
+<li><strong>betaInv</strong> (<em>float</em>) – Noise variance parameter for the data distribution.
+Written as <span class="math notranslate nohighlight">\(eta^{-1}\)</span> in the original paper.</li>
+<li><strong>matMeans</strong> (<em>array of shape (n_instances, 2)</em>) – Data representation in 2D space: means (most commonly used for GTM).</li>
+<li><strong>matModes</strong> (<em>array of shape(n_instances, 2)</em>) – Data representation in 2D space: modes
+(for each instance, coordinate with highest responsibility).</li>
+<li><strong>n_dimensions</strong> (<em>int</em>) – Data space dimensionality (number of variables).</li>
+<li><strong>converged</strong> (<em>bool</em>) – True if the model has converged; otherwise False.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="ugtm.ugtm_classes.OptimizedGTM.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>labels=None</em>, <em>title=''</em>, <em>output='output'</em>, <em>discrete=False</em>, <em>pointsize=1</em>, <em>alpha=0.3</em>, <em>cname='Spectral_r'</em>, <em>output_format='pdf'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_classes.html#OptimizedGTM.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_classes.OptimizedGTM.plot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Simple plotting function for GTM object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>labels</strong> (<em>array of shape (n_instances,), optional (default = None)</em>) – Data labels.</li>
+<li><strong>title</strong> (<em>str, optional (default = “”)</em>) – Plot title.</li>
+<li><strong>output</strong> (<em>str, optional (default = “ouptut”)</em>) – Output path for plot.</li>
+<li><strong>discrete</strong> (<em>bool (default = False)</em>) – Type of label; discrete=True if labels are nominal or binary.</li>
+<li><strong>pointsize</strong> (<em>float, optional (default = “1”)</em>) – Marker size.</li>
+<li><strong>alpha</strong> (<em>float, optional (default = “0.3”),</em>) – Marker transparency.</li>
+<li><strong>cname</strong> (<em>str, optional (default = “Spectral_r”),</em>) – Name of matplotlib color map.
+Cf. <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a></li>
+<li><strong>output_format</strong> (<em>{“pdf”, “png”, “ps”, “eps”, “svg”}</em>) – Output format for GTM plot.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Image file</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function plots mean representations only (no landscape nor modes).</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ugtm.ugtm_classes.OptimizedGTM.plot_html">
 <code class="descname">plot_html</code><span class="sig-paren">(</span><em>labels=None</em>, <em>ids=None</em>, <em>plot_arrows=True</em>, <em>title='GTM'</em>, <em>discrete=False</em>, <em>output='output'</em>, <em>pointsize=1.0</em>, <em>alpha=0.3</em>, <em>do_interpolate=True</em>, <em>cname='Spectral_r'</em>, <em>prior='equiprobable'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_classes.html#OptimizedGTM.plot_html"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_classes.OptimizedGTM.plot_html" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Plotting function for GTM object - HTML output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>labels</strong> (<em>array of shape (n_instances,), optional (default = None)</em>) – Data labels.</li>
+<li><strong>ids</strong> (<em>array of shape (n_instances,), optional (default = None)</em>) – Identifiers for each data point - appears in tooltips.</li>
+<li><strong>title</strong> (<em>str, optional (default = ‘’)</em>) – Plot title.</li>
+<li><strong>output</strong> (<em>str, optional (default = ‘ouptut’)</em>) – Output path for plot.</li>
+<li><strong>discrete</strong> (<em>bool (default = False)</em>) – Type of label; discrete=True if labels are nominal or binary.</li>
+<li><strong>pointsize</strong> (<em>float, optional (default = ‘1’)</em>) – Marker size.</li>
+<li><strong>alpha</strong> (<em>float, optional (default = ‘0.3’),</em>) – Marker transparency.</li>
+<li><strong>cname</strong> (<em>str, optinal (default = ‘Spectral_r’),</em>) – Name of matplotlib color map.</li>
+<li><strong>prior</strong> (<em>{‘equiprobable’,’estimated’}</em>) – Type of prior used to compute class probabilities on the map.
+Choose equiprobable for equiprobable priors.
+Estimated priors take into account class imbalance.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">HTML file</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>May be time-consuming for large datasets.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ugtm.ugtm_classes.OptimizedGTM.plot_html_projection">
@@ -178,7 +299,34 @@
 <dl class="method">
 <dt id="ugtm.ugtm_classes.OptimizedGTM.plot_modes">
 <code class="descname">plot_modes</code><span class="sig-paren">(</span><em>labels=None</em>, <em>title=''</em>, <em>output='output'</em>, <em>discrete=False</em>, <em>pointsize=1</em>, <em>alpha=0.3</em>, <em>cname='Spectral_r'</em>, <em>output_format='pdf'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_classes.html#OptimizedGTM.plot_modes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_classes.OptimizedGTM.plot_modes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Simple plotting function for GTM object: plot modes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>labels</strong> (<em>array of shape (n_instances,), optional (default = None)</em>) – Data labels.</li>
+<li><strong>title</strong> (<em>str, optional (default = “”)</em>) – Plot title.</li>
+<li><strong>output</strong> (<em>str, optional (default = “ouptut”)</em>) – Output path for plot.</li>
+<li><strong>discrete</strong> (<em>bool (default = False)</em>) – Type of label; discrete=True if labels are nominal or binary.</li>
+<li><strong>pointsize</strong> (<em>float, optional (default = “1”)</em>) – Marker size.</li>
+<li><strong>alpha</strong> (<em>float, optional (default = “0.3”),</em>) – Marker transparency.</li>
+<li><strong>cname</strong> (<em>str, optinal (default = “Spectral_r”),</em>) – Name of matplotlib color map.</li>
+<li><strong>output_format</strong> (<em>{“png”, “pdf”, “ps”, “eps”, “svg”}, default = “pdf”</em>) – Output format for GTM plot.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Image file</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function plots mode representations only (no landscape nor means).</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="ugtm.ugtm_classes.OptimizedGTM.plot_multipanel">
@@ -606,7 +754,7 @@ implement default like this:</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

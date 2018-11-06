@@ -142,7 +142,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for ugtm.ugtm_classes</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span></span><span class="c1"># Authors: Helena A. Gaspar &lt;hagax8@gmail.com&gt;</span>
+<span class="c1"># License: MIT</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">.ugtm_plot</span> <span class="k">import</span> <span class="n">plot</span>
 <span class="kn">from</span> <span class="nn">.ugtm_plot</span> <span class="k">import</span> <span class="n">plotMultiPanelGTM</span>
@@ -157,6 +160,45 @@
 
 
 <div class="viewcode-block" id="InitialGTM"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_classes.InitialGTM">[docs]</a><span class="k">class</span> <span class="nc">InitialGTM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Initial GTM model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matX : array of shape (n_nodes, 2)</span>
+<span class="sd">        Coordinates of nodes defining a grid in the 2D space.</span>
+<span class="sd">    matM : array of shape (n_rbf_centers, 2)</span>
+<span class="sd">        Coordinates of radial basis function (RBF) centers,</span>
+<span class="sd">        defining a grid in the 2D space.</span>
+<span class="sd">    n_nodes : int</span>
+<span class="sd">        The number of nodes defining a grid in the 2D space.</span>
+<span class="sd">    n_rbf_centers : int</span>
+<span class="sd">        The number of radial basis function (RBF) centers.</span>
+<span class="sd">    rbfWidth : float</span>
+<span class="sd">        Initial radial basis function (RBF) width.</span>
+<span class="sd">        This is set to the average of the minimum distance between RBF centers:</span>
+<span class="sd">        :math:`rbfWidth=\sigma \times average(\mathbf{distances(rbf)}_{min})`,</span>
+<span class="sd">        where :math:`sigma` is the GTM hyperparameter s.</span>
+<span class="sd">        NB: if GTM hyperparameter s = 0 (not recommended),</span>
+<span class="sd">        rbfWidth is set to the maximum distance between RBF centers.</span>
+<span class="sd">    matPhiMPlusOne: array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+<span class="sd">    matW: array of shape (n_dimensions, n_rbf_centers+1)</span>
+<span class="sd">        Parameter matrix (PCA-initialized).</span>
+<span class="sd">    matY: array of shape (n_dimensions, n_nodes)</span>
+<span class="sd">        Manifold in n-dimensional space (projection of matX in data space);</span>
+<span class="sd">        A point matY[:,i] is a Gaussian component center in data space.</span>
+<span class="sd">        :math:`\mathbf{Y}=\mathbf{W}\mathbf{\Phi}^T`</span>
+<span class="sd">    betaInv: float</span>
+<span class="sd">        Noise variance parameter for the data distribution.</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">        Initialized to be the larger between:</span>
+<span class="sd">        (1) the 3rd eigenvalue of the data covariance matrix,</span>
+<span class="sd">        (2) half the average distance between Gaussian component centers</span>
+<span class="sd">        in the data space (matY matrix).</span>
+<span class="sd">    n_dimensions: int</span>
+<span class="sd">        Data space dimensionality (number of variables).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matX</span><span class="p">,</span> <span class="n">matM</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">,</span> <span class="n">n_rbf_centers</span><span class="p">,</span> <span class="n">rbfWidth</span><span class="p">,</span>
                  <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matW</span><span class="p">,</span> <span class="n">matY</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matX</span> <span class="o">=</span> <span class="n">matX</span>
@@ -172,6 +214,40 @@
 
 
 <div class="viewcode-block" id="OptimizedGTM"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_classes.OptimizedGTM">[docs]</a><span class="k">class</span> <span class="nc">OptimizedGTM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Optimized GTM model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matX : array of shape (n_nodes, 2)</span>
+<span class="sd">        Coordinates of nodes defining a grid in the 2D space.</span>
+<span class="sd">    matW : array of shape (n_dimensions, n_rbf_centers+1)</span>
+<span class="sd">        Parameter matrix (PCA-initialized).</span>
+<span class="sd">    matY : array of shape (n_dimensions, n_nodes)</span>
+<span class="sd">        Manifold in n-dimensional space (projection of matX in data space).</span>
+<span class="sd">        matY = np.dot(matW, np.transpose(matPhiMPlusOne))</span>
+<span class="sd">    matP : array of shape (n_instances, n_nodes)</span>
+<span class="sd">        Data distribution with inverse variance betaInv.</span>
+<span class="sd">    matR : array of shape (n_instances, n_nodes)</span>
+<span class="sd">        Responsibilities (posterior probabilities),</span>
+<span class="sd">        used to compute data representations:</span>
+<span class="sd">        means (matMeans) and modes (matModes).</span>
+<span class="sd">        Responsibilities are the main output of GTM.</span>
+<span class="sd">        matR[i,:] represents the responsibility vector for an instance i.</span>
+<span class="sd">        The columns in matR correspond to rows in matX (nodes).</span>
+<span class="sd">    betaInv: float</span>
+<span class="sd">        Noise variance parameter for the data distribution.</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">    matMeans : array of shape (n_instances, 2)</span>
+<span class="sd">        Data representation in 2D space: means (most commonly used for GTM).</span>
+<span class="sd">    matModes : array of shape(n_instances, 2)</span>
+<span class="sd">        Data representation in 2D space: modes</span>
+<span class="sd">        (for each instance, coordinate with highest responsibility).</span>
+<span class="sd">    n_dimensions : int</span>
+<span class="sd">        Data space dimensionality (number of variables).</span>
+<span class="sd">    converged : bool</span>
+<span class="sd">        True if the model has converged; otherwise False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matW</span><span class="p">,</span> <span class="n">matY</span><span class="p">,</span> <span class="n">matP</span><span class="p">,</span> <span class="n">matR</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">matMeans</span><span class="p">,</span>
                  <span class="n">matModes</span><span class="p">,</span> <span class="n">matX</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">,</span> <span class="n">converged</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matW</span> <span class="o">=</span> <span class="n">matW</span>
@@ -256,6 +332,37 @@
 <div class="viewcode-block" id="OptimizedGTM.plot"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_classes.OptimizedGTM.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
              <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">,</span>
              <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Simple plotting function for GTM object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        labels : array of shape (n_instances,), optional (default = None)</span>
+<span class="sd">            Data labels.</span>
+<span class="sd">        title : str, optional (default = &quot;&quot;)</span>
+<span class="sd">            Plot title.</span>
+<span class="sd">        output : str, optional (default = &quot;ouptut&quot;)</span>
+<span class="sd">            Output path for plot.</span>
+<span class="sd">        discrete : bool (default = False)</span>
+<span class="sd">            Type of label; discrete=True if labels are nominal or binary.</span>
+<span class="sd">        pointsize : float, optional (default = &quot;1&quot;)</span>
+<span class="sd">            Marker size.</span>
+<span class="sd">        alpha : float, optional (default = &quot;0.3&quot;),</span>
+<span class="sd">            Marker transparency.</span>
+<span class="sd">        cname : str, optional (default = &quot;Spectral_r&quot;),</span>
+<span class="sd">            Name of matplotlib color map.</span>
+<span class="sd">            Cf. https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">        output_format : {&quot;pdf&quot;, &quot;png&quot;, &quot;ps&quot;, &quot;eps&quot;, &quot;svg&quot;}</span>
+<span class="sd">            Output format for GTM plot.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Image file</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This function plots mean representations only (no landscape nor modes).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">plot</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matMeans</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
              <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
              <span class="n">pointsize</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="n">cname</span><span class="p">,</span>
@@ -264,6 +371,36 @@
 <div class="viewcode-block" id="OptimizedGTM.plot_modes"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_classes.OptimizedGTM.plot_modes">[docs]</a>    <span class="k">def</span> <span class="nf">plot_modes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
                    <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">,</span>
                    <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Simple plotting function for GTM object: plot modes</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        labels : array of shape (n_instances,), optional (default = None)</span>
+<span class="sd">            Data labels.</span>
+<span class="sd">        title : str, optional (default = &quot;&quot;)</span>
+<span class="sd">            Plot title.</span>
+<span class="sd">        output : str, optional (default = &quot;ouptut&quot;)</span>
+<span class="sd">            Output path for plot.</span>
+<span class="sd">        discrete : bool (default = False)</span>
+<span class="sd">            Type of label; discrete=True if labels are nominal or binary.</span>
+<span class="sd">        pointsize : float, optional (default = &quot;1&quot;)</span>
+<span class="sd">            Marker size.</span>
+<span class="sd">        alpha : float, optional (default = &quot;0.3&quot;),</span>
+<span class="sd">            Marker transparency.</span>
+<span class="sd">        cname : str, optinal (default = &quot;Spectral_r&quot;),</span>
+<span class="sd">            Name of matplotlib color map.</span>
+<span class="sd">        output_format : {&quot;png&quot;, &quot;pdf&quot;, &quot;ps&quot;, &quot;eps&quot;, &quot;svg&quot;}, default = &quot;pdf&quot;</span>
+<span class="sd">            Output format for GTM plot.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Image file</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This function plots mode representations only (no landscape nor means).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">plot</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matModes</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
              <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
              <span class="n">pointsize</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cname</span><span class="o">=</span><span class="n">cname</span><span class="p">,</span>
@@ -273,6 +410,40 @@
                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;GTM&quot;</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
                   <span class="n">pointsize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">do_interpolate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">cname</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Plotting function for GTM object - HTML output.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        labels : array of shape (n_instances,), optional (default = None)</span>
+<span class="sd">            Data labels.</span>
+<span class="sd">        ids : array of shape (n_instances,), optional (default = None)</span>
+<span class="sd">            Identifiers for each data point - appears in tooltips.</span>
+<span class="sd">        title : str, optional (default = &#39;&#39;)</span>
+<span class="sd">            Plot title.</span>
+<span class="sd">        output : str, optional (default = &#39;ouptut&#39;)</span>
+<span class="sd">            Output path for plot.</span>
+<span class="sd">        discrete : bool (default = False)</span>
+<span class="sd">            Type of label; discrete=True if labels are nominal or binary.</span>
+<span class="sd">        pointsize : float, optional (default = &#39;1&#39;)</span>
+<span class="sd">            Marker size.</span>
+<span class="sd">        alpha : float, optional (default = &#39;0.3&#39;),</span>
+<span class="sd">            Marker transparency.</span>
+<span class="sd">        cname : str, optinal (default = &#39;Spectral_r&#39;),</span>
+<span class="sd">            Name of matplotlib color map.</span>
+<span class="sd">        prior : {&#39;equiprobable&#39;,&#39;estimated&#39;}</span>
+<span class="sd">            Type of prior used to compute class probabilities on the map.</span>
+<span class="sd">            Choose equiprobable for equiprobable priors.</span>
+<span class="sd">            Estimated priors take into account class imbalance.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        HTML file</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        May be time-consuming for large datasets.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">plot_html_GTM</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span>
                       <span class="n">plot_arrows</span><span class="o">=</span><span class="n">plot_arrows</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="n">discrete</span><span class="p">,</span>
                       <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
@@ -346,7 +517,7 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

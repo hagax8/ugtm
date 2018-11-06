@@ -1,3 +1,6 @@
+# Authors: Helena A. Gaspar <hagax8@gmail.com>
+# License: MIT
+
 import numpy as np
 import math
 from sklearn.decomposition import PCA
