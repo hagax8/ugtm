@@ -9,12 +9,11 @@ ugtm documentation
 .. toctree::
    :maxdepth: 2
  
-   readme.rst
+   readme
+   ugtm
 
 
-Indices and tables
+General index
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

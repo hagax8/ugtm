@@ -1,7 +1,7 @@
 
-===========
-ugtm
-===========
+=============
+ugtm tutorial
+=============
 
 ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (kernel Generative Topographic Mapping), GTM classification models (kNN, Bayes) and GTM regression models. ugtm also implements cross-validation options which can be used to compare GTM classification models to SVM classification models, and GTM regression models to SVM regression models. Typical usage::
 
@@ -36,7 +36,8 @@ Import ugtm package, allowing to construct GTM and kernel GTM (kGTM) maps, GTM c
 
 A gtm object can be created by running the function runGTM on a dataset. Parameters for runGTM are: k = sqrt(number of nodes), m = sqrt(number of rbf centres), s = RBF width factor, l = regularization coefficient. The number of iteration for the expectation-maximization algorithm is set to 200 by default. This is an example with random data::
 
-
+    import ugtm
+    
     #import numpy to generate random data
     import numpy as np
 

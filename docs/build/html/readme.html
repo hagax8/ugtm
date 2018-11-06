@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm &mdash; ugtm v1.1.7 documentation</title>
+  <title>ugtm tutorial &mdash; ugtm v1.1.7 documentation</title>
   
 
   
@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ugtm package" href="ugtm.html" />
     <link rel="prev" title="ugtm documentation" href="index.html" /> 
 
   
@@ -79,7 +80,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ugtm</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ugtm tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#import-package">1. Import package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#construct-and-plot-gtm-maps-or-kgtm-maps">2. Construct and plot GTM maps (or kGTM maps)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plot-html-maps">3. Plot html maps</a></li>
@@ -92,6 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#links-references">10. Links &amp; references</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ugtm.html">ugtm package</a></li>
 </ul>
 
             
@@ -137,7 +139,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>ugtm</li>
+      <li>ugtm tutorial</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,8 +158,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ugtm">
-<h1>ugtm<a class="headerlink" href="#ugtm" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="ugtm-tutorial">
+<h1>ugtm tutorial<a class="headerlink" href="#ugtm-tutorial" title="Permalink to this headline">¶</a></h1>
 <p>ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (kernel Generative Topographic Mapping), GTM classification models (kNN, Bayes) and GTM regression models. ugtm also implements cross-validation options which can be used to compare GTM classification models to SVM classification models, and GTM regression models to SVM regression models. Typical usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
@@ -186,7 +188,9 @@
 <div class="section" id="construct-and-plot-gtm-maps-or-kgtm-maps">
 <h2>2. Construct and plot GTM maps (or kGTM maps)<a class="headerlink" href="#construct-and-plot-gtm-maps-or-kgtm-maps" title="Permalink to this headline">¶</a></h2>
 <p>A gtm object can be created by running the function runGTM on a dataset. Parameters for runGTM are: k = sqrt(number of nodes), m = sqrt(number of rbf centres), s = RBF width factor, l = regularization coefficient. The number of iteration for the expectation-maximization algorithm is set to 200 by default. This is an example with random data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#import numpy to generate random data</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ugtm</span>
+
+<span class="c1">#import numpy to generate random data</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1">#generate random data (independent variables x),</span>
@@ -376,6 +380,8 @@ The plot_multipanel function only works if you have defined labels:</p>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ugtm.html" class="btn btn-neutral float-right" title="ugtm package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="ugtm documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
