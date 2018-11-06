@@ -1,3 +1,5 @@
+"""Preprocessing operations (mostly using scikit-learn functions).
+"""
 # Authors: Helena A. Gaspar <hagax8@gmail.com>
 # License: MIT
 

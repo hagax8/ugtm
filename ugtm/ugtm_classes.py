@@ -1,3 +1,5 @@
+"""Defines classes for initial and optimized GTM model.
+"""
 # Authors: Helena A. Gaspar <hagax8@gmail.com>
 # License: MIT
 
@@ -70,7 +72,7 @@ class InitialGTM(object):
 
 
 class OptimizedGTM(object):
-    """Optimized GTM model.
+    r"""Optimized GTM model.
 
     Parameters
     ----------

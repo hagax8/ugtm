@@ -28,8 +28,7 @@
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="ugtm tutorial" href="readme.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -78,22 +77,11 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="readme.html">ugtm tutorial</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ugtm package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_classes">ugtm.ugtm_classes module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_core">ugtm.ugtm_core module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_crossvalidate">ugtm.ugtm_crossvalidate module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_gtm">ugtm.ugtm_gtm module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_kgtm">ugtm.ugtm_kgtm module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_landscape">ugtm.ugtm_landscape module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_plot">ugtm.ugtm_plot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_predictions">ugtm.ugtm_predictions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm.ugtm_preprocess">ugtm.ugtm_preprocess module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ugtm">Module contents</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/ugtm.html">ugtm</a></li>
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">ugtm quick tutorial</a></li>
 </ul>
 
             
@@ -165,6 +153,7 @@
 </div>
 <div class="section" id="module-ugtm.ugtm_classes">
 <span id="ugtm-ugtm-classes-module"></span><h2>ugtm.ugtm_classes module<a class="headerlink" href="#module-ugtm.ugtm_classes" title="Permalink to this headline">¶</a></h2>
+<p>Defines classes for initial and optimized GTM model.</p>
 <dl class="class">
 <dt id="ugtm.ugtm_classes.InitialGTM">
 <em class="property">class </em><code class="descclassname">ugtm.ugtm_classes.</code><code class="descname">InitialGTM</code><span class="sig-paren">(</span><em>matX</em>, <em>matM</em>, <em>n_nodes</em>, <em>n_rbf_centers</em>, <em>rbfWidth</em>, <em>matPhiMPlusOne</em>, <em>matW</em>, <em>matY</em>, <em>betaInv</em>, <em>n_dimensions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_classes.html#InitialGTM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_classes.InitialGTM" title="Permalink to this definition">¶</a></dt>
@@ -227,7 +216,7 @@ Responsibilities are the main output of GTM.
 matR[i,:] represents the responsibility vector for an instance i.
 The columns in matR correspond to rows in matX (nodes).</li>
 <li><strong>betaInv</strong> (<em>float</em>) – Noise variance parameter for the data distribution.
-Written as <span class="math notranslate nohighlight">\(eta^{-1}\)</span> in the original paper.</li>
+Written as <span class="math notranslate nohighlight">\(\beta^{-1}\)</span> in the original paper.</li>
 <li><strong>matMeans</strong> (<em>array of shape (n_instances, 2)</em>) – Data representation in 2D space: means (most commonly used for GTM).</li>
 <li><strong>matModes</strong> (<em>array of shape(n_instances, 2)</em>) – Data representation in 2D space: modes
 (for each instance, coordinate with highest responsibility).</li>
@@ -483,6 +472,7 @@ Estimated priors take into account class imbalance.</li>
 </div>
 <div class="section" id="module-ugtm.ugtm_core">
 <span id="ugtm-ugtm-core-module"></span><h2>ugtm.ugtm_core module<a class="headerlink" href="#module-ugtm.ugtm_core" title="Permalink to this headline">¶</a></h2>
+<p>Core linear algebra operations for GTM and kGTM</p>
 <dl class="function">
 <dt id="ugtm.ugtm_core.KERNELcreateDistanceMatrix">
 <code class="descclassname">ugtm.ugtm_core.</code><code class="descname">KERNELcreateDistanceMatrix</code><span class="sig-paren">(</span><em>data</em>, <em>matL</em>, <em>matPhiMPlusOne</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_core.html#KERNELcreateDistanceMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_core.KERNELcreateDistanceMatrix" title="Permalink to this definition">¶</a></dt>
@@ -581,6 +571,7 @@ Estimated priors take into account class imbalance.</li>
 </div>
 <div class="section" id="module-ugtm.ugtm_crossvalidate">
 <span id="ugtm-ugtm-crossvalidate-module"></span><h2>ugtm.ugtm_crossvalidate module<a class="headerlink" href="#module-ugtm.ugtm_crossvalidate" title="Permalink to this headline">¶</a></h2>
+<p>Cross-validation support for GTC and GTR models (also SVM and PCA).</p>
 <dl class="function">
 <dt id="ugtm.ugtm_crossvalidate.crossvalidateGTC">
 <code class="descclassname">ugtm.ugtm_crossvalidate.</code><code class="descname">crossvalidateGTC</code><span class="sig-paren">(</span><em>data</em>, <em>labels</em>, <em>n_neighbors=1</em>, <em>representation='modes'</em>, <em>niter=200</em>, <em>k=0</em>, <em>m=0</em>, <em>doPCA=False</em>, <em>n_components=-1</em>, <em>missing=False</em>, <em>missing_strategy='most_frequent'</em>, <em>random_state=1234</em>, <em>predict_mode='bayes'</em>, <em>prior='equiprobable'</em>, <em>l=-1.0</em>, <em>s=-1.0</em>, <em>n_folds=5</em>, <em>n_repetitions=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_crossvalidate.html#crossvalidateGTC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_crossvalidate.crossvalidateGTC" title="Permalink to this definition">¶</a></dt>
@@ -624,6 +615,7 @@ Estimated priors take into account class imbalance.</li>
 </div>
 <div class="section" id="module-ugtm.ugtm_gtm">
 <span id="ugtm-ugtm-gtm-module"></span><h2>ugtm.ugtm_gtm module<a class="headerlink" href="#module-ugtm.ugtm_gtm" title="Permalink to this headline">¶</a></h2>
+<p>Functions to initialize and optimize GTM models.</p>
 <dl class="function">
 <dt id="ugtm.ugtm_gtm.initialize">
 <code class="descclassname">ugtm.ugtm_gtm.</code><code class="descname">initialize</code><span class="sig-paren">(</span><em>data</em>, <em>k</em>, <em>m</em>, <em>s</em>, <em>random_state=1234</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_gtm.html#initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_gtm.initialize" title="Permalink to this definition">¶</a></dt>
@@ -652,6 +644,7 @@ Estimated priors take into account class imbalance.</li>
 </div>
 <div class="section" id="module-ugtm.ugtm_kgtm">
 <span id="ugtm-ugtm-kgtm-module"></span><h2>ugtm.ugtm_kgtm module<a class="headerlink" href="#module-ugtm.ugtm_kgtm" title="Permalink to this headline">¶</a></h2>
+<p>Functions to initialize and optimize kernel GTM models.</p>
 <dl class="function">
 <dt id="ugtm.ugtm_kgtm.initializeKernel">
 <code class="descclassname">ugtm.ugtm_kgtm.</code><code class="descname">initializeKernel</code><span class="sig-paren">(</span><em>data</em>, <em>k</em>, <em>m</em>, <em>s</em>, <em>maxdim</em>, <em>random_state=1234</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_kgtm.html#initializeKernel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_kgtm.initializeKernel" title="Permalink to this definition">¶</a></dt>
@@ -670,6 +663,7 @@ Estimated priors take into account class imbalance.</li>
 </div>
 <div class="section" id="module-ugtm.ugtm_landscape">
 <span id="ugtm-ugtm-landscape-module"></span><h2>ugtm.ugtm_landscape module<a class="headerlink" href="#module-ugtm.ugtm_landscape" title="Permalink to this headline">¶</a></h2>
+<p>GTM landscapes: continuous landscapes using data labels or activities.</p>
 <dl class="class">
 <dt id="ugtm.ugtm_landscape.ClassMap">
 <em class="property">class </em><code class="descclassname">ugtm.ugtm_landscape.</code><code class="descname">ClassMap</code><span class="sig-paren">(</span><em>nodeClassP</em>, <em>nodeClassT</em>, <em>activityModel</em>, <em>uniqClasses</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_landscape.html#ClassMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_landscape.ClassMap" title="Permalink to this definition">¶</a></dt>
@@ -689,6 +683,7 @@ Estimated priors take into account class imbalance.</li>
 </div>
 <div class="section" id="module-ugtm.ugtm_plot">
 <span id="ugtm-ugtm-plot-module"></span><h2>ugtm.ugtm_plot module<a class="headerlink" href="#module-ugtm.ugtm_plot" title="Permalink to this headline">¶</a></h2>
+<p>ugtm plot functions.</p>
 <dl class="class">
 <dt id="ugtm.ugtm_plot.NumpyEncoder">
 <em class="property">class </em><code class="descclassname">ugtm.ugtm_plot.</code><code class="descname">NumpyEncoder</code><span class="sig-paren">(</span><em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_plot.html#NumpyEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_plot.NumpyEncoder" title="Permalink to this definition">¶</a></dt>
@@ -769,6 +764,7 @@ implement default like this:</p>
 </div>
 <div class="section" id="module-ugtm.ugtm_predictions">
 <span id="ugtm-ugtm-predictions-module"></span><h2>ugtm.ugtm_predictions module<a class="headerlink" href="#module-ugtm.ugtm_predictions" title="Permalink to this headline">¶</a></h2>
+<p>GTC (GTM classification) and GTR (GTM regression)</p>
 <dl class="function">
 <dt id="ugtm.ugtm_predictions.GTC">
 <code class="descclassname">ugtm.ugtm_predictions.</code><code class="descname">GTC</code><span class="sig-paren">(</span><em>train</em>, <em>labels</em>, <em>test</em>, <em>k=0</em>, <em>m=0</em>, <em>s=0.3</em>, <em>l=0.1</em>, <em>n_neighbors=1</em>, <em>niter=200</em>, <em>representation='modes'</em>, <em>doPCA=False</em>, <em>n_components=-1</em>, <em>missing=False</em>, <em>missing_strategy='most_frequent'</em>, <em>random_state=1234</em>, <em>predict_mode='bayes'</em>, <em>prior='equiprobable'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_predictions.html#GTC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_predictions.GTC" title="Permalink to this definition">¶</a></dt>
@@ -812,6 +808,7 @@ implement default like this:</p>
 </div>
 <div class="section" id="module-ugtm.ugtm_preprocess">
 <span id="ugtm-ugtm-preprocess-module"></span><h2>ugtm.ugtm_preprocess module<a class="headerlink" href="#module-ugtm.ugtm_preprocess" title="Permalink to this headline">¶</a></h2>
+<p>Preprocessing operations (mostly using scikit-learn functions).</p>
 <dl class="class">
 <dt id="ugtm.ugtm_preprocess.ProcessedTrainTest">
 <em class="property">class </em><code class="descclassname">ugtm.ugtm_preprocess.</code><code class="descname">ProcessedTrainTest</code><span class="sig-paren">(</span><em>train</em>, <em>test</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ugtm/ugtm_preprocess.html#ProcessedTrainTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ugtm.ugtm_preprocess.ProcessedTrainTest" title="Permalink to this definition">¶</a></dt>
@@ -836,6 +833,42 @@ implement default like this:</p>
 </div>
 <div class="section" id="module-ugtm">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ugtm" title="Permalink to this headline">¶</a></h2>
+<p>ugtm: a python package for Generative Topographic Mapping (GTM)</p>
+<div class="section" id="id1">
+<h3>Submodules<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_gtm.html#module-ugtm.ugtm_gtm" title="ugtm.ugtm_gtm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_gtm</span></code></a></td>
+<td>Functions to initialize and optimize GTM models.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_kgtm.html#module-ugtm.ugtm_kgtm" title="ugtm.ugtm_kgtm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_kgtm</span></code></a></td>
+<td>Functions to initialize and optimize kernel GTM models.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_classes.html#module-ugtm.ugtm_classes" title="ugtm.ugtm_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_classes</span></code></a></td>
+<td>Defines classes for initial and optimized GTM model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_plot.html#module-ugtm.ugtm_plot" title="ugtm.ugtm_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_plot</span></code></a></td>
+<td>ugtm plot functions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_landscape.html#module-ugtm.ugtm_landscape" title="ugtm.ugtm_landscape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_landscape</span></code></a></td>
+<td>GTM landscapes: continuous landscapes using data labels or activities.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_predictions.html#module-ugtm.ugtm_predictions" title="ugtm.ugtm_predictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_predictions</span></code></a></td>
+<td>GTC (GTM classification) and GTR (GTM regression)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_crossvalidate.html#module-ugtm.ugtm_crossvalidate" title="ugtm.ugtm_crossvalidate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_crossvalidate</span></code></a></td>
+<td>Cross-validation support for GTC and GTR models (also SVM and PCA).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_autosummary/ugtm.ugtm_preprocess.html#module-ugtm.ugtm_preprocess" title="ugtm.ugtm_preprocess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ugtm_preprocess</span></code></a></td>
+<td>Preprocessing operations (mostly using scikit-learn functions).</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 
@@ -844,13 +877,6 @@ implement default like this:</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="readme.html" class="btn btn-neutral" title="ugtm tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

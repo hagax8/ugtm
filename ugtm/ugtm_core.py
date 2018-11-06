@@ -1,3 +1,5 @@
+"""Core linear algebra operations for GTM and kGTM
+"""
 # Authors: Helena A. Gaspar <hagax8@gmail.com>
 # License: MIT
 

@@ -1,3 +1,5 @@
+"""Cross-validation support for GTC and GTR models (also SVM and PCA).
+"""
 # Authors: Helena A. Gaspar <hagax8@gmail.com>
 # License: MIT
 

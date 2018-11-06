@@ -1,3 +1,5 @@
+"""GTM landscapes: continuous landscapes using data labels or activities.
+"""
 # Authors: Helena A. Gaspar <hagax8@gmail.com>
 # License: MIT
 

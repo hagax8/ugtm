@@ -1,7 +1,7 @@
 
-=============
-ugtm tutorial
-=============
+==================
+ugtm quick tutorial 
+==================
 
 ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (kernel Generative Topographic Mapping), GTM classification models (kNN, Bayes) and GTM regression models. ugtm also implements cross-validation options which can be used to compare GTM classification models to SVM classification models, and GTM regression models to SVM regression models. Typical usage::
 

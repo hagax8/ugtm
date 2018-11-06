@@ -1,3 +1,5 @@
+"""GTC (GTM classification) and GTR (GTM regression)
+"""
 # Authors: Helena A. Gaspar <hagax8@gmail.com>
 # License: MIT
 

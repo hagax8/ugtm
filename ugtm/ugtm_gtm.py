@@ -1,3 +1,5 @@
+"""Functions to initialize and optimize GTM models.
+"""
 # Authors: Helena A. Gaspar <hagax8@gmail.com>
 # License: MIT
 
