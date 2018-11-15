@@ -1,6 +1,9 @@
 .. ugtm documentation master file, created by
    sphinx-quickstart on Sun May 13 00:58:09 2018.
 
+ugtm: Generative Topographic Mapping with Python
+================================================
+
 .. toctree::
    :maxdepth: 1
    :caption: Get started here
