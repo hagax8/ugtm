@@ -1,25 +1,45 @@
 .. ugtm documentation master file, created by
    sphinx-quickstart on Sun May 13 00:58:09 2018.
 
-ugtm package reference 
-======================
+.. toctree::
+   :maxdepth: 1
+   :caption: Get started here
 
-.. autosummary::
-    :toctree: _autosummary
-
-    ugtm
-
-
-ugtm tutorial 
-=============
+   overview
+   installation
+   eGTM_transformer
+   eGTC_classifier  
+   eGTR_regressor 
 
 .. toctree::
-   :maxdepth: 2
- 
+   :maxdepth: 1
+   :caption: API reference
+        
+   api
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Examples 
+
+   visualization_examples
+   classification_examples
+   regression_examples
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Advanced functions 
+
    readme
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Glossary 
+         
+   glossary
 
-Glossary
-========
+.. toctree::
+   :maxdepth: 1
+   :caption: References
 
-* :ref:`genindex`
+   references
+

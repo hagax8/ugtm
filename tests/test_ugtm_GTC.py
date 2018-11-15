@@ -3,7 +3,7 @@ import ugtm
 import numpy as np
 
 
-class TestGTM(unittest.TestCase):
+class TestGTC(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
         self.n_dimensions = 10
@@ -13,12 +13,11 @@ class TestGTM(unittest.TestCase):
         self.k = 2
         self.m = 2
         self.s = 1
-        self.l = 1
+        self.regul = 1
         self.n_neighbors = 7
         self.train = np.random.randn(self.n_train, self.n_dimensions)
         self.test = np.random.randn(self.n_test, self.n_dimensions)
         self.labels = np.random.choice([1, 2], size=self.n_train)
-        self.activity = np.random.randn(self.n_test, 1)
 
     def test_GTC_bayes(self):
         gtc = ugtm.GTC(train=self.train, test=self.test, labels=self.labels)
@@ -40,14 +39,15 @@ class TestGTM(unittest.TestCase):
 
     def test_crossvalGTC(self):
         ugtm.crossvalidateGTC(data=self.train, labels=self.labels,
-                              s=self.s, l=self.l, n_repetitions=10, n_folds=5)
+                              s=self.s, regul=self.regul, n_repetitions=10,
+                              n_folds=5)
 
-    def test_crossvalPCA(self):
+    def test_crossvalPCAC(self):
         ugtm.crossvalidatePCAC(data=self.train,
                                labels=self.labels,
                                n_neighbors=self.n_neighbors)
 
-    def test_crossvalSVM(self):
+    def test_crossvalSVC(self):
         ugtm.crossvalidateSVCrbf(data=self.train, labels=self.labels,
                                  C=1, gamma=1, n_folds=2, n_repetitions=2)
         ugtm.crossvalidateSVC(data=self.train, labels=self.labels, C=1.0,

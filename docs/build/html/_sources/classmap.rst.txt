@@ -1,0 +1,42 @@
+.. altair-plot::
+
+        from ugtm import eGTM, eGTC
+        import numpy as np
+        import altair as alt
+        import pandas as pd
+        from sklearn import datasets
+        from sklearn import preprocessing
+        from sklearn import decomposition
+        from sklearn import metrics
+        from sklearn import model_selection
+
+        iris = datasets.load_iris()
+        X = iris.data 
+        y = iris.target
+
+        X_train, X_test, y_train, y_test = model_selection.train_test_split(
+        X, y, test_size=0.33, random_state=42)
+
+        # optional preprocessing
+        std = preprocessing.StandardScaler()
+        X_train = std.fit(X_train).transform(X_train) 
+        pca = decomposition.PCA(n_components=4)
+        X_train = pca.fit(X_train).transform(X_train)
+
+        # Construct class map 
+        gtc = eGTC() 
+        gtc = gtc.fit(X_train,y_train)
+
+        dfclassmap = pd.DataFrame(gtc.optimizedModel.matX, columns=["x1", "x2"]) 
+        dfclassmap["predicted node label"] = iris.target_names[gtc.node_label]
+        dfclassmap["probability of predominant class"] = np.max(gtc.node_probabilities,axis=1) 
+
+        # Classification map
+        alt.Chart(dfclassmap).mark_square().encode(
+            x='x1',
+            y='x2',
+            color='predicted node label:N',
+            size=alt.value(50),
+            opacity='probability of predominant class',
+            tooltip=['x1','x2', 'predicted node label:N', 'probability of predominant class']
+        ).properties(title = "Class map", width = 200, height = 200)

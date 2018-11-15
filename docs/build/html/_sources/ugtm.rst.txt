@@ -76,6 +76,13 @@ ugtm.ugtm\_preprocess module
     :undoc-members:
     :show-inheritance:
 
+ugtm.ugtm\_sklearn module
+----------------------------
+
+.. automodule:: ugtm.ugtm_sklearn
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------

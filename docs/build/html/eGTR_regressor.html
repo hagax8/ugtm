@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>eGTR: GTM regressor &mdash; ugtm v2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="eGTC: GTM classifier" href="eGTC_classifier.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ugtm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get started here</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">eGTR: GTM regressor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#run-egtr">Run eGTR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize-activity-landscape">Visualize activity landscape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize-predicted-vs-real-labels">Visualize predicted vs real labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-optimization">Parameter optimization</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">Links &amp; references</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ugtm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>eGTR: GTM regressor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/eGTR_regressor.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="egtr-gtm-regressor">
+<h1>eGTR: GTM regressor<a class="headerlink" href="#egtr-gtm-regressor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="run-egtr">
+<h2>Run eGTR<a class="headerlink" href="#run-egtr" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="ugtm.html#ugtm.ugtm_sklearn.eGTR" title="ugtm.ugtm_sklearn.eGTR"><code class="xref py py-class docutils literal notranslate"><span class="pre">eGTR</span></code></a> is a sklearn-compatible GTM regressor. Similarly to PCA or t-SNE, GTM reduces the dimensionality from n_dimensions to 2 dimensions. GTR uses a GTM class map to predict labels for new data (cf. <code class="xref py py-func docutils literal notranslate"><span class="pre">landscape()</span></code>). The following example uses the iris dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="k">import</span> <span class="n">eGTR</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">model_selection</span>
+
+<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># optional preprocessing</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Predict labels for X_test</span>
+<span class="n">gtr</span> <span class="o">=</span> <span class="n">eGTR</span><span class="p">()</span>
+<span class="n">gtr</span> <span class="o">=</span> <span class="n">gtr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">gtr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="visualize-activity-landscape">
+<h2>Visualize activity landscape<a class="headerlink" href="#visualize-activity-landscape" title="Permalink to this headline">¶</a></h2>
+<p>The GTR algorithm is based on an activity landscape. This landscape is discretized into a grid of nodes,
+which can be colored by predicted label. This visualization uses the python package <a class="reference external" href="https://altair-viz.github.io">altair</a>:</p>
+<div class="highlight-python notranslate" id="eGTR_regressor-rst-altair-source-0"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="kn">import</span> <span class="n">eGTR</span><span class="p">,</span> <span class="n">eGTM</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="kn">as</span> <span class="nn">alt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+
+<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># optional preprocessing</span>
+<span class="n">std</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+
+<span class="c1"># Construct activity landscape</span>
+<span class="n">gtr</span> <span class="o">=</span> <span class="n">eGTR</span><span class="p">()</span>
+<span class="n">gtr</span> <span class="o">=</span> <span class="n">gtr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dfclassmap</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">gtr</span><span class="o">.</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">])</span>
+<span class="n">dfclassmap</span><span class="p">[</span><span class="s2">&quot;predicted node label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gtr</span><span class="o">.</span><span class="n">node_label</span>
+
+<span class="c1"># Classification map</span>
+<span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">dfclassmap</span><span class="p">)</span><span class="o">.</span><span class="n">mark_square</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s1">&#39;predicted node label:Q&#39;</span><span class="p">,</span>
+                    <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;greenblue&#39;</span><span class="p">),</span>
+                    <span class="n">legend</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Boston house prices&quot;</span><span class="p">)),</span>
+    <span class="n">size</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+    <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span> <span class="s1">&#39;predicted node label:Q&#39;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Activity landscape&quot;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+
+<div id="eGTR_regressor-rst-altair-plot-0">
+<script>
+  // embed when document is loaded, to ensure vega library is available
+  // this works on all modern browsers, except IE8 and older
+  document.addEventListener("DOMContentLoaded", function(event) {
+      var spec = {"config": {"view": {"height": 300, "width": 400}}, "encoding": {"color": {"legend": {"title": "Boston house prices"}, "type": "quantitative", "field": "predicted node label", "scale": {"scheme": "greenblue"}}, "size": {"value": 50}, "tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}, {"type": "quantitative", "field": "predicted node label"}], "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "data": {"name": "data-457c4c64b82e43ebc69d76287ef022c5"}, "datasets": {"data-457c4c64b82e43ebc69d76287ef022c5": [{"x1": -1.0, "predicted node label": 18.628487195710814, "x2": -1.0}, {"x1": -1.0, "predicted node label": 22.79874764611142, "x2": -0.8666666666666667}, {"x1": -1.0, "predicted node label": 26.606108214895205, "x2": -0.7333333333333334}, {"x1": -1.0, "predicted node label": 32.58064913174929, "x2": -0.6}, {"x1": -1.0, "predicted node label": 40.69796574038183, "x2": -0.4666666666666667}, {"x1": -1.0, "predicted node label": 47.652519975386056, "x2": -0.33333333333333337}, {"x1": -1.0, "predicted node label": 42.761787021042274, "x2": -0.19999999999999996}, {"x1": -1.0, "predicted node label": 35.16692496641234, "x2": -0.06666666666666665}, {"x1": -1.0, "predicted node label": 32.35383805209596, "x2": 0.06666666666666665}, {"x1": -1.0, "predicted node label": 32.534068186503376, "x2": 0.19999999999999996}, {"x1": -1.0, "predicted node label": 26.483513549517625, "x2": 0.33333333333333326}, {"x1": -1.0, "predicted node label": 23.41663162742946, "x2": 0.46666666666666656}, {"x1": -1.0, "predicted node label": 32.64337685911114, "x2": 0.6000000000000001}, {"x1": -1.0, "predicted node label": 21.876383052165757, "x2": 0.7333333333333334}, {"x1": -1.0, "predicted node label": 22.661217944550867, "x2": 0.8666666666666667}, {"x1": -1.0, "predicted node label": 25.95845305252739, "x2": 1.0}, {"x1": -0.8666666666666667, "predicted node label": 18.62309013715118, "x2": -1.0}, {"x1": -0.8666666666666667, "predicted node label": 19.503827543292374, "x2": -0.8666666666666667}, {"x1": -0.8666666666666667, "predicted node label": 23.441674312837502, "x2": -0.7333333333333334}, {"x1": -0.8666666666666667, "predicted node label": 26.312967404444404, "x2": -0.6}, {"x1": -0.8666666666666667, "predicted node label": 32.723377783503295, "x2": -0.4666666666666667}, {"x1": -0.8666666666666667, "predicted node label": 34.863073631154485, "x2": -0.33333333333333337}, {"x1": -0.8666666666666667, "predicted node label": 36.02893940781191, "x2": -0.19999999999999996}, {"x1": -0.8666666666666667, "predicted node label": 33.44653760386629, "x2": -0.06666666666666665}, {"x1": -0.8666666666666667, "predicted node label": 30.0318721856669, "x2": 0.06666666666666665}, {"x1": -0.8666666666666667, "predicted node label": 26.419378782404756, "x2": 0.19999999999999996}, {"x1": -0.8666666666666667, "predicted node label": 25.353249355402387, "x2": 0.33333333333333326}, {"x1": -0.8666666666666667, "predicted node label": 22.53948570380352, "x2": 0.46666666666666656}, {"x1": -0.8666666666666667, "predicted node label": 31.852792704950183, "x2": 0.6000000000000001}, {"x1": -0.8666666666666667, "predicted node label": 32.66645308378521, "x2": 0.7333333333333334}, {"x1": -0.8666666666666667, "predicted node label": 25.96931319689276, "x2": 0.8666666666666667}, {"x1": -0.8666666666666667, "predicted node label": 26.650727521230543, "x2": 1.0}, {"x1": -0.7333333333333334, "predicted node label": 21.112864102353655, "x2": -1.0}, {"x1": -0.7333333333333334, "predicted node label": 19.85269583611363, "x2": -0.8666666666666667}, {"x1": -0.7333333333333334, "predicted node label": 23.48407299164044, "x2": -0.7333333333333334}, {"x1": -0.7333333333333334, "predicted node label": 24.834030029048737, "x2": -0.6}, {"x1": -0.7333333333333334, "predicted node label": 29.4315686212247, "x2": -0.4666666666666667}, {"x1": -0.7333333333333334, "predicted node label": 32.675955881358995, "x2": -0.33333333333333337}, {"x1": -0.7333333333333334, "predicted node label": 33.087909488428785, "x2": -0.19999999999999996}, {"x1": -0.7333333333333334, "predicted node label": 30.38417608052399, "x2": -0.06666666666666665}, {"x1": -0.7333333333333334, "predicted node label": 29.06280924839912, "x2": 0.06666666666666665}, {"x1": -0.7333333333333334, "predicted node label": 25.026940611405045, "x2": 0.19999999999999996}, {"x1": -0.7333333333333334, "predicted node label": 22.424569133039338, "x2": 0.33333333333333326}, {"x1": -0.7333333333333334, "predicted node label": 23.24811270213067, "x2": 0.46666666666666656}, {"x1": -0.7333333333333334, "predicted node label": 31.329556136042374, "x2": 0.6000000000000001}, {"x1": -0.7333333333333334, "predicted node label": 34.02827301228474, "x2": 0.7333333333333334}, {"x1": -0.7333333333333334, "predicted node label": 39.58737807842418, "x2": 0.8666666666666667}, {"x1": -0.7333333333333334, "predicted node label": 49.51188953071135, "x2": 1.0}, {"x1": -0.6, "predicted node label": 21.253323958231476, "x2": -1.0}, {"x1": -0.6, "predicted node label": 21.1920757414197, "x2": -0.8666666666666667}, {"x1": -0.6, "predicted node label": 22.401996391761823, "x2": -0.7333333333333334}, {"x1": -0.6, "predicted node label": 24.63939620431233, "x2": -0.6}, {"x1": -0.6, "predicted node label": 27.702741514048398, "x2": -0.4666666666666667}, {"x1": -0.6, "predicted node label": 29.015862715057295, "x2": -0.33333333333333337}, {"x1": -0.6, "predicted node label": 26.25611880875242, "x2": -0.19999999999999996}, {"x1": -0.6, "predicted node label": 25.439390549858715, "x2": -0.06666666666666665}, {"x1": -0.6, "predicted node label": 23.73793937101081, "x2": 0.06666666666666665}, {"x1": -0.6, "predicted node label": 21.599370032268588, "x2": 0.19999999999999996}, {"x1": -0.6, "predicted node label": 22.097778719057708, "x2": 0.33333333333333326}, {"x1": -0.6, "predicted node label": 30.90979022195414, "x2": 0.46666666666666656}, {"x1": -0.6, "predicted node label": 37.793025789694326, "x2": 0.6000000000000001}, {"x1": -0.6, "predicted node label": 43.28421871100351, "x2": 0.7333333333333334}, {"x1": -0.6, "predicted node label": 42.95355898798099, "x2": 0.8666666666666667}, {"x1": -0.6, "predicted node label": 31.08861178962058, "x2": 1.0}, {"x1": -0.4666666666666667, "predicted node label": 23.759625947936804, "x2": -1.0}, {"x1": -0.4666666666666667, "predicted node label": 23.342028686956187, "x2": -0.8666666666666667}, {"x1": -0.4666666666666667, "predicted node label": 22.837863094808963, "x2": -0.7333333333333334}, {"x1": -0.4666666666666667, "predicted node label": 21.796401584782735, "x2": -0.6}, {"x1": -0.4666666666666667, "predicted node label": 20.723032531289142, "x2": -0.4666666666666667}, {"x1": -0.4666666666666667, "predicted node label": 20.3693243827964, "x2": -0.33333333333333337}, {"x1": -0.4666666666666667, "predicted node label": 20.387916728119855, "x2": -0.19999999999999996}, {"x1": -0.4666666666666667, "predicted node label": 20.92208325940375, "x2": -0.06666666666666665}, {"x1": -0.4666666666666667, "predicted node label": 21.323583801910257, "x2": 0.06666666666666665}, {"x1": -0.4666666666666667, "predicted node label": 20.5330299444308, "x2": 0.19999999999999996}, {"x1": -0.4666666666666667, "predicted node label": 21.57246530498007, "x2": 0.33333333333333326}, {"x1": -0.4666666666666667, "predicted node label": 28.179395819850516, "x2": 0.46666666666666656}, {"x1": -0.4666666666666667, "predicted node label": 39.29434520615067, "x2": 0.6000000000000001}, {"x1": -0.4666666666666667, "predicted node label": 43.310575455091325, "x2": 0.7333333333333334}, {"x1": -0.4666666666666667, "predicted node label": 40.35403176165589, "x2": 0.8666666666666667}, {"x1": -0.4666666666666667, "predicted node label": 23.24729822555805, "x2": 1.0}, {"x1": -0.33333333333333337, "predicted node label": 24.996915960744662, "x2": -1.0}, {"x1": -0.33333333333333337, "predicted node label": 23.974042245472777, "x2": -0.8666666666666667}, {"x1": -0.33333333333333337, "predicted node label": 22.39253683438342, "x2": -0.7333333333333334}, {"x1": -0.33333333333333337, "predicted node label": 21.62302262559976, "x2": -0.6}, {"x1": -0.33333333333333337, "predicted node label": 20.672107273313536, "x2": -0.4666666666666667}, {"x1": -0.33333333333333337, "predicted node label": 20.297910238944073, "x2": -0.33333333333333337}, {"x1": -0.33333333333333337, "predicted node label": 19.700945549434966, "x2": -0.19999999999999996}, {"x1": -0.33333333333333337, "predicted node label": 21.113005055372938, "x2": -0.06666666666666665}, {"x1": -0.33333333333333337, "predicted node label": 20.105325790404773, "x2": 0.06666666666666665}, {"x1": -0.33333333333333337, "predicted node label": 19.729909236868405, "x2": 0.19999999999999996}, {"x1": -0.33333333333333337, "predicted node label": 21.58963954358349, "x2": 0.33333333333333326}, {"x1": -0.33333333333333337, "predicted node label": 27.404911251820955, "x2": 0.46666666666666656}, {"x1": -0.33333333333333337, "predicted node label": 35.78738403603331, "x2": 0.6000000000000001}, {"x1": -0.33333333333333337, "predicted node label": 43.48390628865808, "x2": 0.7333333333333334}, {"x1": -0.33333333333333337, "predicted node label": 45.91287170025829, "x2": 0.8666666666666667}, {"x1": -0.33333333333333337, "predicted node label": 45.33206947638458, "x2": 1.0}, {"x1": -0.19999999999999996, "predicted node label": 26.22276435277799, "x2": -1.0}, {"x1": -0.19999999999999996, "predicted node label": 24.44449376846853, "x2": -0.8666666666666667}, {"x1": -0.19999999999999996, "predicted node label": 21.158502130016906, "x2": -0.7333333333333334}, {"x1": -0.19999999999999996, "predicted node label": 21.932385461995942, "x2": -0.6}, {"x1": -0.19999999999999996, "predicted node label": 20.330006175620287, "x2": -0.4666666666666667}, {"x1": -0.19999999999999996, "predicted node label": 15.640549337500168, "x2": -0.33333333333333337}, {"x1": -0.19999999999999996, "predicted node label": 14.84472324084043, "x2": -0.19999999999999996}, {"x1": -0.19999999999999996, "predicted node label": 15.445233194017218, "x2": -0.06666666666666665}, {"x1": -0.19999999999999996, "predicted node label": 17.13099731940904, "x2": 0.06666666666666665}, {"x1": -0.19999999999999996, "predicted node label": 18.87727265485137, "x2": 0.19999999999999996}, {"x1": -0.19999999999999996, "predicted node label": 20.19792957259785, "x2": 0.33333333333333326}, {"x1": -0.19999999999999996, "predicted node label": 23.568873121405275, "x2": 0.46666666666666656}, {"x1": -0.19999999999999996, "predicted node label": 29.361471746726686, "x2": 0.6000000000000001}, {"x1": -0.19999999999999996, "predicted node label": 41.82670283561242, "x2": 0.7333333333333334}, {"x1": -0.19999999999999996, "predicted node label": 49.918675713614505, "x2": 0.8666666666666667}, {"x1": -0.19999999999999996, "predicted node label": 49.99902880266695, "x2": 1.0}, {"x1": -0.06666666666666665, "predicted node label": 22.851541438189326, "x2": -1.0}, {"x1": -0.06666666666666665, "predicted node label": 23.87956722903641, "x2": -0.8666666666666667}, {"x1": -0.06666666666666665, "predicted node label": 21.31107600413672, "x2": -0.7333333333333334}, {"x1": -0.06666666666666665, "predicted node label": 21.74649560688648, "x2": -0.6}, {"x1": -0.06666666666666665, "predicted node label": 17.018389446122022, "x2": -0.4666666666666667}, {"x1": -0.06666666666666665, "predicted node label": 14.73566906385188, "x2": -0.33333333333333337}, {"x1": -0.06666666666666665, "predicted node label": 13.424423119268111, "x2": -0.19999999999999996}, {"x1": -0.06666666666666665, "predicted node label": 13.305111427688395, "x2": -0.06666666666666665}, {"x1": -0.06666666666666665, "predicted node label": 16.804342873516934, "x2": 0.06666666666666665}, {"x1": -0.06666666666666665, "predicted node label": 19.057799224445922, "x2": 0.19999999999999996}, {"x1": -0.06666666666666665, "predicted node label": 18.459364587966437, "x2": 0.33333333333333326}, {"x1": -0.06666666666666665, "predicted node label": 21.549540990113666, "x2": 0.46666666666666656}, {"x1": -0.06666666666666665, "predicted node label": 26.246283335130475, "x2": 0.6000000000000001}, {"x1": -0.06666666666666665, "predicted node label": 45.814834653210475, "x2": 0.7333333333333334}, {"x1": -0.06666666666666665, "predicted node label": 38.33682210496162, "x2": 0.8666666666666667}, {"x1": -0.06666666666666665, "predicted node label": 35.02141014497775, "x2": 1.0}, {"x1": 0.06666666666666665, "predicted node label": 21.89153027857857, "x2": -1.0}, {"x1": 0.06666666666666665, "predicted node label": 21.582920810181378, "x2": -0.8666666666666667}, {"x1": 0.06666666666666665, "predicted node label": 18.686413427494273, "x2": -0.7333333333333334}, {"x1": 0.06666666666666665, "predicted node label": 22.928000906800122, "x2": -0.6}, {"x1": 0.06666666666666665, "predicted node label": 20.996885546298476, "x2": -0.4666666666666667}, {"x1": 0.06666666666666665, "predicted node label": 18.44894217577421, "x2": -0.33333333333333337}, {"x1": 0.06666666666666665, "predicted node label": 14.537034838619164, "x2": -0.19999999999999996}, {"x1": 0.06666666666666665, "predicted node label": 14.416766645500607, "x2": -0.06666666666666665}, {"x1": 0.06666666666666665, "predicted node label": 16.948573475187235, "x2": 0.06666666666666665}, {"x1": 0.06666666666666665, "predicted node label": 17.336306841793032, "x2": 0.19999999999999996}, {"x1": 0.06666666666666665, "predicted node label": 20.190254129257955, "x2": 0.33333333333333326}, {"x1": 0.06666666666666665, "predicted node label": 21.058241265470738, "x2": 0.46666666666666656}, {"x1": 0.06666666666666665, "predicted node label": 23.126016571094826, "x2": 0.6000000000000001}, {"x1": 0.06666666666666665, "predicted node label": 22.38272023477168, "x2": 0.7333333333333334}, {"x1": 0.06666666666666665, "predicted node label": 22.4795792474694, "x2": 0.8666666666666667}, {"x1": 0.06666666666666665, "predicted node label": 22.210428367776263, "x2": 1.0}, {"x1": 0.19999999999999996, "predicted node label": 23.334516069942122, "x2": -1.0}, {"x1": 0.19999999999999996, "predicted node label": 21.533433550709113, "x2": -0.8666666666666667}, {"x1": 0.19999999999999996, "predicted node label": 15.44113066004522, "x2": -0.7333333333333334}, {"x1": 0.19999999999999996, "predicted node label": 13.660204514992783, "x2": -0.6}, {"x1": 0.19999999999999996, "predicted node label": 21.68949565855738, "x2": -0.4666666666666667}, {"x1": 0.19999999999999996, "predicted node label": 22.944541219310473, "x2": -0.33333333333333337}, {"x1": 0.19999999999999996, "predicted node label": 15.484565882921975, "x2": -0.19999999999999996}, {"x1": 0.19999999999999996, "predicted node label": 14.381523809127831, "x2": -0.06666666666666665}, {"x1": 0.19999999999999996, "predicted node label": 14.575414759718859, "x2": 0.06666666666666665}, {"x1": 0.19999999999999996, "predicted node label": 16.37313422434788, "x2": 0.19999999999999996}, {"x1": 0.19999999999999996, "predicted node label": 18.893767020056988, "x2": 0.33333333333333326}, {"x1": 0.19999999999999996, "predicted node label": 20.85397910506943, "x2": 0.46666666666666656}, {"x1": 0.19999999999999996, "predicted node label": 20.40788337926637, "x2": 0.6000000000000001}, {"x1": 0.19999999999999996, "predicted node label": 20.13320260361627, "x2": 0.7333333333333334}, {"x1": 0.19999999999999996, "predicted node label": 15.797970794692379, "x2": 0.8666666666666667}, {"x1": 0.19999999999999996, "predicted node label": 14.384250890303752, "x2": 1.0}, {"x1": 0.33333333333333326, "predicted node label": 22.355235616005334, "x2": -1.0}, {"x1": 0.33333333333333326, "predicted node label": 24.69580841739461, "x2": -0.8666666666666667}, {"x1": 0.33333333333333326, "predicted node label": 11.725981250221844, "x2": -0.7333333333333334}, {"x1": 0.33333333333333326, "predicted node label": 13.612981588106269, "x2": -0.6}, {"x1": 0.33333333333333326, "predicted node label": 13.821377129106812, "x2": -0.4666666666666667}, {"x1": 0.33333333333333326, "predicted node label": 16.024340795595137, "x2": -0.33333333333333337}, {"x1": 0.33333333333333326, "predicted node label": 21.78091148853241, "x2": -0.19999999999999996}, {"x1": 0.33333333333333326, "predicted node label": 14.16680653052381, "x2": -0.06666666666666665}, {"x1": 0.33333333333333326, "predicted node label": 8.209045309586317, "x2": 0.06666666666666665}, {"x1": 0.33333333333333326, "predicted node label": 15.85605647853283, "x2": 0.19999999999999996}, {"x1": 0.33333333333333326, "predicted node label": 17.96938172153829, "x2": 0.33333333333333326}, {"x1": 0.33333333333333326, "predicted node label": 18.33315102295902, "x2": 0.46666666666666656}, {"x1": 0.33333333333333326, "predicted node label": 19.21774666845582, "x2": 0.6000000000000001}, {"x1": 0.33333333333333326, "predicted node label": 16.83257981484836, "x2": 0.7333333333333334}, {"x1": 0.33333333333333326, "predicted node label": 13.21358449135729, "x2": 0.8666666666666667}, {"x1": 0.33333333333333326, "predicted node label": 13.155827610905584, "x2": 1.0}, {"x1": 0.46666666666666656, "predicted node label": 15.68238041695985, "x2": -1.0}, {"x1": 0.46666666666666656, "predicted node label": 21.69550775109094, "x2": -0.8666666666666667}, {"x1": 0.46666666666666656, "predicted node label": 7.252418212553533, "x2": -0.7333333333333334}, {"x1": 0.46666666666666656, "predicted node label": 9.18191237428281, "x2": -0.6}, {"x1": 0.46666666666666656, "predicted node label": 13.610223364341712, "x2": -0.4666666666666667}, {"x1": 0.46666666666666656, "predicted node label": 13.798351782841937, "x2": -0.33333333333333337}, {"x1": 0.46666666666666656, "predicted node label": 13.768062404289752, "x2": -0.19999999999999996}, {"x1": 0.46666666666666656, "predicted node label": 9.077600423246192, "x2": -0.06666666666666665}, {"x1": 0.46666666666666656, "predicted node label": 8.179329693227036, "x2": 0.06666666666666665}, {"x1": 0.46666666666666656, "predicted node label": 15.564476490949309, "x2": 0.19999999999999996}, {"x1": 0.46666666666666656, "predicted node label": 18.6896776774868, "x2": 0.33333333333333326}, {"x1": 0.46666666666666656, "predicted node label": 18.328677752576187, "x2": 0.46666666666666656}, {"x1": 0.46666666666666656, "predicted node label": 18.385374100762935, "x2": 0.6000000000000001}, {"x1": 0.46666666666666656, "predicted node label": 19.98286576503498, "x2": 0.7333333333333334}, {"x1": 0.46666666666666656, "predicted node label": 14.014398251226334, "x2": 0.8666666666666667}, {"x1": 0.46666666666666656, "predicted node label": 13.767707782789323, "x2": 1.0}, {"x1": 0.6000000000000001, "predicted node label": 13.972568128523847, "x2": -1.0}, {"x1": 0.6000000000000001, "predicted node label": 23.061069386097063, "x2": -0.8666666666666667}, {"x1": 0.6000000000000001, "predicted node label": 16.374805387264484, "x2": -0.7333333333333334}, {"x1": 0.6000000000000001, "predicted node label": 14.80529849762333, "x2": -0.6}, {"x1": 0.6000000000000001, "predicted node label": 22.90626930682364, "x2": -0.4666666666666667}, {"x1": 0.6000000000000001, "predicted node label": 22.969967110012547, "x2": -0.33333333333333337}, {"x1": 0.6000000000000001, "predicted node label": 18.605497544245537, "x2": -0.19999999999999996}, {"x1": 0.6000000000000001, "predicted node label": 7.51558577070361, "x2": -0.06666666666666665}, {"x1": 0.6000000000000001, "predicted node label": 10.40243985772369, "x2": 0.06666666666666665}, {"x1": 0.6000000000000001, "predicted node label": 15.283879024677455, "x2": 0.19999999999999996}, {"x1": 0.6000000000000001, "predicted node label": 19.002211415317124, "x2": 0.33333333333333326}, {"x1": 0.6000000000000001, "predicted node label": 19.068328369648473, "x2": 0.46666666666666656}, {"x1": 0.6000000000000001, "predicted node label": 22.67503066058133, "x2": 0.6000000000000001}, {"x1": 0.6000000000000001, "predicted node label": 22.920769125520923, "x2": 0.7333333333333334}, {"x1": 0.6000000000000001, "predicted node label": 15.216246379430284, "x2": 0.8666666666666667}, {"x1": 0.6000000000000001, "predicted node label": 14.337430509887866, "x2": 1.0}, {"x1": 0.7333333333333334, "predicted node label": 12.450484060191332, "x2": -1.0}, {"x1": 0.7333333333333334, "predicted node label": 8.769434855482832, "x2": -0.8666666666666667}, {"x1": 0.7333333333333334, "predicted node label": 16.300824542285696, "x2": -0.7333333333333334}, {"x1": 0.7333333333333334, "predicted node label": 22.970768558450008, "x2": -0.6}, {"x1": 0.7333333333333334, "predicted node label": 22.97079646017699, "x2": -0.4666666666666667}, {"x1": 0.7333333333333334, "predicted node label": 22.97079646017699, "x2": -0.33333333333333337}, {"x1": 0.7333333333333334, "predicted node label": 22.97079646017699, "x2": -0.19999999999999996}, {"x1": 0.7333333333333334, "predicted node label": 22.617562778991893, "x2": -0.06666666666666665}, {"x1": 0.7333333333333334, "predicted node label": 9.505338875234884, "x2": 0.06666666666666665}, {"x1": 0.7333333333333334, "predicted node label": 15.041385433801377, "x2": 0.19999999999999996}, {"x1": 0.7333333333333334, "predicted node label": 19.19480636577072, "x2": 0.33333333333333326}, {"x1": 0.7333333333333334, "predicted node label": 21.88278454642755, "x2": 0.46666666666666656}, {"x1": 0.7333333333333334, "predicted node label": 22.944645229208714, "x2": 0.6000000000000001}, {"x1": 0.7333333333333334, "predicted node label": 18.068901574287015, "x2": 0.7333333333333334}, {"x1": 0.7333333333333334, "predicted node label": 16.89357335683186, "x2": 0.8666666666666667}, {"x1": 0.7333333333333334, "predicted node label": 17.318891182738874, "x2": 1.0}, {"x1": 0.8666666666666667, "predicted node label": 8.98828284420693, "x2": -1.0}, {"x1": 0.8666666666666667, "predicted node label": 7.817364470720158, "x2": -0.8666666666666667}, {"x1": 0.8666666666666667, "predicted node label": 10.955842013752646, "x2": -0.7333333333333334}, {"x1": 0.8666666666666667, "predicted node label": 22.946060297260626, "x2": -0.6}, {"x1": 0.8666666666666667, "predicted node label": 22.97065096518438, "x2": -0.4666666666666667}, {"x1": 0.8666666666666667, "predicted node label": 18.23924395074324, "x2": -0.33333333333333337}, {"x1": 0.8666666666666667, "predicted node label": 22.970790392230214, "x2": -0.19999999999999996}, {"x1": 0.8666666666666667, "predicted node label": 22.97079646017699, "x2": -0.06666666666666665}, {"x1": 0.8666666666666667, "predicted node label": 10.877734749347896, "x2": 0.06666666666666665}, {"x1": 0.8666666666666667, "predicted node label": 15.308198697896369, "x2": 0.19999999999999996}, {"x1": 0.8666666666666667, "predicted node label": 19.26493624120499, "x2": 0.33333333333333326}, {"x1": 0.8666666666666667, "predicted node label": 22.78904840599034, "x2": 0.46666666666666656}, {"x1": 0.8666666666666667, "predicted node label": 22.970200907960805, "x2": 0.6000000000000001}, {"x1": 0.8666666666666667, "predicted node label": 19.252404187425917, "x2": 0.7333333333333334}, {"x1": 0.8666666666666667, "predicted node label": 25.14239363200288, "x2": 0.8666666666666667}, {"x1": 0.8666666666666667, "predicted node label": 34.05693858822746, "x2": 1.0}, {"x1": 1.0, "predicted node label": 7.852422282217679, "x2": -1.0}, {"x1": 1.0, "predicted node label": 7.365340695875206, "x2": -0.8666666666666667}, {"x1": 1.0, "predicted node label": 13.153844787189685, "x2": -0.7333333333333334}, {"x1": 1.0, "predicted node label": 22.9557082193912, "x2": -0.6}, {"x1": 1.0, "predicted node label": 11.191836198137528, "x2": -0.4666666666666667}, {"x1": 1.0, "predicted node label": 10.40042644864298, "x2": -0.33333333333333337}, {"x1": 1.0, "predicted node label": 12.151099984700107, "x2": -0.19999999999999996}, {"x1": 1.0, "predicted node label": 22.97079646017699, "x2": -0.06666666666666665}, {"x1": 1.0, "predicted node label": 12.796830671791314, "x2": 0.06666666666666665}, {"x1": 1.0, "predicted node label": 14.98838278749322, "x2": 0.19999999999999996}, {"x1": 1.0, "predicted node label": 18.991133478386935, "x2": 0.33333333333333326}, {"x1": 1.0, "predicted node label": 22.965332436275045, "x2": 0.46666666666666656}, {"x1": 1.0, "predicted node label": 22.97076365168523, "x2": 0.6000000000000001}, {"x1": 1.0, "predicted node label": 26.13511492236331, "x2": 0.7333333333333334}, {"x1": 1.0, "predicted node label": 42.309841069642374, "x2": 0.8666666666666667}, {"x1": 1.0, "predicted node label": 33.594114222639874, "x2": 1.0}]}, "mark": "square", "$schema": "https://vega.github.io/schema/vega-lite/v2.6.0.json", "height": 200, "width": 200, "title": "Activity landscape"};
+      var opt = {
+        "mode": "vega-lite",
+        "renderer": "canvas",
+        "actions": {"editor": false, "export": false, "source": false}
+      };
+      vegaEmbed('#eGTR_regressor-rst-altair-plot-0', spec, opt).catch(console.err);
+  });
+</script>
+</div></div>
+<div class="section" id="visualize-predicted-vs-real-labels">
+<h2>Visualize predicted vs real labels<a class="headerlink" href="#visualize-predicted-vs-real-labels" title="Permalink to this headline">¶</a></h2>
+<p>This visualization uses the python package <a class="reference external" href="https://altair-viz.github.io">altair</a>:</p>
+<div class="highlight-python notranslate" id="eGTR_regressor-rst-altair-source-1"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="kn">import</span> <span class="n">eGTM</span><span class="p">,</span> <span class="n">eGTR</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="kn">as</span> <span class="nn">alt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+
+<span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># optional preprocessing</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Predict labels for X_test</span>
+<span class="n">gtr</span> <span class="o">=</span> <span class="n">eGTR</span><span class="p">()</span>
+<span class="n">gtr</span> <span class="o">=</span> <span class="n">gtr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">gtr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Get GTM transform for X_test</span>
+<span class="n">transformed</span> <span class="o">=</span> <span class="n">eGTM</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">transformed</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;predicted label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;true label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_test</span>
+
+<span class="n">chart1</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">mark_point</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+<span class="n">x</span><span class="o">=</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span>
+<span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;predicted label:Q&quot;</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;greenblue&#39;</span><span class="p">),</span>
+                 <span class="n">legend</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Boston house prices&quot;</span><span class="p">)),</span>
+<span class="n">tooltip</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted label:Q&quot;</span><span class="p">,</span> <span class="s2">&quot;true label:Q&quot;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pedicted labels&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+
+<span class="n">chart2</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">mark_point</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+<span class="n">x</span><span class="o">=</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span>
+<span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;true label:Q&quot;</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;greenblue&#39;</span><span class="p">),</span>
+                <span class="n">legend</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Boston house prices&quot;</span><span class="p">)),</span>
+<span class="n">tooltip</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted label:Q&quot;</span><span class="p">,</span> <span class="s2">&quot;true label:Q&quot;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;True labels&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+
+<span class="n">alt</span><span class="o">.</span><span class="n">hconcat</span><span class="p">(</span><span class="n">chart1</span><span class="p">,</span> <span class="n">chart2</span><span class="p">)</span>
+</pre></div>
+</div>
+
+<div id="eGTR_regressor-rst-altair-plot-1">
+<script>
+  // embed when document is loaded, to ensure vega library is available
+  // this works on all modern browsers, except IE8 and older
+  document.addEventListener("DOMContentLoaded", function(event) {
+      var spec = {"config": {"view": {"height": 300, "width": 400}}, "hconcat": [{"encoding": {"color": {"legend": {"title": "Boston house prices"}, "type": "quantitative", "field": "predicted label", "scale": {"scheme": "greenblue"}}, "tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}, {"type": "quantitative", "field": "predicted label"}, {"type": "quantitative", "field": "true label"}], "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "data": {"name": "data-245e946ce38d11565e646a524015bccb"}, "mark": "point", "height": 200, "width": 200, "selection": {"selector004": {"encodings": ["x", "y"], "type": "interval", "bind": "scales"}}, "title": "Pedicted labels"}, {"encoding": {"color": {"legend": {"title": "Boston house prices"}, "type": "quantitative", "field": "true label", "scale": {"scheme": "greenblue"}}, "tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}, {"type": "quantitative", "field": "predicted label"}, {"type": "quantitative", "field": "true label"}], "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "data": {"name": "data-245e946ce38d11565e646a524015bccb"}, "mark": "point", "height": 200, "width": 200, "selection": {"selector005": {"encodings": ["x", "y"], "type": "interval", "bind": "scales"}}, "title": "True labels"}], "$schema": "https://vega.github.io/schema/vega-lite/v2.6.0.json", "datasets": {"data-245e946ce38d11565e646a524015bccb": [{"x1": -0.27389800919532525, "predicted label": 27.404911251817687, "true label": 23.6, "x2": 0.4715903408611546}, {"x1": -0.8682985322025201, "predicted label": 32.666453083784745, "true label": 32.4, "x2": 0.734714397199201}, {"x1": 0.45444400336171425, "predicted label": 18.689677677486394, "true label": 13.6, "x2": 0.2832739449043374}, {"x1": -0.3328905333316023, "predicted label": 24.996915960743966, "true label": 22.8, "x2": -0.9611618421137595}, {"x1": 0.8689181435818, "predicted label": 15.30819869789622, "true label": 16.1, "x2": 0.18264199212341578}, {"x1": -0.2790455905151799, "predicted label": 20.19792957259687, "true label": 20.0, "x2": 0.16889394818120612}, {"x1": -0.26040068354759127, "predicted label": 21.113005055372827, "true label": 17.8, "x2": -0.08706786234341374}, {"x1": 0.26088603022404394, "predicted label": 16.373134224346867, "true label": 14.0, "x2": 0.1824797226289673}, {"x1": 0.2785711450612798, "predicted label": 22.355235616005885, "true label": 19.6, "x2": -0.9348627813003462}, {"x1": -0.18093641985543213, "predicted label": 18.877272654851474, "true label": 16.8, "x2": 0.20225687970090211}, {"x1": -0.9993711049083125, "predicted label": 22.661217944550426, "true label": 21.5, "x2": 0.8806384345600228}, {"x1": -0.3449261620648929, "predicted label": 20.297910238944116, "true label": 18.9, "x2": -0.3456392236019741}, {"x1": 0.7429505982340112, "predicted label": 22.970768558445414, "true label": 7.0, "x2": -0.6098183039313698}, {"x1": -0.22033152617678348, "predicted label": 21.158502130018753, "true label": 21.2, "x2": -0.6960065906120785}, {"x1": -0.35962935908212246, "predicted label": 20.10532579040546, "true label": 18.5, "x2": 0.12879953631802993}, {"x1": 0.30131710528298883, "predicted label": 22.355235616005885, "true label": 29.8, "x2": -0.999341460897121}, {"x1": 0.17522016579182756, "predicted label": 20.85397910506833, "true label": 18.8, "x2": 0.3805409931691605}, {"x1": 0.41600129539520253, "predicted label": 9.181912374285302, "true label": 10.2, "x2": -0.6002923984780556}, {"x1": -0.9709099506377339, "predicted label": 42.761787021038, "true label": 50.0, "x2": -0.2740437608934274}, {"x1": 0.8863877847497937, "predicted label": 15.30819869789622, "true label": 14.1, "x2": 0.1944492827187593}, {"x1": -0.39324931399999785, "predicted label": 24.996915960743966, "true label": 25.2, "x2": -0.9704215784029125}, {"x1": -0.6594032393770002, "predicted label": 25.439390549859176, "true label": 29.1, "x2": -0.10212103656617337}, {"x1": -0.1838451382440246, "predicted label": 15.445233194016879, "true label": 12.7, "x2": -0.021107845855844538}, {"x1": -0.15824416144382353, "predicted label": 20.19792957259687, "true label": 22.4, "x2": 0.3574657371904766}, {"x1": 0.7104921759096793, "predicted label": 15.30819869789622, "true label": 14.2, "x2": -0.20261240030489858}, {"x1": 0.34733141795200284, "predicted label": 24.695808417392836, "true label": 13.8, "x2": -0.7976036232619237}, {"x1": -0.19900747615463263, "predicted label": 24.444493768466682, "true label": 20.3, "x2": -0.8478171744058765}, {"x1": 0.744951625780072, "predicted label": 12.45048406019219, "true label": 14.9, "x2": -0.999994261332892}, {"x1": -0.9996355172078606, "predicted label": 22.661217944550426, "true label": 21.7, "x2": 0.8444647426729363}, {"x1": -0.1931925590428154, "predicted label": 18.877272654851474, "true label": 18.3, "x2": 0.02424647439848365}, {"x1": -0.32489848789392656, "predicted label": 21.113005055372827, "true label": 23.1, "x2": -0.12898034722012625}, {"x1": -0.4899624750631063, "predicted label": 21.572465304979488, "true label": 23.8, "x2": 0.3273589698451}, {"x1": 0.979677947050296, "predicted label": 14.9883827874934, "true label": 15.0, "x2": 0.14245325873920103}, {"x1": 0.33878076801390533, "predicted label": 24.695808417392836, "true label": 20.8, "x2": -0.8516627274360594}, {"x1": 0.6608809018761639, "predicted label": 15.041385433798265, "true label": 19.1, "x2": -0.0975426774323212}, {"x1": 0.20032961528338133, "predicted label": 15.797970794694818, "true label": 19.4, "x2": 0.8647373410712249}, {"x1": -0.46986168566000963, "predicted label": 39.2943452061487, "true label": 34.7, "x2": 0.5638568695671456}, {"x1": -0.5083344326316994, "predicted label": 20.533029944431387, "true label": 19.5, "x2": 0.24520060420213052}, {"x1": -0.9993057155224601, "predicted label": 21.876383052171814, "true label": 24.4, "x2": 0.7364434168076781}, {"x1": -0.3343507600347656, "predicted label": 24.996915960743966, "true label": 23.4, "x2": -0.9667730793715751}, {"x1": -0.09531513211372794, "predicted label": 21.746495606886583, "true label": 19.7, "x2": -0.44231100013447117}, {"x1": -0.4632654450202593, "predicted label": 28.1793958198468, "true label": 28.2, "x2": 0.40977441967374884}, {"x1": -0.9975230450901087, "predicted label": 47.65251997538214, "true label": 50.0, "x2": -0.30858237726389}, {"x1": -0.4524670421964283, "predicted label": 22.392536834383673, "true label": 17.4, "x2": -0.484539230488907}, {"x1": -0.376735782141019, "predicted label": 27.404911251817687, "true label": 22.6, "x2": 0.40565556670126923}, {"x1": 0.6522253239930412, "predicted label": 15.30819869789622, "true label": 15.1, "x2": -0.1653007220550976}, {"x1": -0.19328784202415922, "predicted label": 17.13099731941002, "true label": 13.1, "x2": 0.06434749490969109}, {"x1": -0.3302263626287869, "predicted label": 24.996915960743966, "true label": 24.2, "x2": -0.9778433768845632}, {"x1": 0.29580695054424766, "predicted label": 24.695808417392836, "true label": 19.9, "x2": -0.8273991509522535}, {"x1": -0.5503697671539625, "predicted label": 26.25611880875196, "true label": 24.0, "x2": -0.15964260605181396}, {"x1": -0.40505163861157445, "predicted label": 20.3693243827966, "true label": 18.9, "x2": -0.3276554347531835}, {"x1": -0.6103680010530195, "predicted label": 29.01586271505656, "true label": 35.4, "x2": -0.3073518399598979}, {"x1": -0.20827320313332445, "predicted label": 17.13099731941002, "true label": 15.2, "x2": 0.09111344465419692}, {"x1": -0.25535059530809673, "predicted label": 23.568873121403378, "true label": 26.5, "x2": 0.4036328674855291}, {"x1": -0.19975797317032412, "predicted label": 49.91867571360995, "true label": 43.5, "x2": 0.8198372947277802}, {"x1": 0.21483323794191697, "predicted label": 23.334516069941312, "true label": 21.2, "x2": -0.9868767831964241}, {"x1": 0.8804898076301699, "predicted label": 15.30819869789622, "true label": 18.4, "x2": 0.1955833645668673}, {"x1": -0.9818636277392263, "predicted label": 32.35383805209466, "true label": 28.5, "x2": -0.010351797676413851}, {"x1": -0.5285757854427006, "predicted label": 22.097778719057427, "true label": 23.9, "x2": 0.23966573515161466}, {"x1": -0.36337726859150876, "predicted label": 20.297910238944116, "true label": 18.5, "x2": -0.2864901842723902}, {"x1": -0.8609064856923924, "predicted label": 26.483513549521028, "true label": 25.0, "x2": 0.3020727829847585}, {"x1": -0.9885459868675283, "predicted label": 26.606108214893066, "true label": 35.4, "x2": -0.6691369166506428}, {"x1": -0.2135940831024383, "predicted label": 26.22276435277699, "true label": 31.5, "x2": -0.9852496627169864}, {"x1": -0.35839599350270124, "predicted label": 19.729909236868856, "true label": 20.2, "x2": 0.07530310681636278}, {"x1": -0.890663477762087, "predicted label": 19.50382754329423, "true label": 24.1, "x2": -0.8560621134895738}, {"x1": -0.9999991180874067, "predicted label": 22.661217944550426, "true label": 20.0, "x2": 0.8631864953774147}, {"x1": 0.918423979969594, "predicted label": 15.30819869789622, "true label": 13.1, "x2": 0.1987394491498451}, {"x1": -0.665118752311302, "predicted label": 25.02694061140732, "true label": 24.8, "x2": 0.06931148723824498}, {"x1": -0.9307441334148805, "predicted label": 32.35383805209466, "true label": 30.8, "x2": -0.0894751711819765}, {"x1": 0.739686331126875, "predicted label": 12.45048406019219, "true label": 12.7, "x2": -0.999999847473274}, {"x1": -0.32353791136451715, "predicted label": 22.392536834383673, "true label": 20.0, "x2": -0.7111669838256608}, {"x1": 0.23649565944156486, "predicted label": 23.334516069941312, "true label": 23.7, "x2": -0.9999019885650556}, {"x1": 0.5753351113605095, "predicted label": 23.06106938609195, "true label": 10.8, "x2": -0.844308840346972}, {"x1": -0.955152556186765, "predicted label": 18.628487195713163, "true label": 20.6, "x2": -0.9910111586167399}, {"x1": -0.18392038814930128, "predicted label": 24.444493768466682, "true label": 20.8, "x2": -0.8234980515760737}, {"x1": 0.6070220768669473, "predicted label": 18.6054975442393, "true label": 5.0, "x2": -0.28110352930978316}, {"x1": -0.1877789584068846, "predicted label": 18.877272654851474, "true label": 20.1, "x2": 0.254601235575793}, {"x1": -0.9950916704588566, "predicted label": 47.65251997538214, "true label": 48.5, "x2": -0.3212903834715601}, {"x1": 0.9251634765325403, "predicted label": 14.9883827874934, "true label": 10.9, "x2": 0.18390661787845747}, {"x1": 0.4092542685263773, "predicted label": 15.564476490949472, "true label": 7.0, "x2": 0.16846984386158173}, {"x1": -0.5934929692483009, "predicted label": 22.4245691330408, "true label": 20.9, "x2": -0.20406171450931743}, {"x1": 0.35653520396783056, "predicted label": 11.725981250223933, "true label": 17.2, "x2": -0.7300242096242736}, {"x1": -0.8747278862868113, "predicted label": 23.44167431283928, "true label": 20.9, "x2": -0.7552130410679327}, {"x1": 0.344307125471522, "predicted label": 11.725981250223933, "true label": 9.7, "x2": -0.7244592734108534}, {"x1": -0.20708690089358392, "predicted label": 20.19792957259687, "true label": 19.4, "x2": 0.2567940284757485}, {"x1": -0.8696184940257161, "predicted label": 25.96931319689653, "true label": 29.0, "x2": 0.8525533530984345}, {"x1": 0.5118487486839589, "predicted label": 15.682380416963603, "true label": 16.4, "x2": -0.9593267518734041}, {"x1": -0.4977091464843998, "predicted label": 22.097778719057427, "true label": 25.0, "x2": 0.1017465120887113}, {"x1": -0.25872423190452337, "predicted label": 26.22276435277699, "true label": 25.0, "x2": -0.9699458792079458}, {"x1": 0.2203096774744464, "predicted label": 18.89376702005557, "true label": 17.1, "x2": 0.3201286626350846}, {"x1": -0.30430981335712093, "predicted label": 21.623022625599855, "true label": 23.2, "x2": -0.6073105049622429}, {"x1": 0.7182854142988121, "predicted label": 16.300824542285735, "true label": 10.4, "x2": -0.7366143284648083}, {"x1": 0.19841730319089143, "predicted label": 18.89376702005557, "true label": 19.6, "x2": 0.3350665969286095}, {"x1": -0.5902456434702918, "predicted label": 21.599370032269793, "true label": 17.2, "x2": 0.10411477476010071}, {"x1": 0.31820909967991795, "predicted label": 11.725981250223933, "true label": 27.5, "x2": -0.7401330502393768}, {"x1": 0.1894899738213173, "predicted label": 18.89376702005557, "true label": 23.0, "x2": 0.3424561880088955}, {"x1": 0.38627399858059186, "predicted label": 22.355235616005885, "true label": 50.0, "x2": -0.8901842522441216}, {"x1": 0.8480309750596526, "predicted label": 7.817364470720694, "true label": 17.9, "x2": -0.8666668073896703}, {"x1": 0.7406291209197498, "predicted label": 12.45048406019219, "true label": 9.6, "x2": -0.9781103439529039}, {"x1": 0.741630148758246, "predicted label": 12.45048406019219, "true label": 17.2, "x2": -0.9869898128631228}, {"x1": -0.4121798916467411, "predicted label": 20.533029944431387, "true label": 22.5, "x2": -0.18201223265103642}, {"x1": -0.1918559916957078, "predicted label": 24.444493768466682, "true label": 21.4, "x2": -0.8681548720723505}, {"x1": 0.4569147028543682, "predicted label": 7.25241821255605, "true label": 12.0, "x2": -0.7311653966544729}, {"x1": -0.4107144126416601, "predicted label": 20.533029944431387, "true label": 19.9, "x2": 0.24042461610070245}, {"x1": -0.585905912854993, "predicted label": 22.40199639176114, "true label": 19.4, "x2": -0.7688196290293488}, {"x1": 0.7982869720299067, "predicted label": 12.45048406019219, "true label": 13.4, "x2": -0.9999981285650742}, {"x1": -0.2995449978090934, "predicted label": 19.729909236868856, "true label": 18.2, "x2": 0.20167945928385433}, {"x1": -0.31710892280081676, "predicted label": 24.996915960743966, "true label": 24.6, "x2": -0.9614217833965011}, {"x1": -0.6109535799211956, "predicted label": 22.097778719057427, "true label": 21.1, "x2": 0.2886658167381584}, {"x1": -0.9628870311910589, "predicted label": 26.606108214893066, "true label": 24.7, "x2": -0.736937426375728}, {"x1": 0.8644242690855015, "predicted label": 7.817364470720694, "true label": 8.7, "x2": -0.8844342876062693}, {"x1": 0.6011069844032886, "predicted label": 13.972568128528959, "true label": 27.5, "x2": -0.963669812989108}, {"x1": -0.6408184103740919, "predicted label": 22.097778719057427, "true label": 20.7, "x2": 0.32845786744625205}, {"x1": -0.3922299457720542, "predicted label": 21.589639543583484, "true label": 36.2, "x2": 0.32332406406618813}, {"x1": -0.26166802720983806, "predicted label": 29.3614717467337, "true label": 31.6, "x2": 0.589702257885203}, {"x1": 0.7038641942134495, "predicted label": 8.76943485549087, "true label": 11.7, "x2": -0.9268596142887106}, {"x1": -0.33606872052680786, "predicted label": 35.787384036035284, "true label": 39.8, "x2": 0.6015477781421114}, {"x1": -0.22330758420989574, "predicted label": 17.13099731941002, "true label": 13.9, "x2": 0.08420803662876379}, {"x1": -0.09075292284757482, "predicted label": 21.311076004136634, "true label": 21.8, "x2": -0.6354727130432123}, {"x1": -0.6081020760425114, "predicted label": 22.40199639176114, "true label": 23.7, "x2": -0.5466002336220461}, {"x1": -0.49851111559621375, "predicted label": 20.922083259403447, "true label": 17.6, "x2": -0.002414096958740078}, {"x1": -0.8616136317061203, "predicted label": 25.353249355402983, "true label": 24.4, "x2": 0.22980871767287572}, {"x1": 0.9999918954945258, "predicted label": 22.955708219391195, "true label": 8.8, "x2": -0.5999999999689228}, {"x1": -0.16322523328299232, "predicted label": 20.19792957259687, "true label": 19.2, "x2": 0.34111305367196637}, {"x1": -0.3719269619565347, "predicted label": 23.974042245472422, "true label": 25.3, "x2": -0.9319090873982817}, {"x1": -0.48308419222978405, "predicted label": 21.572465304979488, "true label": 20.4, "x2": 0.23921680545304075}, {"x1": -0.9741894616214843, "predicted label": 26.606108214893066, "true label": 23.1, "x2": -0.7346652500105643}, {"x1": -0.3117311258447038, "predicted label": 35.787384036035284, "true label": 37.9, "x2": 0.5870887916563053}, {"x1": 0.6000528714633209, "predicted label": 14.33743050988836, "true label": 15.6, "x2": 0.9992862830417206}, {"x1": -0.38805215715297336, "predicted label": 43.483906288653756, "true label": 45.4, "x2": 0.7326242311544723}, {"x1": 0.12250506716745072, "predicted label": 16.9485734751859, "true label": 15.7, "x2": 0.07552101107437917}, {"x1": -0.34218974645705935, "predicted label": 23.974042245472422, "true label": 22.6, "x2": -0.8629616737871447}, {"x1": -0.23135135654797243, "predicted label": 18.877272654851474, "true label": 14.5, "x2": 0.17956055610818977}, {"x1": -0.19959997091896636, "predicted label": 17.13099731941002, "true label": 18.7, "x2": 0.01046028296969203}, {"x1": 0.22166647208192256, "predicted label": 14.38425089030455, "true label": 17.8, "x2": 0.9580751371479267}, {"x1": 0.6110454213714397, "predicted label": 13.972568128528959, "true label": 16.1, "x2": -0.9999985880954227}, {"x1": -0.5394971698405877, "predicted label": 22.097778719057427, "true label": 20.6, "x2": 0.2646256852645026}, {"x1": -0.979207569278074, "predicted label": 32.58064913175386, "true label": 31.6, "x2": -0.5993676574666132}, {"x1": -0.7561777603267077, "predicted label": 24.83403002904957, "true label": 29.1, "x2": -0.46242840356011894}, {"x1": -0.22494059500139152, "predicted label": 17.13099731941002, "true label": 15.6, "x2": 0.10324209818293344}, {"x1": -0.2673994277944905, "predicted label": 18.877272654851474, "true label": 17.5, "x2": 0.15630106792478268}, {"x1": -0.8174763495539855, "predicted label": 26.31296740444793, "true label": 22.5, "x2": -0.6047463515736883}, {"x1": -0.844185570952996, "predicted label": 23.44167431283928, "true label": 19.4, "x2": -0.7076504997315434}, {"x1": -0.9999990240473017, "predicted label": 22.661217944550426, "true label": 19.3, "x2": 0.8592176360331503}, {"x1": 0.6709865610671063, "predicted label": 22.617562778983398, "true label": 8.5, "x2": -0.3328671574272334}, {"x1": -0.3150958803486267, "predicted label": 20.922083259403447, "true label": 20.6, "x2": 0.1465233131764309}, {"x1": 0.6102186059923929, "predicted label": 14.33743050988836, "true label": 17.0, "x2": 0.9975011909811441}, {"x1": 0.9237735591503919, "predicted label": 15.30819869789622, "true label": 17.1, "x2": 0.19975100932096165}, {"x1": -0.18978955932574132, "predicted label": 17.13099731941002, "true label": 14.5, "x2": 0.0329535646712318}, {"x1": -0.33023380414007003, "predicted label": 43.483906288653756, "true label": 50.0, "x2": 0.7369797700566431}, {"x1": 0.6845129999705964, "predicted label": 12.45048406019219, "true label": 14.3, "x2": -0.9999959265153162}, {"x1": 0.9087846510533045, "predicted label": 15.30819869789622, "true label": 12.6, "x2": 0.19512403094834843}, {"x1": -0.5912118088284641, "predicted label": 22.097778719057427, "true label": 28.7, "x2": 0.35699168555873073}, {"x1": -0.1658233773394375, "predicted label": 20.19792957259687, "true label": 21.2, "x2": 0.16027773227461406}, {"x1": -0.3308490044603247, "predicted label": 22.392536834383673, "true label": 19.3, "x2": -0.7567833710019134}, {"x1": -0.27665238196843284, "predicted label": 26.22276435277699, "true label": 23.1, "x2": -0.7040181105397648}, {"x1": 0.3740316829957028, "predicted label": 24.695808417392836, "true label": 19.1, "x2": -0.8521951954843031}, {"x1": 0.3468354961418588, "predicted label": 22.355235616005885, "true label": 25.0, "x2": -0.9746817693243001}, {"x1": -0.602754919508215, "predicted label": 30.909790221949184, "true label": 33.4, "x2": 0.4537228265036751}, {"x1": 0.7674997932023431, "predicted label": 22.97079646017699, "true label": 5.0, "x2": -0.3020908088262525}, {"x1": -0.4098801386068246, "predicted label": 21.323583801909813, "true label": 29.6, "x2": 0.11684435062526138}, {"x1": -0.5733992483160159, "predicted label": 21.599370032269793, "true label": 18.7, "x2": 0.1445652321406756}, {"x1": -0.28017456684058517, "predicted label": 19.729909236868856, "true label": 21.7, "x2": 0.24895446307438795}, {"x1": -0.48263074566230807, "predicted label": 21.572465304979488, "true label": 23.1, "x2": 0.32350461382977336}, {"x1": 0.06389145850075201, "predicted label": 22.479579247469346, "true label": 22.8, "x2": 0.8876276081730484}, {"x1": -0.2684849838596708, "predicted label": 20.19792957259687, "true label": 21.0, "x2": 0.2948240805347936}, {"x1": -0.19900226587012135, "predicted label": 49.999028802666906, "true label": 48.8, "x2": 0.9835139076152344}]}};
+      var opt = {
+        "mode": "vega-lite",
+        "renderer": "canvas",
+        "actions": {"editor": false, "export": false, "source": false}
+      };
+      vegaEmbed('#eGTR_regressor-rst-altair-plot-1', spec, opt).catch(console.err);
+  });
+</script>
+</div></div>
+<div class="section" id="parameter-optimization">
+<h2>Parameter optimization<a class="headerlink" href="#parameter-optimization" title="Permalink to this headline">¶</a></h2>
+<p>GridSearchCV from sklearn can be used with eGTC for parameter optimization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="k">import</span> <span class="n">eGTR</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
+
+<span class="c1"># Dummy train and test</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Parameters to tune</span>
+<span class="n">tuned_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;regul&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+                <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+                <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">16</span><span class="p">],</span>
+                <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">]}</span>
+
+<span class="c1"># GTM classifier (GTR)</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">eGTR</span><span class="p">(),</span> <span class="n">tuned_params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">)</span>
+<span class="n">gs</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="eGTC_classifier.html" class="btn btn-neutral" title="eGTC: GTM classifier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Helena A. Gaspar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v2.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

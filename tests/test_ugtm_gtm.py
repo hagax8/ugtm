@@ -11,6 +11,8 @@ class TestGTM(unittest.TestCase):
         self.n_individuals = 100
         self.n_nodes = 4
         self.k = 2
+        self.regul = 0.1
+        self.s = 0.3
         self.n_rbf_centers = 4
         self.m = 2
         self.data = np.random.randn(self.n_individuals, self.n_dimensions)
@@ -18,7 +20,8 @@ class TestGTM(unittest.TestCase):
         activity = np.random.randn(self.n_individuals, 1)
 
     def test_runGTM(self):
-        gtm = ugtm.runGTM(data=self.data, k=self.k)
+        gtm = ugtm.runGTM(data=self.data, k=self.k, m=self.m, 
+                          s=self.s, regul=self.regul)
         self.assertEqual(gtm.converged, True)
         self.assertEqual(gtm.matR.shape, (self.n_individuals, self.n_nodes))
         self.assertAlmostEqual(sum(gtm.matR[0, :]), 1.0)
@@ -27,6 +30,7 @@ class TestGTM(unittest.TestCase):
 
     def test_runkGTM(self):
         gtm = ugtm.runkGTM(data=self.data, k=self.k,
+                           m=self.m, s=self.s, regul=self.regul,
                            doPCA=True, doKernel=True)
         self.assertEqual(gtm.converged, True)
         self.assertEqual(gtm.matR.shape, (self.n_individuals, self.n_nodes))
@@ -35,7 +39,9 @@ class TestGTM(unittest.TestCase):
         self.assertEqual(gtm.matModes.shape, (self.n_individuals, 2))
 
     def test_transform(self):
-        gtm = ugtm.runGTM(data=self.data, k=self.k, doPCA=True)
+        gtm = ugtm.runGTM(data=self.data, k=self.k, 
+                          m=self.m, s=self.s, regul=self.regul,
+                          doPCA=True)
         transformed = ugtm.transform(
             optimizedModel=gtm, train=self.data, test=self.data, doPCA=True)
         self.assertEqual(transformed.converged, True)

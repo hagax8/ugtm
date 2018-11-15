@@ -1,0 +1,455 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>eGTC: GTM classifier &mdash; ugtm v2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="eGTR: GTM regressor" href="eGTR_regressor.html" />
+    <link rel="prev" title="eGTM: GTM transformer" href="eGTM_transformer.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ugtm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get started here</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">eGTC: GTM classifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#run-egtc">Run eGTC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize-class-map">Visualize class map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize-predicted-vs-real-labels">Visualize predicted vs real labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-optimization">Parameter optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eGTR_regressor.html">eGTR: GTM regressor</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">Links &amp; references</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ugtm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>eGTC: GTM classifier</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/eGTC_classifier.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="egtc-gtm-classifier">
+<h1>eGTC: GTM classifier<a class="headerlink" href="#egtc-gtm-classifier" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="run-egtc">
+<h2>Run eGTC<a class="headerlink" href="#run-egtc" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="ugtm.html#ugtm.ugtm_sklearn.eGTC" title="ugtm.ugtm_sklearn.eGTC"><code class="xref py py-class docutils literal notranslate"><span class="pre">eGTC</span></code></a> is a sklearn-compatible GTM classifier. Similarly to PCA or t-SNE, GTM reduces the dimensionality from n_dimensions to 2 dimensions. GTC uses a GTM class map to predict labels for new data (cf. <code class="xref py py-func docutils literal notranslate"><span class="pre">classMap()</span></code>).
+Two algorithms are available: the bayesian classifier GTC (<code class="xref py py-class docutils literal notranslate"><span class="pre">uGTC</span></code>) or the nearest node classifier (<code class="xref py py-class docutils literal notranslate"><span class="pre">uGTCnn</span></code>). The following example uses the iris dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="k">import</span> <span class="n">eGTC</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">model_selection</span>
+
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># optional preprocessing</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Predict labels for X_test</span>
+<span class="n">gtc</span> <span class="o">=</span> <span class="n">eGTC</span><span class="p">()</span>
+<span class="n">gtc</span> <span class="o">=</span> <span class="n">gtc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">gtc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Print score</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="visualize-class-map">
+<h2>Visualize class map<a class="headerlink" href="#visualize-class-map" title="Permalink to this headline">¶</a></h2>
+<p>The GTC algorithm is based on a classification map, discretized into a grid of nodes,
+which are colored by predicted label. To each node is associated class probabilities:</p>
+<div class="highlight-python notranslate" id="eGTC_classifier-rst-altair-source-0"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="kn">import</span> <span class="n">eGTM</span><span class="p">,</span> <span class="n">eGTC</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="kn">as</span> <span class="nn">alt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># optional preprocessing</span>
+<span class="n">std</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+
+<span class="c1"># Construct class map</span>
+<span class="n">gtc</span> <span class="o">=</span> <span class="n">eGTC</span><span class="p">()</span>
+<span class="n">gtc</span> <span class="o">=</span> <span class="n">gtc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dfclassmap</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">gtc</span><span class="o">.</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matX</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">])</span>
+<span class="n">dfclassmap</span><span class="p">[</span><span class="s2">&quot;predicted node label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target_names</span><span class="p">[</span><span class="n">gtc</span><span class="o">.</span><span class="n">node_label</span><span class="p">]</span>
+<span class="n">dfclassmap</span><span class="p">[</span><span class="s2">&quot;probability of predominant class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">gtc</span><span class="o">.</span><span class="n">node_probabilities</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Classification map</span>
+<span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">dfclassmap</span><span class="p">)</span><span class="o">.</span><span class="n">mark_square</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;predicted node label:N&#39;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+    <span class="n">opacity</span><span class="o">=</span><span class="s1">&#39;probability of predominant class&#39;</span><span class="p">,</span>
+    <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span> <span class="s1">&#39;predicted node label:N&#39;</span><span class="p">,</span> <span class="s1">&#39;probability of predominant class&#39;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Class map&quot;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+
+<div id="eGTC_classifier-rst-altair-plot-0">
+<script>
+  // embed when document is loaded, to ensure vega library is available
+  // this works on all modern browsers, except IE8 and older
+  document.addEventListener("DOMContentLoaded", function(event) {
+      var spec = {"config": {"view": {"height": 300, "width": 400}}, "encoding": {"tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}, {"type": "nominal", "field": "predicted node label"}, {"type": "quantitative", "field": "probability of predominant class"}], "opacity": {"type": "quantitative", "field": "probability of predominant class"}, "color": {"type": "nominal", "field": "predicted node label"}, "size": {"value": 50}, "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "data": {"name": "data-aaaf609f802b3ce1ccbd852a925d15e6"}, "datasets": {"data-aaaf609f802b3ce1ccbd852a925d15e6": [{"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.7333333333333334}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.6}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.4666666666666667}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.33333333333333337}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.19999999999999996}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.06666666666666665}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.06666666666666665}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -1.0, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.7333333333333334}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.6}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.4666666666666667}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.33333333333333337}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.19999999999999996}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.06666666666666665}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.06666666666666665}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -0.8666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 0.9999999999984794, "x2": -1.0}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 0.9999999999943822, "x2": -0.8666666666666667}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 0.9999999998492483, "x2": -0.7333333333333334}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 0.9999999999999337, "x2": -0.6}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.4666666666666667}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.33333333333333337}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.19999999999999996}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.06666666666666665}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.06666666666666665}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -0.7333333333333334, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": -0.6, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999722, "x2": -1.0}, {"x1": -0.6, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999979, "x2": -0.8666666666666667}, {"x1": -0.6, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999998, "x2": -0.7333333333333334}, {"x1": -0.6, "predicted node label": "versicolor", "probability of predominant class": 0.9999717421834148, "x2": -0.6}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 0.9999999999999922, "x2": -0.4666666666666667}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.33333333333333337}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.19999999999999996}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.06666666666666665}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.06666666666666665}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -0.6, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": -0.4666666666666667, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999999, "x2": -1.0}, {"x1": -0.4666666666666667, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": -0.4666666666666667, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.7333333333333334}, {"x1": -0.4666666666666667, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.6}, {"x1": -0.4666666666666667, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999962931, "x2": -0.4666666666666667}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 0.9989314700830438, "x2": -0.33333333333333337}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.19999999999999996}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": -0.06666666666666665}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.06666666666666665}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -0.4666666666666667, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": -0.33333333333333337, "predicted node label": "versicolor", "probability of predominant class": 0.9999999996701368, "x2": -1.0}, {"x1": -0.33333333333333337, "predicted node label": "versicolor", "probability of predominant class": 0.9999999998139533, "x2": -0.8666666666666667}, {"x1": -0.33333333333333337, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999998, "x2": -0.7333333333333334}, {"x1": -0.33333333333333337, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.6}, {"x1": -0.33333333333333337, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.4666666666666667}, {"x1": -0.33333333333333337, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.33333333333333337}, {"x1": -0.33333333333333337, "predicted node label": "versicolor", "probability of predominant class": 0.9996664237246228, "x2": -0.19999999999999996}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 0.9999999999999991, "x2": -0.06666666666666665}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.06666666666666665}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -0.33333333333333337, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999694, "x2": -1.0}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999664833, "x2": -0.8666666666666667}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999998471, "x2": -0.7333333333333334}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.6}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.4666666666666667}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.33333333333333337}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.19999999999999996}, {"x1": -0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999999265058582, "x2": -0.06666666666666665}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 0.9999995831169407, "x2": 0.06666666666666665}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 0.9999999999999998, "x2": 0.19999999999999996}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -0.19999999999999996, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999484148, "x2": -0.7333333333333334}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.999999999957013, "x2": -0.6}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.999999999974263, "x2": -0.4666666666666667}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999917339387, "x2": -0.33333333333333337}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999997565, "x2": -0.19999999999999996}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.06666666666666665}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": 0.06666666666666665}, {"x1": -0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999551849415937, "x2": 0.19999999999999996}, {"x1": -0.06666666666666665, "predicted node label": "setosa", "probability of predominant class": 0.9999942383574983, "x2": 0.33333333333333326}, {"x1": -0.06666666666666665, "predicted node label": "setosa", "probability of predominant class": 0.999999999999991, "x2": 0.46666666666666656}, {"x1": -0.06666666666666665, "predicted node label": "setosa", "probability of predominant class": 0.9999999999999997, "x2": 0.6000000000000001}, {"x1": -0.06666666666666665, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": -0.06666666666666665, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": -0.06666666666666665, "predicted node label": "setosa", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999996703528, "x2": -0.7333333333333334}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9965187055949424, "x2": -0.6}, {"x1": 0.06666666666666665, "predicted node label": "virginica", "probability of predominant class": 0.986190462291142, "x2": -0.4666666666666667}, {"x1": 0.06666666666666665, "predicted node label": "virginica", "probability of predominant class": 0.8800139038372294, "x2": -0.33333333333333337}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.7893009025194446, "x2": -0.19999999999999996}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999955929100824, "x2": -0.06666666666666665}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999891, "x2": 0.06666666666666665}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999092457, "x2": 0.7333333333333334}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999999827, "x2": 0.8666666666666667}, {"x1": 0.06666666666666665, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999998772, "x2": 1.0}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999999997121842, "x2": -0.7333333333333334}, {"x1": 0.19999999999999996, "predicted node label": "virginica", "probability of predominant class": 0.9993871475412875, "x2": -0.6}, {"x1": 0.19999999999999996, "predicted node label": "virginica", "probability of predominant class": 0.9999999996375257, "x2": -0.4666666666666667}, {"x1": 0.19999999999999996, "predicted node label": "virginica", "probability of predominant class": 0.9999780127801989, "x2": -0.33333333333333337}, {"x1": 0.19999999999999996, "predicted node label": "virginica", "probability of predominant class": 0.8122565708487416, "x2": -0.19999999999999996}, {"x1": 0.19999999999999996, "predicted node label": "virginica", "probability of predominant class": 0.9388229321382149, "x2": -0.06666666666666665}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9289255081019584, "x2": 0.06666666666666665}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999998538414764, "x2": 0.19999999999999996}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999999998657048, "x2": 0.33333333333333326}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.999999998422175, "x2": 0.46666666666666656}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9996611515744146, "x2": 0.6000000000000001}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.997899349211831, "x2": 0.7333333333333334}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9999695365287288, "x2": 0.8666666666666667}, {"x1": 0.19999999999999996, "predicted node label": "versicolor", "probability of predominant class": 0.9920054336777131, "x2": 1.0}, {"x1": 0.33333333333333326, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": 0.33333333333333326, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": 0.33333333333333326, "predicted node label": "versicolor", "probability of predominant class": 0.9999999999317642, "x2": -0.7333333333333334}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9999933006127738, "x2": -0.6}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9999999999999071, "x2": -0.4666666666666667}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9999999989478132, "x2": -0.33333333333333337}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.999801699946551, "x2": -0.19999999999999996}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9511074618944262, "x2": -0.06666666666666665}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9992149624362094, "x2": 0.06666666666666665}, {"x1": 0.33333333333333326, "predicted node label": "versicolor", "probability of predominant class": 0.99603914950801, "x2": 0.19999999999999996}, {"x1": 0.33333333333333326, "predicted node label": "versicolor", "probability of predominant class": 0.9999979030202178, "x2": 0.33333333333333326}, {"x1": 0.33333333333333326, "predicted node label": "versicolor", "probability of predominant class": 0.9999242559075282, "x2": 0.46666666666666656}, {"x1": 0.33333333333333326, "predicted node label": "versicolor", "probability of predominant class": 0.7739747017840759, "x2": 0.6000000000000001}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9999759368908318, "x2": 0.7333333333333334}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9999999989397216, "x2": 0.8666666666666667}, {"x1": 0.33333333333333326, "predicted node label": "virginica", "probability of predominant class": 0.9999999981309503, "x2": 1.0}, {"x1": 0.46666666666666656, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": 0.46666666666666656, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -0.8666666666666667}, {"x1": 0.46666666666666656, "predicted node label": "versicolor", "probability of predominant class": 0.9999999874670448, "x2": -0.7333333333333334}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.999994515956701, "x2": -0.6}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.9999999999997042, "x2": -0.4666666666666667}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.9999998820098409, "x2": -0.33333333333333337}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.9999999999683779, "x2": -0.19999999999999996}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.9999999982270881, "x2": -0.06666666666666665}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.9941664730504568, "x2": 0.06666666666666665}, {"x1": 0.46666666666666656, "predicted node label": "versicolor", "probability of predominant class": 0.9401925262083431, "x2": 0.19999999999999996}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.7572339981987112, "x2": 0.33333333333333326}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.8378024125223792, "x2": 0.46666666666666656}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.9999281148799197, "x2": 0.6000000000000001}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 0.9999999999992297, "x2": 0.7333333333333334}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": 0.46666666666666656, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": 0.6000000000000001, "predicted node label": "versicolor", "probability of predominant class": 1.0, "x2": -1.0}, {"x1": 0.6000000000000001, "predicted node label": "versicolor", "probability of predominant class": 0.999999614884956, "x2": -0.8666666666666667}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9125119209791066, "x2": -0.7333333333333334}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.5129148826899428, "x2": -0.6}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999955855310932, "x2": -0.4666666666666667}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999999993537539, "x2": -0.33333333333333337}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999999999998029, "x2": -0.19999999999999996}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999999073789358, "x2": -0.06666666666666665}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999674989829371, "x2": 0.06666666666666665}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.99999963934397, "x2": 0.19999999999999996}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999999999951333, "x2": 0.33333333333333326}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999999999996319, "x2": 0.46666666666666656}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 0.9999999999999996, "x2": 0.6000000000000001}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": 0.6000000000000001, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": 0.7333333333333334, "predicted node label": "versicolor", "probability of predominant class": 0.9999051507368533, "x2": -1.0}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 0.5223460521879095, "x2": -0.8666666666666667}, {"x1": 0.7333333333333334, "predicted node label": "versicolor", "probability of predominant class": 0.9995385246707276, "x2": -0.7333333333333334}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 0.9947049836010103, "x2": -0.6}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 0.9973419046164224, "x2": -0.4666666666666667}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 0.9999932954566468, "x2": -0.33333333333333337}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 0.9999999196855489, "x2": -0.19999999999999996}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 0.9999994460490516, "x2": -0.06666666666666665}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 0.9999999987361354, "x2": 0.06666666666666665}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": 0.7333333333333334, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": 0.8666666666666667, "predicted node label": "versicolor", "probability of predominant class": 0.9463530755030692, "x2": -1.0}, {"x1": 0.8666666666666667, "predicted node label": "versicolor", "probability of predominant class": 0.9994856984969804, "x2": -0.8666666666666667}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 0.9225658842977406, "x2": -0.7333333333333334}, {"x1": 0.8666666666666667, "predicted node label": "versicolor", "probability of predominant class": 0.9545805131024876, "x2": -0.6}, {"x1": 0.8666666666666667, "predicted node label": "versicolor", "probability of predominant class": 0.9873052761975176, "x2": -0.4666666666666667}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 0.8190251957812502, "x2": -0.33333333333333337}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 0.999764798570417, "x2": -0.19999999999999996}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 0.9999993754277678, "x2": -0.06666666666666665}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 0.9999999999934032, "x2": 0.06666666666666665}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.19999999999999996}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": 0.8666666666666667, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 1.0}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 0.9356925311145717, "x2": -1.0}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 0.6056062660694492, "x2": -0.8666666666666667}, {"x1": 1.0, "predicted node label": "versicolor", "probability of predominant class": 0.9960986566982241, "x2": -0.7333333333333334}, {"x1": 1.0, "predicted node label": "versicolor", "probability of predominant class": 0.9996221465514818, "x2": -0.6}, {"x1": 1.0, "predicted node label": "versicolor", "probability of predominant class": 0.9999999141105007, "x2": -0.4666666666666667}, {"x1": 1.0, "predicted node label": "versicolor", "probability of predominant class": 0.9999994007656954, "x2": -0.33333333333333337}, {"x1": 1.0, "predicted node label": "versicolor", "probability of predominant class": 0.9991304300788734, "x2": -0.19999999999999996}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 0.9615864647244295, "x2": -0.06666666666666665}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 0.9999999870987295, "x2": 0.06666666666666665}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 0.9999999999999999, "x2": 0.19999999999999996}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.33333333333333326}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.46666666666666656}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.6000000000000001}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.7333333333333334}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 0.8666666666666667}, {"x1": 1.0, "predicted node label": "virginica", "probability of predominant class": 1.0, "x2": 1.0}]}, "mark": "square", "$schema": "https://vega.github.io/schema/vega-lite/v2.6.0.json", "height": 200, "width": 200, "title": "Class map"};
+      var opt = {
+        "mode": "vega-lite",
+        "renderer": "canvas",
+        "actions": {"editor": false, "export": false, "source": false}
+      };
+      vegaEmbed('#eGTC_classifier-rst-altair-plot-0', spec, opt).catch(console.err);
+  });
+</script>
+</div></div>
+<div class="section" id="visualize-predicted-vs-real-labels">
+<h2>Visualize predicted vs real labels<a class="headerlink" href="#visualize-predicted-vs-real-labels" title="Permalink to this headline">¶</a></h2>
+<p>Visualize predicted vs real labels using the iris dataset and <a class="reference external" href="https://altair-viz.github.io">altair</a>:</p>
+<div class="highlight-python notranslate" id="eGTC_classifier-rst-altair-source-1"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="kn">import</span> <span class="n">eGTM</span><span class="p">,</span> <span class="n">eGTC</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="kn">as</span> <span class="nn">alt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">preprocessing</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">decomposition</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
+
+<span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># optional preprocessing</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Predict labels for X_test</span>
+<span class="n">gtc</span> <span class="o">=</span> <span class="n">eGTC</span><span class="p">()</span>
+<span class="n">gtc</span> <span class="o">=</span> <span class="n">gtc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">gtc</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Get GTM transform for X_test</span>
+<span class="n">transformed</span> <span class="o">=</span> <span class="n">eGTM</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">transformed</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;predicted label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target_names</span><span class="p">[</span><span class="n">y_pred</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;true label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target_names</span><span class="p">[</span><span class="n">y_test</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;probability of predominant class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">gtc</span><span class="o">.</span><span class="n">posteriors</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Projection of X_test colored by predicted label</span>
+<span class="n">chart1</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">()</span><span class="o">.</span><span class="n">mark_circle</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;predicted label:N&quot;</span><span class="p">,</span>
+           <span class="n">legend</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)),</span>
+    <span class="n">opacity</span><span class="o">=</span><span class="s2">&quot;probability of predominant class:Q&quot;</span><span class="p">,</span>
+    <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted label:N&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;true label:N&quot;</span><span class="p">,</span> <span class="s2">&quot;probability of predominant class&quot;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pedicted labels&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+
+<span class="c1"># Projection of X_test colored by true label</span>
+<span class="n">chart2</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">()</span><span class="o">.</span><span class="n">mark_circle</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;true label:N&quot;</span><span class="p">,</span>
+                    <span class="n">legend</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)),</span>
+    <span class="n">size</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">tooltip</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted label:N&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;true label:N&quot;</span><span class="p">,</span> <span class="s2">&quot;probability of predominant class&quot;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;True labels&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+
+
+<span class="n">alt</span><span class="o">.</span><span class="n">hconcat</span><span class="p">(</span><span class="n">chart1</span><span class="p">,</span> <span class="n">chart2</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+
+<div id="eGTC_classifier-rst-altair-plot-1">
+<script>
+  // embed when document is loaded, to ensure vega library is available
+  // this works on all modern browsers, except IE8 and older
+  document.addEventListener("DOMContentLoaded", function(event) {
+      var spec = {"config": {"view": {"height": 300, "width": 400}}, "hconcat": [{"encoding": {"tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}, {"type": "nominal", "field": "predicted label"}, {"type": "nominal", "field": "true label"}, {"type": "quantitative", "field": "probability of predominant class"}], "opacity": {"type": "quantitative", "field": "probability of predominant class"}, "color": {"legend": {"title": "label"}, "type": "nominal", "field": "predicted label"}, "size": {"value": 100}, "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "mark": "circle", "height": 200, "width": 200, "selection": {"selector001": {"encodings": ["x", "y"], "type": "interval", "bind": "scales"}}, "title": "Pedicted labels"}, {"encoding": {"color": {"legend": {"title": "label"}, "type": "nominal", "field": "true label"}, "size": {"value": 100}, "tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}, {"type": "nominal", "field": "predicted label"}, {"type": "nominal", "field": "true label"}, {"type": "quantitative", "field": "probability of predominant class"}], "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "mark": "circle", "height": 200, "width": 200, "selection": {"selector002": {"encodings": ["x", "y"], "type": "interval", "bind": "scales"}}, "title": "True labels"}], "$schema": "https://vega.github.io/schema/vega-lite/v2.6.0.json", "datasets": {"data-7d65f9f0e922c91449ed91f2e0ba90ae": [{"x1": 0.19990233782067102, "predicted label": "versicolor", "true label": "versicolor", "x2": 0.24737362081397946, "probability of predominant class": 0.9999858099185199}, {"x1": -0.3865414536376206, "predicted label": "setosa", "true label": "setosa", "x2": 0.7912062495625914, "probability of predominant class": 1.0}, {"x1": 0.8654545455661499, "predicted label": "virginica", "true label": "virginica", "x2": 0.3333936915746319, "probability of predominant class": 1.0}, {"x1": 0.19758619622551932, "predicted label": "versicolor", "true label": "versicolor", "x2": 0.08583384419649447, "probability of predominant class": 0.938009547585758}, {"x1": 0.39683269428870543, "predicted label": "versicolor", "true label": "versicolor", "x2": 0.2508320665721828, "probability of predominant class": 0.9990073323666016}, {"x1": -0.9533364752887694, "predicted label": "setosa", "true label": "setosa", "x2": 0.44582109766904965, "probability of predominant class": 0.9999999999999999}, {"x1": 0.023990006528897177, "predicted label": "versicolor", "true label": "versicolor", "x2": -0.012071430568707273, "probability of predominant class": 0.9999999976544115}, {"x1": 0.5134855099597583, "predicted label": "virginica", "true label": "virginica", "x2": 0.5560165987022994, "probability of predominant class": 0.9999935591713053}, {"x1": 0.7333831840974042, "predicted label": "virginica", "true label": "versicolor", "x2": -0.8667195300673024, "probability of predominant class": 0.5221126865258814}, {"x1": -0.18005751078840007, "predicted label": "versicolor", "true label": "versicolor", "x2": -0.502878855000926, "probability of predominant class": 0.9999999997897199}, {"x1": 0.46963573053263163, "predicted label": "virginica", "true label": "virginica", "x2": 0.3690619401603612, "probability of predominant class": 0.999763396228192}, {"x1": -0.6151818981772129, "predicted label": "setosa", "true label": "setosa", "x2": 0.060143620880703796, "probability of predominant class": 1.0}, {"x1": -0.9823354565449306, "predicted label": "setosa", "true label": "setosa", "x2": 0.43798641756505585, "probability of predominant class": 0.9999999999999998}, {"x1": -0.7165457479625917, "predicted label": "setosa", "true label": "setosa", "x2": -0.02519605462575415, "probability of predominant class": 1.0000000000000002}, {"x1": -0.6480015055993931, "predicted label": "setosa", "true label": "setosa", "x2": 0.8180327896765422, "probability of predominant class": 0.9999999999999998}, {"x1": 0.2000002076534483, "predicted label": "versicolor", "true label": "versicolor", "x2": 0.7344181370819826, "probability of predominant class": 0.9979162188521212}, {"x1": 0.5240827894289539, "predicted label": "virginica", "true label": "virginica", "x2": -0.06763544991588723, "probability of predominant class": 0.9998209845997195}, {"x1": -0.213097319006137, "predicted label": "versicolor", "true label": "versicolor", "x2": -0.6719405545941605, "probability of predominant class": 0.9999999474427175}, {"x1": -0.06535630797092357, "predicted label": "versicolor", "true label": "versicolor", "x2": -0.4315262988972762, "probability of predominant class": 0.9999758580421294}, {"x1": 0.5992552197195063, "predicted label": "virginica", "true label": "virginica", "x2": -0.44509418109064136, "probability of predominant class": 0.9995732552561581}, {"x1": -0.7198668608388871, "predicted label": "setosa", "true label": "setosa", "x2": 0.079995471550446, "probability of predominant class": 0.9999999999999996}, {"x1": 0.27913991224971396, "predicted label": "virginica", "true label": "virginica", "x2": 0.02075006702566248, "probability of predominant class": 0.9230535446295317}, {"x1": -0.6385866789634624, "predicted label": "setosa", "true label": "setosa", "x2": 0.47692847985129355, "probability of predominant class": 0.9999999999999999}, {"x1": 0.6320347343732737, "predicted label": "virginica", "true label": "virginica", "x2": -0.4118404594548051, "probability of predominant class": 0.9963096632345935}, {"x1": 0.9999797837647548, "predicted label": "virginica", "true label": "virginica", "x2": 0.8673072739576112, "probability of predominant class": 1.0}, {"x1": 0.5305680673714961, "predicted label": "virginica", "true label": "virginica", "x2": 0.3249730623880992, "probability of predominant class": 0.9997531960181798}, {"x1": 0.8918400329310793, "predicted label": "virginica", "true label": "virginica", "x2": -0.7617094717033747, "probability of predominant class": 0.8405841660370631}, {"x1": 0.4861864074395554, "predicted label": "virginica", "true label": "virginica", "x2": 0.65580536310502, "probability of predominant class": 0.9999999691229613}, {"x1": -0.6613064398196498, "predicted label": "setosa", "true label": "setosa", "x2": -0.09025589245129903, "probability of predominant class": 0.9999999999999996}, {"x1": -0.693146587929749, "predicted label": "setosa", "true label": "setosa", "x2": -0.009801234243143076, "probability of predominant class": 1.0000000000000004}, {"x1": -0.5010353973080465, "predicted label": "setosa", "true label": "setosa", "x2": 0.5990532682752961, "probability of predominant class": 0.9999999999999999}, {"x1": -0.35280410645777044, "predicted label": "setosa", "true label": "setosa", "x2": 0.9999999462743928, "probability of predominant class": 0.9999999999999999}, {"x1": 0.99871606075415, "predicted label": "versicolor", "true label": "versicolor", "x2": -0.4928447270216328, "probability of predominant class": 0.9998964011454898}, {"x1": -0.7497140476190793, "predicted label": "setosa", "true label": "setosa", "x2": 0.26155174257219854, "probability of predominant class": 1.0000000000000004}, {"x1": -0.8425544999480403, "predicted label": "setosa", "true label": "setosa", "x2": -0.09899503835991016, "probability of predominant class": 0.9999999999999997}, {"x1": 0.7396217165250673, "predicted label": "versicolor", "true label": "virginica", "x2": -0.7376890266293485, "probability of predominant class": 0.978394349527308}, {"x1": 0.2010160656588385, "predicted label": "versicolor", "true label": "versicolor", "x2": 0.6959025200969617, "probability of predominant class": 0.9983659119905937}, {"x1": -0.9195465119744862, "predicted label": "setosa", "true label": "setosa", "x2": 0.4738149544382343, "probability of predominant class": 1.0}, {"x1": -0.6807531893400707, "predicted label": "setosa", "true label": "setosa", "x2": 0.6192970947447628, "probability of predominant class": 1.0000000000000002}, {"x1": -0.5892577800970002, "predicted label": "setosa", "true label": "setosa", "x2": 0.9789046367155727, "probability of predominant class": 1.0}, {"x1": 0.5979661947890154, "predicted label": "virginica", "true label": "virginica", "x2": -0.5997334380233285, "probability of predominant class": 0.5178435758036714}, {"x1": 0.16328953116575246, "predicted label": "versicolor", "true label": "versicolor", "x2": 0.8847358094592918, "probability of predominant class": 0.9981652909949895}, {"x1": 0.9949430485659739, "predicted label": "versicolor", "true label": "versicolor", "x2": -0.5092437570736009, "probability of predominant class": 0.9991002979636103}, {"x1": -0.6817545094575616, "predicted label": "setosa", "true label": "setosa", "x2": 0.9076604681853626, "probability of predominant class": 0.9999999999999999}, {"x1": -0.43793943774362515, "predicted label": "setosa", "true label": "setosa", "x2": 0.7358006588245456, "probability of predominant class": 0.9999999999999999}, {"x1": -0.23560280351304055, "predicted label": "versicolor", "true label": "versicolor", "x2": -0.7359381969784289, "probability of predominant class": 0.9999999999217482}, {"x1": 0.542547585654655, "predicted label": "versicolor", "true label": "virginica", "x2": -0.12850681732005526, "probability of predominant class": 0.8063767277451265}, {"x1": 0.5353137802837511, "predicted label": "virginica", "true label": "virginica", "x2": -0.11177240666041005, "probability of predominant class": 0.9745999178442335}, {"x1": 0.5611754855284609, "predicted label": "versicolor", "true label": "versicolor", "x2": 0.04654673742197356, "probability of predominant class": 0.9991194433977965}, {"x1": 0.7332911876935171, "predicted label": "virginica", "true label": "virginica", "x2": 0.9948080772680695, "probability of predominant class": 1.0000000000000002}]}, "data": {"name": "data-7d65f9f0e922c91449ed91f2e0ba90ae"}};
+      var opt = {
+        "mode": "vega-lite",
+        "renderer": "canvas",
+        "actions": {"editor": false, "export": false, "source": false}
+      };
+      vegaEmbed('#eGTC_classifier-rst-altair-plot-1', spec, opt).catch(console.err);
+  });
+</script>
+</div></div>
+<div class="section" id="parameter-optimization">
+<h2>Parameter optimization<a class="headerlink" href="#parameter-optimization" title="Permalink to this headline">¶</a></h2>
+<p>GridSearchCV can be used with eGTC for parameter optimization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="k">import</span> <span class="n">eGTC</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
+
+<span class="c1"># Dummy train and test</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Parameters to tune</span>
+<span class="n">tuned_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;regul&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+                <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+                <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">16</span><span class="p">],</span>
+                <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">]}</span>
+
+<span class="c1"># GTM classifier (GTC), bayesian</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">eGTC</span><span class="p">(),</span> <span class="n">tuned_params</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+<span class="n">gs</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="eGTR_regressor.html" class="btn btn-neutral float-right" title="eGTR: GTM regressor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="eGTM_transformer.html" class="btn btn-neutral" title="eGTM: GTM transformer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Helena A. Gaspar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v2.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

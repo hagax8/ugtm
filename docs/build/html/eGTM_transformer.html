@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>eGTM: GTM transformer &mdash; ugtm v2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="eGTC: GTM classifier" href="eGTC_classifier.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ugtm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get started here</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">eGTM: GTM transformer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#run-gtm">Run GTM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize-projection">Visualize projection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eGTR_regressor.html">eGTR: GTM regressor</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">Links &amp; references</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ugtm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>eGTM: GTM transformer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/eGTM_transformer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="egtm-gtm-transformer">
+<h1>eGTM: GTM transformer<a class="headerlink" href="#egtm-gtm-transformer" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="run-gtm">
+<h2>Run GTM<a class="headerlink" href="#run-gtm" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="ugtm.html#ugtm.ugtm_sklearn.eGTM" title="ugtm.ugtm_sklearn.eGTM"><code class="xref py py-class docutils literal notranslate"><span class="pre">eGTM</span></code></a> is a sklearn-compatible GTM transformer. Similarly to PCA or t-SNE, eGTM reduces the dimensionality from n_dimensions to 2 dimensions. To generate mean GTM 2D projections:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="k">import</span> <span class="n">eGTM</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Fit GTM on X_train and get 2D projections for X_test</span>
+<span class="n">transformed</span> <span class="o">=</span> <span class="n">eGTM</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The default output of eGTM.transform is the mean GTM projection. For other data representations (modes, responsibilities), see <a class="reference internal" href="ugtm.html#ugtm.ugtm_sklearn.eGTM.transform" title="ugtm.ugtm_sklearn.eGTM.transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">transform()</span></code></a>.</p>
+</div>
+<div class="section" id="visualize-projection">
+<h2>Visualize projection<a class="headerlink" href="#visualize-projection" title="Permalink to this headline">¶</a></h2>
+<p>Visualization demo using altair <a class="reference external" href="https://altair-viz.github.io">https://altair-viz.github.io</a>:</p>
+<div class="highlight-python notranslate" id="eGTM_transformer-rst-altair-source-0"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="kn">import</span> <span class="n">eGTM</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="kn">as</span> <span class="nn">alt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="n">transformed</span> <span class="o">=</span> <span class="n">eGTM</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">transformed</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">])</span>
+<span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">mark_point</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+<span class="n">x</span><span class="o">=</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;x2&#39;</span><span class="p">,</span>
+<span class="n">tooltip</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">properties</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;GTM projection of X_test&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</pre></div>
+</div>
+
+<div id="eGTM_transformer-rst-altair-plot-0">
+<script>
+  // embed when document is loaded, to ensure vega library is available
+  // this works on all modern browsers, except IE8 and older
+  document.addEventListener("DOMContentLoaded", function(event) {
+      var spec = {"config": {"view": {"height": 300, "width": 400}}, "encoding": {"tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}], "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "data": {"name": "data-1aa294be55871301852011a079dd6f8a"}, "datasets": {"data-1aa294be55871301852011a079dd6f8a": [{"x1": 0.1499411121117183, "x2": 0.6732498891685575}, {"x1": -0.4516924204968384, "x2": 0.062710977948181}, {"x1": 0.9116354008250411, "x2": 0.6281847742927537}, {"x1": -0.15122297267077098, "x2": 0.1114190800976713}, {"x1": 0.056867256498167915, "x2": -0.17185984918141395}, {"x1": 0.5365457976580539, "x2": 0.8874360389471451}, {"x1": -0.19822140994334217, "x2": 0.43203167566971556}, {"x1": 0.03633370376928677, "x2": 0.22403212940625955}, {"x1": -0.4769325311165177, "x2": -0.5752877143577549}, {"x1": 0.8020723142403017, "x2": 0.6505511589879949}, {"x1": -0.40096392561354544, "x2": 0.4687892339962843}, {"x1": -0.175865919683925, "x2": -0.7962981793869938}, {"x1": 0.21318939009071455, "x2": 0.8219913874920797}, {"x1": -0.20742093551857982, "x2": -0.10929311475835168}, {"x1": 0.5190021892793356, "x2": -0.5712743253864909}, {"x1": -0.27166616668371146, "x2": 0.4193407671173187}, {"x1": -0.5943916472900975, "x2": 0.5339179664953257}, {"x1": -0.43798497134024655, "x2": 0.13686970029167433}, {"x1": 0.13121869250620496, "x2": 0.3110697173585661}, {"x1": 0.1045257085844754, "x2": -0.39848566805079744}, {"x1": -0.7612866566090223, "x2": 0.6327286294682191}, {"x1": 0.14621344091836425, "x2": 0.7856212385366604}, {"x1": -0.6290577813039759, "x2": 0.5421251265996868}, {"x1": -0.32855549995349803, "x2": -0.34586410489596225}, {"x1": -0.09713252030923492, "x2": -0.36157230514278876}, {"x1": -0.532213876695279, "x2": 0.744666842742854}, {"x1": -0.24750357462775133, "x2": 0.1907109708560302}, {"x1": -0.6024832731631635, "x2": 0.49547243690027504}, {"x1": 0.7677868507195966, "x2": -0.018058194523722454}, {"x1": -0.36107334960516935, "x2": -0.07024570708561892}, {"x1": -0.4405344267891359, "x2": 0.023021298231050393}, {"x1": -0.7203078615325943, "x2": -0.07741144674489939}, {"x1": 0.33501444693272375, "x2": 0.4719081780508508}, {"x1": -0.7020161479473837, "x2": 0.5497366454531841}, {"x1": -0.804772124330448, "x2": -0.18860996162633042}, {"x1": -0.017457091804386028, "x2": 0.14093090735364625}, {"x1": -0.6435713941376499, "x2": 0.20872034864814357}, {"x1": -0.13361145735900853, "x2": -0.24860365904101853}, {"x1": 0.5283423988873941, "x2": 0.6384446995505301}, {"x1": -0.6106463443656048, "x2": 0.7996709345534643}, {"x1": 0.028451534661209553, "x2": -0.31390587737697756}, {"x1": -0.30024435826235063, "x2": 0.883736867811083}, {"x1": -0.6480908981196138, "x2": 0.06580312234229721}, {"x1": -0.5563729805865247, "x2": 0.21442378757294878}, {"x1": -0.4183134991994769, "x2": -0.6699743386631996}, {"x1": 0.08723391955197171, "x2": -0.6287177985066909}, {"x1": -0.7304869576216468, "x2": -0.2666763891061569}, {"x1": -0.1275115410518538, "x2": -0.47950018023099256}, {"x1": -0.0401446178600531, "x2": -0.5547639116193005}, {"x1": -0.7269489356008861, "x2": -0.08749089879855071}]}, "mark": "point", "$schema": "https://vega.github.io/schema/vega-lite/v2.6.0.json", "selection": {"selector003": {"encodings": ["x", "y"], "type": "interval", "bind": "scales"}}, "title": "GTM projection of X_test"};
+      var opt = {
+        "mode": "vega-lite",
+        "renderer": "canvas",
+        "actions": {"editor": false, "export": false, "source": false}
+      };
+      vegaEmbed('#eGTM_transformer-rst-altair-plot-0', spec, opt).catch(console.err);
+  });
+</script>
+</div></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="eGTC_classifier.html" class="btn btn-neutral float-right" title="eGTC: GTM classifier" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Helena A. Gaspar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v2.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

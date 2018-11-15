@@ -1,0 +1,26 @@
+GTM parameter optimization with sklearn
+---------------------------------------
+
+Perform parameter grid search for regularization coefficient::
+
+
+        from ugtm import eGTM, eGTC, eGTR
+        import numpy as np
+
+        # Dummy train and test
+        X_train = np.random.randn(100, 50)
+        X_test = np.random.randn(50, 50)
+        y_train = np.random.choice([1, 2, 3], size=100)
+
+
+        tuned_params = {"l": [0.0001, 0.001, 0.01]}
+
+        gs = GridSearchCV(eGTC(), tuned_params, cv=5, iid=False, scoring='accuracy')
+        gs.fit(X_train, y_train)
+        print(gs.best_params_)
+
+
+        gs = GridSearchCV(eGTR(), tuned_params, cv=5, iid=False, scoring='r2')
+        gs.fit(X_train, y_train)
+        print(gs.best_params_)
+

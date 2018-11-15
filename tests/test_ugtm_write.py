@@ -4,7 +4,7 @@ import numpy as np
 # check matrixdimensions
 
 
-class TestGTM(unittest.TestCase):
+class TestGTMkGTM(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
         self.n_dimensions = 10
@@ -12,7 +12,6 @@ class TestGTM(unittest.TestCase):
         self.n_nodes = 4
         self.k = 2
         self.n_rbf_centers = 4
-        self.m = 2
         self.data = np.random.randn(self.n_individuals, self.n_dimensions)
         labels = np.random.choice([1, 2], size=self.n_individuals)
         activity = np.random.randn(self.n_individuals, 1)

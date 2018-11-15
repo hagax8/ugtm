@@ -1,0 +1,35 @@
+GTM parameter optimization with sklearn
+---------------------------------------
+
+Perform parameter grid search for GTM classifier (GTC) and regressor (GTR)::
+
+        from ugtm import eGTCnn, eGTC, eGTR
+        import numpy as np
+        from sklearn.model_selection import GridSearchCV
+
+        # Dummy train and test
+        X_train = np.random.randn(100, 50)
+        X_test = np.random.randn(50, 50)
+        y_train = np.random.choice([1, 2, 3], size=100)
+
+        # Parameters to tune
+        tuned_params = {'regul': [0.0001, 0.001, 0.01],
+                        's': [0.1, 0.2, 0.3],
+                        'k': [16],
+                        'm': [4]}
+
+        # GTM classifier (GTC), bayesian 
+        gs = GridSearchCV(eGTC(), tuned_params, cv=3, iid=False, scoring='accuracy')
+        gs.fit(X_train, y_train)
+        print(gs.best_params_)
+
+        # GTM classifier (GTC), nearest node algorithm 
+        gs = GridSearchCV(eGTCnn(), tuned_params, cv=3, iid=False, scoring='accuracy')
+        gs.fit(X_train, y_train)
+        print(gs.best_params_)
+
+        # GTM regressor (GTR)
+        gs = GridSearchCV(eGTR(), tuned_params, cv=3, iid=False, scoring='r2')
+        gs.fit(X_train, y_train)
+        print(gs.best_params_)
+

@@ -3,7 +3,7 @@ import ugtm
 import numpy as np
 
 
-class TestGTM(unittest.TestCase):
+class TestPlots(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
         self.n_dimensions = 10
@@ -14,8 +14,8 @@ class TestGTM(unittest.TestCase):
         self.m = 2
         self.data = np.random.randn(self.n_individuals, self.n_dimensions)
         self.labels = np.random.choice([1, 2], size=self.n_individuals)
-        self.gtm = ugtm.runGTM(self.data)
-
+        self.gtm = ugtm.runGTM(self.data, k=self.k, m=self.m)
+        
     def test_plotClassMap_html(self):
         self.gtm.plot_html(output="tests/output_tests/testout",
                            discrete=True, pointsize=20, cname="Spectral_r",

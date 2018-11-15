@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm quick tutorial &mdash; ugtm v1.1.7 documentation</title>
+  <title>tutorial &mdash; ugtm v2.0.0 documentation</title>
   
 
   
@@ -27,9 +27,11 @@
   
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="ugtm.ugtm_preprocess" href="_autosummary/_autosummary/ugtm.ugtm_preprocess.html" /> 
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Regression examples" href="regression_examples.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -78,11 +80,27 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="_autosummary/ugtm.html">ugtm</a></li>
+              <p class="caption"><span class="caption-text">Get started here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eGTR_regressor.html">eGTR: GTM regressor</a></li>
 </ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ugtm quick tutorial</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#import-package">1. Import package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#construct-and-plot-gtm-maps-or-kgtm-maps">2. Construct and plot GTM maps (or kGTM maps)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#plot-html-maps">3. Plot html maps</a></li>
@@ -92,9 +110,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#output-predictions-for-a-test-set-gtm-regression-gtr-and-classification-gtc">7. Output predictions for a test set: GTM regression (GTR) and classification (GTC)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-gtm-predictions-with-per-class-probabilities">8. Advanced GTM predictions with per-class probabilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#crossvalidation-experiments">9. Crossvalidation experiments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#links-references">10. Links &amp; references</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="references.html">Links &amp; references</a></li>
 </ul>
 
             
@@ -140,7 +165,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>ugtm quick tutorial</li>
+      <li>tutorial</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -159,8 +184,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ugtm-quick-tutorial">
-<h1>ugtm quick tutorial<a class="headerlink" href="#ugtm-quick-tutorial" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="tutorial">
+<h1>tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
 <p>ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (kernel Generative Topographic Mapping), GTM classification models (kNN, Bayes) and GTM regression models. ugtm also implements cross-validation options which can be used to compare GTM classification models to SVM classification models, and GTM regression models to SVM regression models. Typical usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
@@ -188,7 +213,7 @@
 </div>
 <div class="section" id="construct-and-plot-gtm-maps-or-kgtm-maps">
 <h2>2. Construct and plot GTM maps (or kGTM maps)<a class="headerlink" href="#construct-and-plot-gtm-maps-or-kgtm-maps" title="Permalink to this headline">¶</a></h2>
-<p>A gtm object can be created by running the function runGTM on a dataset. Parameters for runGTM are: k = sqrt(number of nodes), m = sqrt(number of rbf centres), s = RBF width factor, l = regularization coefficient. The number of iteration for the expectation-maximization algorithm is set to 200 by default. This is an example with random data:</p>
+<p>A gtm object can be created by running the function runGTM on a dataset. Parameters for runGTM are: k = sqrt(number of nodes), m = sqrt(number of rbf centres), s = RBF width factor, regul = regularization coefficient. The number of iteration for the expectation-maximization algorithm is set to 200 by default. This is an example with random data:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ugtm</span>
 
 <span class="c1">#import numpy to generate random data</span>
@@ -322,7 +347,7 @@ The plot_multipanel function only works if you have defined labels:</p>
 </div>
 <div class="section" id="advanced-gtm-predictions-with-per-class-probabilities">
 <h2>8. Advanced GTM predictions with per-class probabilities<a class="headerlink" href="#advanced-gtm-predictions-with-per-class-probabilities" title="Permalink to this headline">¶</a></h2>
-<p>Per-class probabilities for a test set can be given by the advancedGTC() function (you can set the m, k, l, s parameters just as with runGTM):</p>
+<p>Per-class probabilities for a test set can be given by the advancedGTC() function (you can set the m, k, regul, s parameters just as with runGTM):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#get whole output model and label predictions for test set</span>
 <span class="n">predicted_model</span><span class="o">=</span><span class="n">ugtm</span><span class="o">.</span><span class="n">advancedGTC</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
 
@@ -335,11 +360,11 @@ The plot_multipanel function only works if you have defined labels:</p>
 <h2>9. Crossvalidation experiments<a class="headerlink" href="#crossvalidation-experiments" title="Permalink to this headline">¶</a></h2>
 <p>Different crossvalidation experiments were implemented to compare GTC and GTR models to classical machine learning methods:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#crossvalidation experiment: GTM classification model implemented in ugtm,</span>
-<span class="c1">#here: set hyperparameters s=1 and l=1 (set to -1 to optimize)</span>
-<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateGTC</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n_repetitions</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">n_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="c1">#here: set hyperparameters s=1 and regul=1 (set to -1 to optimize)</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateGTC</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">regul</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n_repetitions</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">n_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c1">#crossvalidation experiment: GTM regression model</span>
-<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateGTR</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ugtm</span><span class="o">.</span><span class="n">crossvalidateGTR</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="n">activity</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">regul</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#you can also run the following functions to compare</span>
 <span class="c1">#with other classification/regression algorithms:</span>
@@ -362,16 +387,6 @@ The plot_multipanel function only works if you have defined labels:</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="links-references">
-<h2>10. Links &amp; references<a class="headerlink" href="#links-references" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li>GTM algorithm by Bishop et al: <a class="reference external" href="https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf">https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf</a></li>
-<li>kernel GTM: <a class="reference external" href="https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es2010-44.pdf">https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es2010-44.pdf</a></li>
-<li>GTM classification models: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/24320683">https://www.ncbi.nlm.nih.gov/pubmed/24320683</a></li>
-<li>GTM regression models: <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/27490381">https://www.ncbi.nlm.nih.gov/pubmed/27490381</a></li>
-<li>github: <a class="reference external" href="https://github.com/hagax8/ugtm">https://github.com/hagax8/ugtm</a></li>
-</ol>
-</div>
 </div>
 
 
@@ -382,8 +397,10 @@ The plot_multipanel function only works if you have defined labels:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="_autosummary/_autosummary/ugtm.ugtm_preprocess.html" class="btn btn-neutral" title="ugtm.ugtm_preprocess" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="regression_examples.html" class="btn btn-neutral" title="Regression examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -414,7 +431,7 @@ The plot_multipanel function only works if you have defined labels:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'v1.1.7',
+            VERSION:'v2.0.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -425,6 +442,9 @@ The plot_multipanel function only works if you have defined labels:</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
       <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   

@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ugtm.ugtm_plot &mdash; ugtm v2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/altair-plot.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ugtm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get started here</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eGTR_regressor.html">eGTR: GTM regressor</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">Links &amp; references</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ugtm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>ugtm.ugtm_plot</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/ugtm.ugtm_plot.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ugtm.ugtm_plot">
+<span id="ugtm-ugtm-plot"></span><h1>ugtm.ugtm_plot<a class="headerlink" href="#module-ugtm.ugtm_plot" title="Permalink to this headline">¶</a></h1>
+<p>ugtm plot functions.</p>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plot" title="ugtm.ugtm_plot.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(coordinates[,&nbsp;labels,&nbsp;title,&nbsp;output,&nbsp;…])</td>
+<td>Simple plotting function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plotClassMap" title="ugtm.ugtm_plot.plotClassMap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotClassMap</span></code></a>(optimizedModel,&nbsp;labels[,&nbsp;…])</td>
+<td>Plots GTM class map.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plotClassMapNoPoints" title="ugtm.ugtm_plot.plotClassMapNoPoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotClassMapNoPoints</span></code></a>(optimizedModel,&nbsp;labels)</td>
+<td>Plots GTM class map without 2D representations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plotLandscape" title="ugtm.ugtm_plot.plotLandscape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotLandscape</span></code></a>(optimizedModel,&nbsp;labels[,&nbsp;…])</td>
+<td>Plots GTM landscape.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plotLandscapeNoPoints" title="ugtm.ugtm_plot.plotLandscapeNoPoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotLandscapeNoPoints</span></code></a>(optimizedModel,&nbsp;labels)</td>
+<td>Plots GTM landscape without 2D representations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plotMultiPanelGTM" title="ugtm.ugtm_plot.plotMultiPanelGTM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plotMultiPanelGTM</span></code></a>(optimizedModel,&nbsp;labels[,&nbsp;…])</td>
+<td>Multipanel visualization for GTM object - PDF output.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plot_html" title="ugtm.ugtm_plot.plot_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_html</span></code></a>(coordinates[,&nbsp;labels,&nbsp;ids,&nbsp;title,&nbsp;…])</td>
+<td>Simple plotting function: HTML output.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plot_html_GTM" title="ugtm.ugtm_plot.plot_html_GTM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_html_GTM</span></code></a>(optimizedModel[,&nbsp;labels,&nbsp;ids,&nbsp;…])</td>
+<td>Plotting function for GTM object - HTML output.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plot_html_GTM_projection" title="ugtm.ugtm_plot.plot_html_GTM_projection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_html_GTM_projection</span></code></a>(optimizedModel,&nbsp;…)</td>
+<td>Returns a GTM landscape with projected data points - HTML output.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.plot_pdf" title="ugtm.ugtm_plot.plot_pdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_pdf</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_plot.NumpyEncoder" title="ugtm.ugtm_plot.NumpyEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NumpyEncoder</span></code></a>([skipkeys,&nbsp;ensure_ascii,&nbsp;…])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Helena A. Gaspar.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'v2.0.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

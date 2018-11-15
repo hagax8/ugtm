@@ -1,0 +1,30 @@
+===============
+GETTING STARTED  
+===============
+
+
+Sklearn integration
+-------------------
+
+
+ugtm provides sklearn-compatible GTM transformer (eGTM), GTM classifier (eGTC) and GTM regressor (eGTR).
+
+As for a PCA or t-SNE transformer, eGTM reduces the dimensionality from n_dimensions to 2 dimensions. To generate mean 2D projections, a GTM classifier (GTC) and a GTC regressor (GTR)::
+
+        from ugtm import eGTM, eGTC, eGTR
+        import numpy as np
+
+        # Dummy train and test
+        X_train = np.random.randn(100, 50)
+        X_test = np.random.randn(50, 50)
+        y_train = np.random.choice([1, 2, 3], size=100)
+
+        # GTM transformer
+        transformed = eGTM(l=0.1).fit(X_train).transform(X_test)
+
+        # Predict new labels using GTM classifier (GTC)
+        predicted_labels = eGTC(l=0.1).fit(X_train, y_train).predict(X_test)
+
+        # Predict new continuous outcomes using GTM regressor (GTR) 
+        predicted_labels = eGTR(l=0.1).fit(X_train, y_train).predict(X_test)
+
