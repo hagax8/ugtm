@@ -40,12 +40,12 @@ again overrides it. It should look something like this::
 If this configuration is not specified, all are set to True.
 """
 
-import contextlib
+import contextlib2
 import io
 import os
 import json
 import warnings
-
+import sys
 import jinja2
 
 from docutils import nodes
@@ -61,6 +61,7 @@ from altair.utils.execeval import eval_block
 VEGA_JS_URL_DEFAULT = "https://cdn.jsdelivr.net/npm/vega@3"
 VEGALITE_JS_URL_DEFAULT = "https://cdn.jsdelivr.net/npm/vega-lite@2"
 VEGAEMBED_JS_URL_DEFAULT = "https://cdn.jsdelivr.net/npm/vega-embed@3"
+
 
 
 VGL_TEMPLATE = jinja2.Template("""
@@ -190,7 +191,7 @@ def html_visit_altair_plot(self, node):
     namespace = node['namespace']
     try:
         f = io.StringIO()
-        with contextlib.redirect_stdout(f):
+        with contextlib2.redirect_stdout(f):
             chart = eval_block(node['code'], namespace)
         stdout = f.getvalue()
     except Exception as e:

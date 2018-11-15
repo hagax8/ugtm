@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -25,22 +23,29 @@
   
 
   
+  
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="eGTC: GTM classifier" href="eGTC_classifier.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+  
+
+  
+    <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ugtm v2.0.0 documentation" href="index.html"/>
+        <link rel="next" title="eGTC: GTM classifier" href="eGTC_classifier.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -77,10 +82,7 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Get started here</span></p>
+                <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -124,54 +126,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">ugtm</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">ugtm</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>eGTM: GTM transformer</li>
-    
-    
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>eGTM: GTM transformer</li>
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/eGTM_transformer.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -220,11 +202,11 @@
   // embed when document is loaded, to ensure vega library is available
   // this works on all modern browsers, except IE8 and older
   document.addEventListener("DOMContentLoaded", function(event) {
-      var spec = {"config": {"view": {"height": 300, "width": 400}}, "encoding": {"tooltip": [{"type": "quantitative", "field": "x1"}, {"type": "quantitative", "field": "x2"}], "y": {"type": "quantitative", "field": "x2"}, "x": {"type": "quantitative", "field": "x1"}}, "data": {"name": "data-1aa294be55871301852011a079dd6f8a"}, "datasets": {"data-1aa294be55871301852011a079dd6f8a": [{"x1": 0.1499411121117183, "x2": 0.6732498891685575}, {"x1": -0.4516924204968384, "x2": 0.062710977948181}, {"x1": 0.9116354008250411, "x2": 0.6281847742927537}, {"x1": -0.15122297267077098, "x2": 0.1114190800976713}, {"x1": 0.056867256498167915, "x2": -0.17185984918141395}, {"x1": 0.5365457976580539, "x2": 0.8874360389471451}, {"x1": -0.19822140994334217, "x2": 0.43203167566971556}, {"x1": 0.03633370376928677, "x2": 0.22403212940625955}, {"x1": -0.4769325311165177, "x2": -0.5752877143577549}, {"x1": 0.8020723142403017, "x2": 0.6505511589879949}, {"x1": -0.40096392561354544, "x2": 0.4687892339962843}, {"x1": -0.175865919683925, "x2": -0.7962981793869938}, {"x1": 0.21318939009071455, "x2": 0.8219913874920797}, {"x1": -0.20742093551857982, "x2": -0.10929311475835168}, {"x1": 0.5190021892793356, "x2": -0.5712743253864909}, {"x1": -0.27166616668371146, "x2": 0.4193407671173187}, {"x1": -0.5943916472900975, "x2": 0.5339179664953257}, {"x1": -0.43798497134024655, "x2": 0.13686970029167433}, {"x1": 0.13121869250620496, "x2": 0.3110697173585661}, {"x1": 0.1045257085844754, "x2": -0.39848566805079744}, {"x1": -0.7612866566090223, "x2": 0.6327286294682191}, {"x1": 0.14621344091836425, "x2": 0.7856212385366604}, {"x1": -0.6290577813039759, "x2": 0.5421251265996868}, {"x1": -0.32855549995349803, "x2": -0.34586410489596225}, {"x1": -0.09713252030923492, "x2": -0.36157230514278876}, {"x1": -0.532213876695279, "x2": 0.744666842742854}, {"x1": -0.24750357462775133, "x2": 0.1907109708560302}, {"x1": -0.6024832731631635, "x2": 0.49547243690027504}, {"x1": 0.7677868507195966, "x2": -0.018058194523722454}, {"x1": -0.36107334960516935, "x2": -0.07024570708561892}, {"x1": -0.4405344267891359, "x2": 0.023021298231050393}, {"x1": -0.7203078615325943, "x2": -0.07741144674489939}, {"x1": 0.33501444693272375, "x2": 0.4719081780508508}, {"x1": -0.7020161479473837, "x2": 0.5497366454531841}, {"x1": -0.804772124330448, "x2": -0.18860996162633042}, {"x1": -0.017457091804386028, "x2": 0.14093090735364625}, {"x1": -0.6435713941376499, "x2": 0.20872034864814357}, {"x1": -0.13361145735900853, "x2": -0.24860365904101853}, {"x1": 0.5283423988873941, "x2": 0.6384446995505301}, {"x1": -0.6106463443656048, "x2": 0.7996709345534643}, {"x1": 0.028451534661209553, "x2": -0.31390587737697756}, {"x1": -0.30024435826235063, "x2": 0.883736867811083}, {"x1": -0.6480908981196138, "x2": 0.06580312234229721}, {"x1": -0.5563729805865247, "x2": 0.21442378757294878}, {"x1": -0.4183134991994769, "x2": -0.6699743386631996}, {"x1": 0.08723391955197171, "x2": -0.6287177985066909}, {"x1": -0.7304869576216468, "x2": -0.2666763891061569}, {"x1": -0.1275115410518538, "x2": -0.47950018023099256}, {"x1": -0.0401446178600531, "x2": -0.5547639116193005}, {"x1": -0.7269489356008861, "x2": -0.08749089879855071}]}, "mark": "point", "$schema": "https://vega.github.io/schema/vega-lite/v2.6.0.json", "selection": {"selector003": {"encodings": ["x", "y"], "type": "interval", "bind": "scales"}}, "title": "GTM projection of X_test"};
+      var spec = {"selection": {"selector003": {"bind": "scales", "type": "interval", "encodings": ["x", "y"]}}, "title": "GTM projection of X_test", "data": {"values": [{"x2": -0.1228716610258481, "x1": 0.4287357823513557}, {"x2": -0.1156338648084836, "x1": -0.22595606785473102}, {"x2": -0.19351390944370797, "x1": -0.3957784622218787}, {"x2": -0.17586910253315066, "x1": 0.7851521999902815}, {"x2": 0.18854894242852413, "x1": 0.3532148380194948}, {"x2": -0.3689593996716672, "x1": -0.06878746110394157}, {"x2": -0.8255974923506243, "x1": -0.7252358596435616}, {"x2": 0.5621128075406204, "x1": -0.7222507685220776}, {"x2": -0.5711254336795359, "x1": 0.20511211689942976}, {"x2": -0.15489371955383432, "x1": -0.41714387657720703}, {"x2": -0.80197464769527, "x1": -0.1537585841323908}, {"x2": -0.34282096674725726, "x1": 0.8140414033405107}, {"x2": -0.3564174332672399, "x1": -0.1676687964589131}, {"x2": 0.48713920291129775, "x1": -0.4273392883308569}, {"x2": 0.10849814076607192, "x1": -0.415876848343583}, {"x2": 0.48108897590914856, "x1": -0.035568509172809085}, {"x2": 0.28624827266348124, "x1": -0.5818822339387003}, {"x2": -0.55013134207074, "x1": -0.6012657235908191}, {"x2": -0.32238067783483576, "x1": 0.41859353149101713}, {"x2": -0.3392935369561619, "x1": -0.6731052817935151}, {"x2": 0.5333389575473603, "x1": -0.44956031860754286}, {"x2": 0.3958460424383257, "x1": -0.2954647263570817}, {"x2": 0.08189523696716162, "x1": -0.1783376860154165}, {"x2": -0.437118620210084, "x1": -0.6063719798634611}, {"x2": -0.27286977607147356, "x1": 0.43897496055613655}, {"x2": -0.5829866415888668, "x1": 0.7054235012049774}, {"x2": 0.04748575091522491, "x1": -0.38578488561547614}, {"x2": -0.47285803928761144, "x1": -0.20976657188918482}, {"x2": -0.44000925083447995, "x1": 0.34490983231991407}, {"x2": -0.6516456457950366, "x1": -0.48983534840834037}, {"x2": -0.2995710184470904, "x1": -0.12903935423910803}, {"x2": -0.3489160814781344, "x1": 0.21340613808971376}, {"x2": -0.19163321294192845, "x1": 0.7430738224310588}, {"x2": -0.11096013593426618, "x1": -0.20392063764532367}, {"x2": -0.6091273627739879, "x1": -0.02622751778950455}, {"x2": -0.32028524490872706, "x1": -0.23251914788106284}, {"x2": -0.2125749260834034, "x1": -0.10562165020606173}, {"x2": 0.3281306703346706, "x1": -0.08020861176451413}, {"x2": -0.5881378931091901, "x1": 0.3862868482870915}, {"x2": -0.5301599248384549, "x1": -0.32630581960095767}, {"x2": 0.5210392600487019, "x1": 0.10248253373764649}, {"x2": -0.6560313920468225, "x1": -0.43229926410630604}, {"x2": 0.1268144059556062, "x1": -0.15084430316894148}, {"x2": -0.6105038813176378, "x1": -0.49788568565766456}, {"x2": 0.05610482476999378, "x1": 0.4874659908056927}, {"x2": -0.5421799378543334, "x1": -0.09603073743521516}, {"x2": -0.2172021270880718, "x1": 0.4412217680563931}, {"x2": -0.41464587796197855, "x1": -0.31234788835709715}, {"x2": -0.5424868371496723, "x1": 0.524591176657059}, {"x2": 0.8271649788808834, "x1": 0.13404920792940464}]}, "encoding": {"y": {"field": "x2", "type": "quantitative"}, "x": {"field": "x1", "type": "quantitative"}, "tooltip": [{"field": "x1", "type": "quantitative"}, {"field": "x2", "type": "quantitative"}]}, "mark": "point", "$schema": "https://vega.github.io/schema/vega-lite/v2.4.3.json", "config": {"view": {"width": 400, "height": 300}}};
       var opt = {
         "mode": "vega-lite",
         "renderer": "canvas",
-        "actions": {"editor": false, "export": false, "source": false}
+        "actions": {"source": false, "export": false, "editor": false}
       };
       vegaEmbed('#eGTM_transformer-rst-altair-plot-0', spec, opt).catch(console.err);
   });
@@ -234,16 +216,15 @@
 
 
            </div>
-           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="eGTC_classifier.html" class="btn btn-neutral float-right" title="eGTC: GTM classifier" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="eGTC_classifier.html" class="btn btn-neutral float-right" title="eGTC: GTM classifier" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -256,7 +237,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -275,11 +256,9 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'v2.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
@@ -288,7 +267,6 @@
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -297,11 +275,14 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

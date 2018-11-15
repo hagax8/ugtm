@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -25,20 +23,28 @@
   
 
   
+  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+  
+
+  
+    <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="ugtm v2.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -75,10 +81,7 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Get started here</span></p>
+                <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
@@ -118,52 +121,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">ugtm</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ugtm</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
-      <li>ugtm.ugtm_core</li>
-    
-    
+      
+    <li>ugtm.ugtm_core</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -183,7 +168,7 @@
 
 
 <div class="viewcode-block" id="createYMatrixInit"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createYMatrixInit">[docs]</a><span class="k">def</span> <span class="nf">createYMatrixInit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">matW</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Creates initial manifold matrix (Y).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates initial manifold matrix (Y).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -214,7 +199,7 @@
 
 
 <div class="viewcode-block" id="createPhiMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createPhiMatrix">[docs]</a><span class="k">def</span> <span class="nf">createPhiMatrix</span><span class="p">(</span><span class="n">matX</span><span class="p">,</span> <span class="n">matM</span><span class="p">,</span> <span class="n">numX</span><span class="p">,</span> <span class="n">numM</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Creates matrix of RBF functions.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates matrix of RBF functions.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -248,7 +233,7 @@
 
 
 <div class="viewcode-block" id="computeWidth"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.computeWidth">[docs]</a><span class="k">def</span> <span class="nf">computeWidth</span><span class="p">(</span><span class="n">matM</span><span class="p">,</span> <span class="n">numM</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Initializes radial basis function width using hyperparameter sigma.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Initializes radial basis function width using hyperparameter sigma.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -289,7 +274,7 @@
 
 
 <div class="viewcode-block" id="createWMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createWMatrix">[docs]</a><span class="k">def</span> <span class="nf">createWMatrix</span><span class="p">(</span><span class="n">matX</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matU</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">,</span> <span class="n">n_rbf_centers</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Creates PCA-initialized parameter matrix W.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates PCA-initialized parameter matrix W.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -321,7 +306,7 @@
 
 
 <div class="viewcode-block" id="createYMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createYMatrix">[docs]</a><span class="k">def</span> <span class="nf">createYMatrix</span><span class="p">(</span><span class="n">matW</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Updates manifold matrix (Y) using new parameter matrix (W).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates manifold matrix (Y) using new parameter matrix (W).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -342,7 +327,7 @@
 
 
 <div class="viewcode-block" id="createDistanceMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createDistanceMatrix">[docs]</a><span class="k">def</span> <span class="nf">createDistanceMatrix</span><span class="p">(</span><span class="n">matY</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes distances between manifold centers and data vectors.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes distances between manifold centers and data vectors.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -361,7 +346,7 @@
 
 
 <div class="viewcode-block" id="KERNELcreateDistanceMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.KERNELcreateDistanceMatrix">[docs]</a><span class="k">def</span> <span class="nf">KERNELcreateDistanceMatrix</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">matL</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes distances between data and manifold for kernel algorithm.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes distances between data and manifold for kernel algorithm.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -390,7 +375,7 @@
 
 
 <div class="viewcode-block" id="exp_normalize"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.exp_normalize">[docs]</a><span class="k">def</span> <span class="nf">exp_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Exp-normalize trick: compute exp(x-max(x))</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Exp-normalize trick: compute exp(x-max(x))</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -409,7 +394,7 @@
 
 
 <div class="viewcode-block" id="createPMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createPMatrix">[docs]</a><span class="k">def</span> <span class="nf">createPMatrix</span><span class="p">(</span><span class="n">matD</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes data distribution matrix = exp(-(parameter)*distances).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes data distribution matrix = exp(-(parameter)*distances).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -440,7 +425,7 @@
 
 
 <div class="viewcode-block" id="createRMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createRMatrix">[docs]</a><span class="k">def</span> <span class="nf">createRMatrix</span><span class="p">(</span><span class="n">matP</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes responsibilities (posterior probabilities).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes responsibilities (posterior probabilities).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -459,7 +444,7 @@
 
 
 <div class="viewcode-block" id="createGMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createGMatrix">[docs]</a><span class="k">def</span> <span class="nf">createGMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Creates the G diagonal matrix from responsibilities (R)</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Creates the G diagonal matrix from responsibilities (R)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -478,7 +463,7 @@
 
 
 <div class="viewcode-block" id="optimWMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimWMatrix">[docs]</a><span class="k">def</span> <span class="nf">optimWMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matG</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">regul</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Updates parameter matrix W.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates parameter matrix W.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -516,7 +501,7 @@
 
 
 <div class="viewcode-block" id="optimLMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimLMatrix">[docs]</a><span class="k">def</span> <span class="nf">optimLMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matG</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">regul</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Updates parameter matrix regul for kernel GTM.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates parameter matrix regul for kernel GTM.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -552,7 +537,7 @@
 
 
 <div class="viewcode-block" id="optimBetaInv"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimBetaInv">[docs]</a><span class="k">def</span> <span class="nf">optimBetaInv</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matD</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Updates noise variance parameter.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Updates noise variance parameter.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -572,7 +557,7 @@
 
 
 <div class="viewcode-block" id="meanPoint"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.meanPoint">[docs]</a><span class="k">def</span> <span class="nf">meanPoint</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matX</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes mean positions for data points (usual GTM output).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes mean positions for data points (usual GTM output).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -591,7 +576,7 @@
 
 
 <div class="viewcode-block" id="modePoint"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.modePoint">[docs]</a><span class="k">def</span> <span class="nf">modePoint</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matX</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes modes (nodes with maximum responsibility for each data point).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes modes (nodes with maximum responsibility for each data point).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -610,7 +595,7 @@
 
 
 <div class="viewcode-block" id="computelogLikelihood"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.computelogLikelihood">[docs]</a><span class="k">def</span> <span class="nf">computelogLikelihood</span><span class="p">(</span><span class="n">matP</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes log likelihood = GTM objective function</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes log likelihood = GTM objective function</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -646,7 +631,7 @@
 
 
 <div class="viewcode-block" id="evalBetaInv"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.evalBetaInv">[docs]</a><span class="k">def</span> <span class="nf">evalBetaInv</span><span class="p">(</span><span class="n">matY</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Decides which value to use for initial noise variance parameter.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decides which value to use for initial noise variance parameter.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -685,7 +670,7 @@
 
 
 <div class="viewcode-block" id="initBetaInvRandom"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.initBetaInvRandom">[docs]</a><span class="k">def</span> <span class="nf">initBetaInvRandom</span><span class="p">(</span><span class="n">matD</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">,</span> <span class="n">n_individuals</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes initial noise variance parameter for kernel GTM.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes initial noise variance parameter for kernel GTM.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -709,7 +694,6 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
   
@@ -722,7 +706,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -741,11 +725,9 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'v2.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -754,7 +736,6 @@
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -763,11 +744,14 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

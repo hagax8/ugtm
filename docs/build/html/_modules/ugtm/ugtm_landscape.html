@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -25,20 +23,28 @@
   
 
   
+  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+  
+
+  
+    <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="ugtm v2.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -75,10 +81,7 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Get started here</span></p>
+                <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
@@ -118,52 +121,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">ugtm</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ugtm</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
-      <li>ugtm.ugtm_landscape</li>
-    
-    
+      
+    <li>ugtm.ugtm_landscape</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -180,7 +165,7 @@
 
 
 <div class="viewcode-block" id="ClassMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.ClassMap">[docs]</a><span class="k">class</span> <span class="nc">ClassMap</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Class for ClassMap: Bayesian classification model for each GTM node.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Class for ClassMap: Bayesian classification model for each GTM node.</span>
 
 <span class="sd">    Arguments</span>
 <span class="sd">    =========</span>
@@ -200,7 +185,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodeClassP</span><span class="p">,</span> <span class="n">nodeClassT</span><span class="p">,</span> <span class="n">activityModel</span><span class="p">,</span> <span class="n">uniqClasses</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Constructor of ClassMap.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constructor of ClassMap.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ==========</span>
@@ -225,7 +210,7 @@
 
 
 <div class="viewcode-block" id="landscape"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.landscape">[docs]</a><span class="k">def</span> <span class="nf">landscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">activity</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes GTM landscapes based on activities (= continuous labels).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes GTM landscapes based on activities (= continuous labels).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -247,7 +232,7 @@
 <span class="sd">        and N = n_individuals:</span>
 <span class="sd">        :math:`landscape_k = \frac{\mathbf{a \cdot r}_k}{\sum_i^{N}r_{ik}}`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">epsilon</span> <span class="o">=</span> <span class="mi">10</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span>
+    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">10e-8</span>
     <span class="n">sums</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">+</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">landscape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">activity</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
                        <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">+</span><span class="n">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="n">sums</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
@@ -255,7 +240,7 @@
 
 
 <div class="viewcode-block" id="classMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.classMap">[docs]</a><span class="k">def</span> <span class="nf">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Computes GTM class map based on discrete activities (= discrete labels)</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Computes GTM class map based on discrete activities (= discrete labels)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -339,7 +324,6 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
   
@@ -352,7 +336,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -371,11 +355,9 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'v2.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -384,7 +366,6 @@
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -393,11 +374,14 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

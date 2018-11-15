@@ -5,7 +5,7 @@ scipy>=0.19.1
 mpld3>=0.3
 jinja2>=2.10
 altair>=2.2.2
-contextlib
+contextlib2
 io
 os
 json

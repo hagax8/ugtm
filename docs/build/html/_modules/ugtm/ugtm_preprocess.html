@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -25,20 +23,28 @@
   
 
   
+  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+  
+
+  
+    <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="ugtm v2.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -75,10 +81,7 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Get started here</span></p>
+                <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
@@ -118,52 +121,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">ugtm</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ugtm</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
-      <li>ugtm.ugtm_preprocess</li>
-    
-    
+      
+    <li>ugtm.ugtm_preprocess</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -187,7 +172,7 @@
 
 
 <div class="viewcode-block" id="ProcessedTrainTest"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.ProcessedTrainTest">[docs]</a><span class="k">class</span> <span class="nc">ProcessedTrainTest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Class for processed train and test set.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Class for processed train and test set.</span>
 
 <span class="sd">    Arguments</span>
 <span class="sd">    =========</span>
@@ -198,7 +183,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot; Constructor for :class:`~ugtm.ugtm_preprocess.ProcessedTrainTest`.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Constructor for :class:`~ugtm.ugtm_preprocess.ProcessedTrainTest`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        =========</span>
@@ -213,7 +198,7 @@
 
 <div class="viewcode-block" id="pcaPreprocess"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.pcaPreprocess">[docs]</a><span class="k">def</span> <span class="nf">pcaPreprocess</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Preprocess data using PCA.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Preprocess data using PCA.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -256,7 +241,7 @@
 
 <div class="viewcode-block" id="processTrainTest"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.processTrainTest">[docs]</a><span class="k">def</span> <span class="nf">processTrainTest</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">doPCA</span><span class="p">,</span> <span class="n">n_components</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                      <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Preprocess train and test data using PCA.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Preprocess train and test data using PCA.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -298,7 +283,7 @@
 
 
 <div class="viewcode-block" id="chooseKernel"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.chooseKernel">[docs]</a><span class="k">def</span> <span class="nf">chooseKernel</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">kerneltype</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Kernalize data (uses sklearn)</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Kernalize data (uses sklearn)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -328,7 +313,6 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
   
@@ -341,7 +325,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -360,11 +344,9 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'v2.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -373,7 +355,6 @@
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -382,11 +363,14 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>

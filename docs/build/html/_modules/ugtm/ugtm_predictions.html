@@ -13,8 +13,6 @@
 
   
   
-  
-  
 
   
 
@@ -25,20 +23,28 @@
   
 
   
+  
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+  
+
+  
+    <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="ugtm v2.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav">
+<body class="wy-body-for-nav" role="document">
 
-   
   <div class="wy-grid-for-nav">
 
     
@@ -75,10 +81,7 @@
           
             
             
-              
-            
-            
-              <p class="caption"><span class="caption-text">Get started here</span></p>
+                <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
@@ -118,52 +121,34 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">ugtm</a>
-        
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ugtm</a>
       </nav>
 
 
+      
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
           
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div role="navigation" aria-label="breadcrumbs navigation">
-
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
-      <li>ugtm.ugtm_predictions</li>
-    
-    
+      
+    <li>ugtm.ugtm_predictions</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -190,7 +175,7 @@
 <div class="viewcode-block" id="predictNN"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictNN">[docs]</a><span class="k">def</span> <span class="nf">predictNN</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">modeltype</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span>
               <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
               <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;GTM nearest node(s) classification or regression.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;GTM nearest node(s) classification or regression.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -269,7 +254,7 @@
 
 <div class="viewcode-block" id="predictNNSimple"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictNNSimple">[docs]</a><span class="k">def</span> <span class="nf">predictNNSimple</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">modeltype</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Nearest neighbor(s) classification or regression.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Nearest neighbor(s) classification or regression.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -310,7 +295,7 @@
 
 
 <div class="viewcode-block" id="predictBayes"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictBayes">[docs]</a><span class="k">def</span> <span class="nf">predictBayes</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot; Bayesian GTM classifier (GTC Bayes).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Bayesian GTM classifier (GTC Bayes).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -357,7 +342,7 @@
                 <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
                 <span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Run GTC (GTM classification): advanced Bayes</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Run GTC (GTM classification): advanced Bayes</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -501,7 +486,7 @@
 
 <div class="viewcode-block" id="advancedPredictBayes"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.advancedPredictBayes">[docs]</a><span class="k">def</span> <span class="nf">advancedPredictBayes</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span>
                          <span class="n">new_data</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Bayesian GTM classifier: complete model</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Bayesian GTM classifier: complete model</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -577,7 +562,7 @@
 
 
 <div class="viewcode-block" id="printClassPredictions"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.printClassPredictions">[docs]</a><span class="k">def</span> <span class="nf">printClassPredictions</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Print output of :func:`~ugtm.ugtm_predictions.advancedPredictBayes`.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Print output of :func:`~ugtm.ugtm_predictions.advancedPredictBayes`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -634,7 +619,7 @@
         <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
         <span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Run GTC (GTM classification): Bayes or nearest node algorithm.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Run GTC (GTM classification): Bayes or nearest node algorithm.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -760,7 +745,7 @@
 <div class="viewcode-block" id="GTR"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.GTR">[docs]</a><span class="k">def</span> <span class="nf">GTR</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
         <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;Run GTR (GTM nearest node(s) regression).</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Run GTR (GTM nearest node(s) regression).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -851,7 +836,6 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
   
@@ -864,7 +848,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -883,11 +867,9 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
             VERSION:'v2.0.0',
-            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            HAS_SOURCE:  true
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
@@ -896,7 +878,6 @@
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -905,11 +886,14 @@
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
   
 
+  
+  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
+          SphinxRtdTheme.StickyNav.enable();
       });
-  </script> 
+  </script>
+   
 
 </body>
 </html>
