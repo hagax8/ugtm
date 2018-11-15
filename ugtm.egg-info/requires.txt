@@ -6,8 +6,4 @@ mpld3>=0.3
 jinja2>=2.10
 altair>=2.2.2
 contextlib2
-io
-os
-json
-warnings
 docutils
