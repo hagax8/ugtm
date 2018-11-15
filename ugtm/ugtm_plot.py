@@ -4,7 +4,6 @@
 # License: MIT
 from __future__ import print_function
 import numpy as np
-import math
 import matplotlib
 matplotlib.use('agg')
 from scipy import interpolate
@@ -28,6 +27,35 @@ _display.NumpyEncoder = NumpyEncoder
 def plot(coordinates, labels=None, title="", output="output",
          discrete=False, pointsize=1.0, alpha=0.3, cname="Spectral_r",
          output_format="pdf"):
+    """ Simple plotting function.
+
+    Parameters
+    ----------
+    coordinates: array of shape (n_individuals, 2)
+        Coordinates to plot.
+    labels : array of shape (n_individuals,), optional (default = None)
+        Data labels.
+    title : str, optional (default = '')
+        Plot title.
+    output : str, optional (default = 'ouptut')
+        Output path for plot.
+    discrete : bool (default = False)
+        Type of label; discrete=True if labels are nominal or binary.
+    pointsize : float, optional (default = '1')
+        Marker size.
+    alpha : float, optional (default = '0.3'),
+        Marker transparency.
+    cname : str, optional (default = 'Spectral_r'),
+        Name of matplotlib color map.
+        Cf. https://matplotlib.org/examples/color/colormaps_reference.html
+    output_format : {'pdf', "png', 'ps', 'eps', 'svg'}
+        Output format.
+
+    Returns
+    -------
+    Image file
+        Basic plotting function. Plots coordinates.
+    """
     if labels is None:
         colvec = "black"
     elif discrete:
@@ -53,8 +81,8 @@ def plot(coordinates, labels=None, title="", output="output",
     plt.xticks([]), plt.yticks([])
 
     if not output_format:
-         # Just show the plot, since no output format has been selected
-         fig.show()
+        # Just show the plot, since no output format has been selected
+        fig.show()
     else:
         if output_format[0] == ".":
             output_format = output_format[1:]
@@ -72,7 +100,41 @@ def plot_pdf(*args, **kwargs):
 
 def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
                       pointsize=1.0, alpha=0.3, do_interpolate=True,
-                      cname="Spectral_r", prior="equiprobable"):
+                      cname="Spectral_r", prior="estimated"):
+    """ Multipanel visualization for GTM object - PDF output.
+
+    Parameters
+    ----------
+    optimizedModel : instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`,
+        Optimized GTM model.
+    labels : array of shape (n_individuals,), optional (default = None)
+        Data labels.
+    output : str, optional (default = 'ouptut')
+        Output path for plot.
+    discrete : bool (default = False)
+        Type of label; discrete=True if labels are nominal or binary.
+    pointsize : float, optional (default = '1')
+        Marker size.
+    alpha : float, optional (default = '0.3')
+        Marker transparency.
+    do_interpolate : bool, optional (default = True)
+        Interpolate color between grid nodes.
+    cname : str, optional (default = 'Spectral_r')
+        Name of matplotlib color map.
+    prior : {'estimated','equiprobable'}
+        Type of prior used to compute class probabilities on the map.
+        Choose equiprobable for equiprobable priors.
+        Estimated priors take into account class imbalance.
+
+    Returns
+    -------
+    PDF image
+        Four plots are returned:
+        (1) means,
+        (2) modes,
+        (3) landscape with means,
+        (4) landscape with modes.
+    """
     if labels is None:
         colvec = "black"
     elif labels is not None and discrete:
@@ -142,6 +204,33 @@ def plotMultiPanelGTM(optimizedModel, labels, output="output", discrete=False,
 def plot_html(coordinates, labels=None, ids=None, title="plot",
               discrete=False, output="output", pointsize=1.0, alpha=0.3,
               cname="Spectral_r"):
+    """ Simple plotting function: HTML output.
+
+    Parameters
+    ----------
+    coordinates: array of shape (n_individuals, 2)
+        Coordinates to plot.
+    labels : array of shape (n_individuals,), optional (default = None)
+        Data labels.
+    title : str, optional (default = '')
+        Plot title.
+    output : str, optional (default = 'ouptut')
+        Output path for plot.
+    discrete : bool (default = False)
+        Type of label; discrete=True if labels are nominal or binary.
+    pointsize : float, optional (default = '1')
+        Marker size.
+    alpha : float, optional (default = '0.3'),
+        Marker transparency.
+    cname : str, optional (default = 'Spectral_r'),
+        Name of matplotlib color map.
+        Cf. https://matplotlib.org/examples/color/colormaps_reference.html
+
+    Returns
+    -------
+    Image file
+        Plots coordinates to HTML file.
+    """
     if labels is None:
         colvec = "black"
     elif discrete:
@@ -178,7 +267,49 @@ def plot_html(coordinates, labels=None, ids=None, title="plot",
 def plot_html_GTM(optimizedModel, labels=None, ids=None, plot_arrows=True,
                   title="GTM", discrete=False, output="output",
                   pointsize=1.0, alpha=0.3, do_interpolate=True,
-                  cname="Spectral_r", prior="equiprobable"):
+                  cname="Spectral_r", prior="estimated"):
+    """ Plotting function for GTM object - HTML output.
+
+    Parameters
+    ----------
+    optimizedModel : instance of :class:`ugtm.ugtm_classes.OptimizedGTM`
+        OptimizedGTM model.
+    labels : array of shape (n_individuals,), optional (default = None)
+        Data labels.
+    ids : array of shape (n_individuals,), optional (default = None)
+        Identifiers for each data point - appears in tooltips.
+    title : str, optional (default = '')
+        Plot title.
+    output : str, optional (default = 'ouptut')
+        Output path for plot.
+    discrete : bool (default = False)
+        Type of label; discrete=True if labels are nominal or binary.
+    pointsize : float, optional (default = '1')
+        Marker size.
+    alpha : float, optional (default = '0.3')
+        Marker transparency.
+    do_interpolate : bool, optional (default = True)
+        Interpolate color between grid nodes.
+    cname : str, optional (default = 'Spectral_r')
+        Name of matplotlib color map.
+    prior : {'estimated','equiprobable'}
+        Type of prior used to compute class probabilities on the map.
+        Choose equiprobable for equiprobable priors.
+        Estimated priors take into account class imbalance.
+
+    Returns
+    -------
+    HTML file
+        HTML file of GTM output (mean coordinates). If labels are provided,
+        a landscape (continuous or discrete depending on the labels) is
+        drawn in the background. This landscape is computed
+        using responsibilities and is indicative of the average activity
+        or label value at a given node on the map.
+
+    Notes
+    -----
+    May be time-consuming for large datasets.
+    """
     if labels is None:
         colvec = "black"
     elif discrete:
@@ -228,7 +359,57 @@ def plot_html_GTM_projection(optimizedModel, projections, labels=None,
                              discrete=False, output="output",
                              pointsize=1, alpha=0.3,
                              do_interpolate=True, cname="Spectral_r",
-                             prior="equiprobable"):
+                             prior="estimated"):
+    """ Returns a GTM landscape with projected data points - HTML output.
+
+    Parameters
+    ----------
+    optimizedModel : instance of :class:`ugtm.ugtm_classes.OptimizedGTM`
+        OptimizedGTM model.
+    projections : instance of :class:`ugtm.ugtm_classes.OptimizedGTM`
+        OptimizedGTM model.
+    labels : array of shape (n_train,), optional (default = None)
+        Data labels for the training set (not projections).
+    ids : array of shape (n_test,), optional (default = None)
+        Identifiers for each projected data point - appears in tooltips.
+    title : str, optional (default = '')
+        Plot title.
+    output : str, optional (default = 'ouptut')
+        Output path for plot.
+    discrete : bool (default = False)
+        Type of label; discrete=True if labels are nominal or binary.
+    pointsize : float, optional (default = '1')
+        Marker size.
+    alpha : float, optional (default = '0.3')
+        Marker transparency.
+    do_interpolate : bool, optional (default = True)
+        Interpolate color between grid nodes.
+    cname : str, optional (default = 'Spectral_r')
+        Name of matplotlib color map.
+    prior : {'estimated','equiprobable'}
+        Type of prior used to compute class probabilities on the map.
+        Choose equiprobable for equiprobable priors.
+        Estimated priors take into account class imbalance.
+
+    Returns
+    -------
+    HTML file
+        HTML file of GTM output (mean coordinates).
+        This function plots a GTM model (from a training set)
+        with projected points
+        (= mean positions of projected test data).
+        If labels are provided,
+        a landscape (continuous or discrete depending on the labels) is
+        drawn in the background. This landscape is computed
+        using responsibilities and is indicative of the average activity
+        or label value at a given node on the map.
+
+    Notes
+    -----
+    - May be time-consuming for large datasets.
+    - The labels correspond to training data (the optimized model).
+    - The ids (identifiers) correspond to the test data (projections).
+    """
     if discrete:
         uniqClasses, label_numeric = np.unique(labels, return_inverse=True)
     elif not discrete:
@@ -266,7 +447,9 @@ def plot_html_GTM_projection(optimizedModel, projections, labels=None,
 
 def plotLandscape(optimizedModel, labels, do_interpolate=True,
                   cname="Spectral_r", pointsize=1.0, alpha=0.3):
-    k = math.sqrt(optimizedModel.matX.shape[0])
+    """ Plots GTM landscape. Internal usage.
+    """
+    k = np.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
     y = optimizedModel.matX[:, 1]
@@ -292,7 +475,9 @@ def plotLandscape(optimizedModel, labels, do_interpolate=True,
 
 def plotLandscapeNoPoints(optimizedModel, labels, do_interpolate=True,
                           cname="Spectral_r"):
-    k = math.sqrt(optimizedModel.matX.shape[0])
+    """ Plots GTM landscape without 2D representations. Internal usage.
+    """
+    k = np.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
     y = optimizedModel.matX[:, 1]
@@ -313,10 +498,12 @@ def plotLandscapeNoPoints(optimizedModel, labels, do_interpolate=True,
     plt.xticks([]), plt.yticks([])
 
 
-def plotClassMap(optimizedModel, labels, prior="equiprobable",
+def plotClassMap(optimizedModel, labels, prior="estimated",
                  do_interpolate=True, cname="Spectral_r", pointsize=1.0,
                  alpha=0.3):
-    k = math.sqrt(optimizedModel.matX.shape[0])
+    """ Plots GTM class map. Internal usage.
+    """
+    k = np.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
     y = optimizedModel.matX[:, 1]
@@ -343,9 +530,11 @@ def plotClassMap(optimizedModel, labels, prior="equiprobable",
     plt.xticks([]), plt.yticks([])
 
 
-def plotClassMapNoPoints(optimizedModel, labels, prior="equiprobable",
+def plotClassMapNoPoints(optimizedModel, labels, prior="estimated",
                          do_interpolate=True, cname="Spectral_r"):
-    k = math.sqrt(optimizedModel.matX.shape[0])
+    """Plots GTM class map without 2D representations. Internal usage.
+    """
+    k = np.sqrt(optimizedModel.matX.shape[0])
     n = 100
     x = optimizedModel.matX[:, 0]
     y = optimizedModel.matX[:, 1]

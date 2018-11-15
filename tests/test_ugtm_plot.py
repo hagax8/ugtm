@@ -15,7 +15,7 @@ class TestPlots(unittest.TestCase):
         self.data = np.random.randn(self.n_individuals, self.n_dimensions)
         self.labels = np.random.choice([1, 2], size=self.n_individuals)
         self.gtm = ugtm.runGTM(self.data, k=self.k, m=self.m)
-        
+
     def test_plotClassMap_html(self):
         self.gtm.plot_html(output="tests/output_tests/testout",
                            discrete=True, pointsize=20, cname="Spectral_r",

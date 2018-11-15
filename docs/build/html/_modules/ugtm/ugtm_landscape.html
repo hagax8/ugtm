@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm.ugtm_landscape &mdash; ugtm v1.1.7 documentation</title>
+  <title>ugtm.ugtm_landscape &mdash; ugtm v2.0.0 documentation</title>
   
 
   
@@ -27,6 +27,7 @@
   
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 
@@ -77,11 +78,35 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ugtm.html">ugtm</a></li>
-</ul>
+              <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">ugtm quick tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTR_regressor.html">eGTR: GTM regressor</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">Links &amp; references</a></li>
 </ul>
 
             
@@ -145,7 +170,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for ugtm.ugtm_landscape</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;GTM landscapes: continuous landscapes using data labels or activities.</span>
+<span></span><span class="sd">&quot;&quot;&quot;Builds continuous GTM class maps or landscapes using labels or activities.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># Authors: Helena A. Gaspar &lt;hagax8@gmail.com&gt;</span>
 <span class="c1"># License: MIT</span>
@@ -155,7 +180,44 @@
 
 
 <div class="viewcode-block" id="ClassMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.ClassMap">[docs]</a><span class="k">class</span> <span class="nc">ClassMap</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Class for ClassMap: Bayesian classification model for each GTM node.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    =========</span>
+<span class="sd">    nodeClassT : array of shape (n_nodes, n_classes)</span>
+<span class="sd">        Likelihood of each node :math:`k`</span>
+<span class="sd">        given class :math:`C_i`:</span>
+<span class="sd">        :math:`P(k|C_i) = \frac{\sum_{i_{c}}R_{i_{c},k}}{N_c}`.</span>
+<span class="sd">    nodeClassP : array of shape (n_nodes, n_classes)</span>
+<span class="sd">        Posterior probabilities of each class :math:`C_i`</span>
+<span class="sd">        for each node :math:`k`:</span>
+<span class="sd">        :math:`P(C_i|k) =\frac{P(k|C_i)P(C_i)}{\sum_i P(k|C_i)P(C_i)}`</span>
+<span class="sd">    activityModel : array of shape (n_nodes,1)</span>
+<span class="sd">        Class label attributed to each GTM node on the GTM node grid.</span>
+<span class="sd">        Computed using argmax of posterior probabilities.</span>
+<span class="sd">    uniqClasses : array of shape (n_classes,1)</span>
+<span class="sd">        Unique class labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodeClassP</span><span class="p">,</span> <span class="n">nodeClassT</span><span class="p">,</span> <span class="n">activityModel</span><span class="p">,</span> <span class="n">uniqClasses</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Constructor of ClassMap.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        nodeClassT : array of shape (n_nodes, n_classes)</span>
+<span class="sd">            Likelihood of each node :math:`k`</span>
+<span class="sd">            given class :math:`C_i`:</span>
+<span class="sd">            :math:`P(k|C_i) = \frac{\sum_{i_{c}}R_{i_{c},k}}{N_c}`.</span>
+<span class="sd">        nodeClassP : array of shape (n_nodes, n_classes)</span>
+<span class="sd">            Posterior probabilities of each class</span>
+<span class="sd">            :math:`C_i` for each node :math:`k`:</span>
+<span class="sd">            :math:`P(C_i|k) =\frac{P(k|C_i)P(C_i)}{\sum_i P(k|C_i)P(C_i)}`</span>
+<span class="sd">        activityModel : array of shape (n_nodes,1)</span>
+<span class="sd">            Class label attributed to each GTM node on the GTM node grid.</span>
+<span class="sd">            Computed using argmax of posterior probabilities.</span>
+<span class="sd">        uniqClasses : array of shape (n_classes,1)</span>
+<span class="sd">            Unique class labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodeClassP</span> <span class="o">=</span> <span class="n">nodeClassP</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodeClassT</span> <span class="o">=</span> <span class="n">nodeClassT</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">activityModel</span> <span class="o">=</span> <span class="n">activityModel</span>
@@ -163,6 +225,28 @@
 
 
 <div class="viewcode-block" id="landscape"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.landscape">[docs]</a><span class="k">def</span> <span class="nf">landscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">activity</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes GTM landscapes based on activities (= continuous labels).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    optimizedModel: an instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">        The optimized GTM model.</span>
+<span class="sd">    activity: array of shape (n_individuals,1)</span>
+<span class="sd">        Activity vector (continuous labels) associated with the data</span>
+<span class="sd">        used to compute the optimized GTM model.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_nodes,1)</span>
+<span class="sd">        Activity landscape: associates each GTM node :math:`k`</span>
+<span class="sd">        on the GTM node grid</span>
+<span class="sd">        with an activity value, which is computed as an average mean of data</span>
+<span class="sd">        activity values (continuous labels).</span>
+<span class="sd">        If a = activities,</span>
+<span class="sd">        r_k = vector of optimized GTM responsibilities for node k,</span>
+<span class="sd">        and N = n_individuals:</span>
+<span class="sd">        :math:`landscape_k = \frac{\mathbf{a \cdot r}_k}{\sum_i^{N}r_{ik}}`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">epsilon</span> <span class="o">=</span> <span class="mi">10</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span>
     <span class="n">sums</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">+</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">landscape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">activity</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
@@ -170,7 +254,50 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">landscape</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span></div>
 
 
-<div class="viewcode-block" id="classMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.classMap">[docs]</a><span class="k">def</span> <span class="nf">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="classMap"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_landscape.classMap">[docs]</a><span class="k">def</span> <span class="nf">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes GTM class map based on discrete activities (= discrete labels)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    optimizedModel: an instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">        The optimized GTM model.</span>
+<span class="sd">    activity: array of shape (n_individuals,1)</span>
+<span class="sd">        Activity vector (discrete labels) associated with the data</span>
+<span class="sd">        used to compute the optimized GTM model.</span>
+<span class="sd">    prior: {estimated, equiprobable}, optional</span>
+<span class="sd">        Type of prior used for Bayesian classifier.</span>
+<span class="sd">        &quot;equiprobable&quot; assigns the same weight to all classes:</span>
+<span class="sd">        :math:`P(C_i)=1/N_{classes}`.</span>
+<span class="sd">        &quot;estimated&quot; accounts for class imbalance using</span>
+<span class="sd">        the number of individuals in each class :math:`N(C_i)`:</span>
+<span class="sd">        :math:`P(C_i)=N_{C_i}/N_{total}`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    instance of :class:`~ugtm.ugtm_landscape.ClassMap`</span>
+<span class="sd">        Computes a GTM bayesian model and returns an instance of</span>
+<span class="sd">        :class:`~ugtm.ugtm_landscape.ClassMap`.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    This function computes the likelihood of each GTM node given a class,</span>
+<span class="sd">    the posterior probabilities of each class (using Bayes&#39; theorem),</span>
+<span class="sd">    and the class attributed to each node:</span>
+
+<span class="sd">        1. output.nodeClassT:</span>
+<span class="sd">           likelihood of each node :math:`k`</span>
+<span class="sd">           given class :math:`C_i`:</span>
+<span class="sd">           :math:`P(k|C_i) = \frac{\sum_{i_{c}}R_{i_{c},k}}{N_c}`.</span>
+<span class="sd">        2. output.nodeClassP:</span>
+<span class="sd">           posterior probabilities of each class</span>
+<span class="sd">           :math:`C_i` for each node :math:`k`,</span>
+<span class="sd">           using piors :math:`P(C_i)`:</span>
+<span class="sd">           :math:`P(C_i|k) =\frac{P(k|C_i)P(C_i)}{\sum_i P(k|C_i)P(C_i)}`</span>
+<span class="sd">        3. output.activityModel:</span>
+<span class="sd">            Class label attributed to each GTM node on the GTM node grid.</span>
+<span class="sd">            Computed using argmax of posterior probabilities.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">uniqClasses</span><span class="p">,</span> <span class="n">classVector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">nClasses</span> <span class="o">=</span> <span class="n">uniqClasses</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">optimizedModel</span><span class="o">.</span><span class="n">matR</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -243,7 +370,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'v1.1.7',
+            VERSION:'v2.0.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -254,6 +381,9 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
       <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   

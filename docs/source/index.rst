@@ -19,7 +19,7 @@
 
 .. toctree::
    :maxdepth: 1
-   :caption: Visualization examples 
+   :caption: Examples 
 
    visualization_examples
    classification_examples

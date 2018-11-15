@@ -1,15 +1,43 @@
 Metadata-Version: 1.0
 Name: ugtm
-Version: 1.1.8
+Version: 2.0.0
 Summary: Generative Topographic Mapping (GTM) for python, GTM classification and GTM regression
 Home-page: http://github.com/hagax8/ugtm
 Author: Helena A. Gaspar
 Author-email: hagax8@gmail.com
 License: MIT
-Description: 
-        ==================
-        ugtm quick tutorial 
-        ==================
+Description: tutorial
+        ========
+        
+        sklearn integration
+        -------------------
+        
+        ugtm v2.0 provides sklearn-compatible GTM transformer (eGTM), GTM classifier (eGTC) and GTM regressor (eGTR)::
+        
+        
+                from ugtm import eGTM, eGTC, eGTR
+                import numpy as np
+        
+                # Dummy train and test
+                X_train = np.random.randn(100, 50)
+                X_test = np.random.randn(50, 50)
+                y_train = np.random.choice([1, 2, 3], size=100)
+        
+                # GTM transformer
+                transformed = eGTM().fit(X_train).transform(X_test)
+        
+                # Predict new labels using GTM classifier (GTC)
+                predicted_labels = eGTC().fit(X_train, y_train).predict(X_test)
+        
+                # Predict new continuous outcomes using GTM regressor (GTR) 
+                predicted_labels = eGTR().fit(X_train, y_train).predict(X_test)
+        
+        
+        The following sections will show functions no defined within the sklearn framework.
+        
+        
+        Basic functions
+        ---------------
         
         ugtm provides an implementation of GTM (Generative Topographic Mapping), kGTM (kernel Generative Topographic Mapping), GTM classification models (kNN, Bayes) and GTM regression models. ugtm also implements cross-validation options which can be used to compare GTM classification models to SVM classification models, and GTM regression models to SVM regression models. Typical usage::
         
@@ -30,19 +58,11 @@ Description:
         
         For installation instructions, cf. https://github.com/hagax8/ugtm
         
-        1. Import package
-        =================
         
-        Import ugtm package, allowing to construct GTM and kernel GTM (kGTM) maps, GTM classification models, GTM regression models::
+        Construct and plot GTM maps (or kGTM maps)
+        ------------------------------------------
         
-            import ugtm
-        
-        
-        2. Construct and plot GTM maps (or kGTM maps)
-        =============================================
-        
-        
-        A gtm object can be created by running the function runGTM on a dataset. Parameters for runGTM are: k = sqrt(number of nodes), m = sqrt(number of rbf centres), s = RBF width factor, l = regularization coefficient. The number of iteration for the expectation-maximization algorithm is set to 200 by default. This is an example with random data::
+        A gtm object can be created by running the function runGTM on a dataset. Parameters for runGTM are: k = sqrt(number of nodes), m = sqrt(number of rbf centres), s = RBF width factor, regul = regularization coefficient. The number of iteration for the expectation-maximization algorithm is set to 200 by default. This is an example with random data::
         
             import ugtm
             
@@ -75,8 +95,9 @@ Description:
             gtm_responsibilities = gtm.matR
         
         
-        3. Plot html maps
-        =========================================
+        
+        Plot html maps
+        --------------
         
         Call the plot_html() function on the gtm object::
         
@@ -100,9 +121,8 @@ Description:
                           do_interpolate=False)
         
         
-        
-        4. Plot pdf maps
-        =========================================
+        Plot pdf maps
+        -------------
         
         Call the plot() function on the gtm object::
         
@@ -120,8 +140,8 @@ Description:
         
         
         
-        5. Plot multipanel views (only if labels or activities are provided)
-        ======================================================================
+        Plot multipanel views
+        ---------------------
         
         Call the plot_multipanel() function on the gtm object.
         This plots a general model view, showing means, modes, landscape with or without points.
@@ -145,8 +165,8 @@ Description:
                                 do_interpolate=False)
         
         
-        6. Project new data onto existing GTM map
-        ===================================================================
+        Project new data onto existing GTM map
+        --------------------------------------
         
         New data can be projected on the GTM map by using the transform() function, which takes as input the gtm model, a training and test set. The train set is then only used to perform data preprocessing on the test set based on the train (for example: apply the same PCA transformation to the train and test sets before running the algorithm)::
         
@@ -184,7 +204,7 @@ Description:
         8. Advanced GTM predictions with per-class probabilities
         =========================================================
         
-        Per-class probabilities for a test set can be given by the advancedGTC() function (you can set the m, k, l, s parameters just as with runGTM)::
+        Per-class probabilities for a test set can be given by the advancedGTC() function (you can set the m, k, regul, s parameters just as with runGTM)::
         
             #get whole output model and label predictions for test set
             predicted_model=ugtm.advancedGTC(train=train,test=test,labels=labels)
@@ -200,11 +220,11 @@ Description:
         Different crossvalidation experiments were implemented to compare GTC and GTR models to classical machine learning methods::
         
             #crossvalidation experiment: GTM classification model implemented in ugtm, 
-            #here: set hyperparameters s=1 and l=1 (set to -1 to optimize)
-            ugtm.crossvalidateGTC(data=train,labels=labels,s=1,l=1,n_repetitions=10,n_folds=5)
+            #here: set hyperparameters s=1 and regul=1 (set to -1 to optimize)
+            ugtm.crossvalidateGTC(data=train,labels=labels,s=1,regul=1,n_repetitions=10,n_folds=5)
         
             #crossvalidation experiment: GTM regression model
-            ugtm.crossvalidateGTR(data=train,labels=activity,s=1,l=1)
+            ugtm.crossvalidateGTR(data=train,labels=activity,s=1,regul=1)
         
             #you can also run the following functions to compare
             #with other classification/regression algorithms:

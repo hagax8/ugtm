@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm.ugtm_preprocess &mdash; ugtm v1.1.7 documentation</title>
+  <title>ugtm.ugtm_preprocess &mdash; ugtm v2.0.0 documentation</title>
   
 
   
@@ -27,6 +27,7 @@
   
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 
@@ -77,11 +78,35 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ugtm.html">ugtm</a></li>
-</ul>
+              <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">ugtm quick tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTR_regressor.html">eGTR: GTM regressor</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">Links &amp; references</a></li>
 </ul>
 
             
@@ -162,13 +187,56 @@
 
 
 <div class="viewcode-block" id="ProcessedTrainTest"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.ProcessedTrainTest">[docs]</a><span class="k">class</span> <span class="nc">ProcessedTrainTest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Class for processed train and test set.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    =========</span>
+<span class="sd">    train : array of shape (n_train, n_dimensions)</span>
+<span class="sd">        Train data matrix.</span>
+<span class="sd">    test : array of shape (n_test, ndimensions)</span>
+<span class="sd">        Test data matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot; Constructor for :class:`~ugtm.ugtm_preprocess.ProcessedTrainTest`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        =========</span>
+<span class="sd">        train : array of shape (n_train, n_dimensions)</span>
+<span class="sd">            Train data matrix.</span>
+<span class="sd">        test : array of shape (n_test, ndimensions)</span>
+<span class="sd">            Test data matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train</span> <span class="o">=</span> <span class="n">train</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">test</span></div>
 
 
 <div class="viewcode-block" id="pcaPreprocess"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.pcaPreprocess">[docs]</a><span class="k">def</span> <span class="nf">pcaPreprocess</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+                  <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Preprocess data using PCA.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    data : array of shape (n_individuals, n_dimensions)</span>
+<span class="sd">        Data matrix.</span>
+<span class="sd">    doPCA : bool, optional (default = False)</span>
+<span class="sd">        Apply PCA pre-processing.</span>
+<span class="sd">    n_components : int, optional (default = -1)</span>
+<span class="sd">        Number of components for PCA pre-processing.</span>
+<span class="sd">        If set to -1, keep principal components</span>
+<span class="sd">        accounting for 80% of data variance.</span>
+<span class="sd">    missing : bool, optional (default = True)</span>
+<span class="sd">        Replace missing values (calls scikit-learn functions).</span>
+<span class="sd">    missing_strategy : str (default = &#39;median&#39;)</span>
+<span class="sd">        Scikit-learn missing data strategy.</span>
+<span class="sd">    random_state : int (default = 1234)</span>
+<span class="sd">        Random state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_individuals, n_components)</span>
+<span class="sd">        Data projected onto principal axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
         <span class="n">imp</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">missing_strategy</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -187,7 +255,32 @@
 
 
 <div class="viewcode-block" id="processTrainTest"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.processTrainTest">[docs]</a><span class="k">def</span> <span class="nf">processTrainTest</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">doPCA</span><span class="p">,</span> <span class="n">n_components</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+                     <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Preprocess train and test data using PCA.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    train : array of shape (n_individuals, n_train)</span>
+<span class="sd">        Train data matrix.</span>
+<span class="sd">    test : array of shape (n_individuals, n_test)</span>
+<span class="sd">        Test data matrix.</span>
+<span class="sd">    doPCA : bool, optional (default = False)</span>
+<span class="sd">        Apply PCA pre-processing.</span>
+<span class="sd">    n_components : int, optional (default = -1)</span>
+<span class="sd">        Number of components for PCA pre-processing.</span>
+<span class="sd">        If set to -1, keep principal components</span>
+<span class="sd">        accounting for 80% of data variance.</span>
+<span class="sd">    missing : bool, optional (default = True)</span>
+<span class="sd">        Replace missing values (calls scikit-learn functions).</span>
+<span class="sd">    missing_strategy : str (default = &#39;median&#39;)</span>
+<span class="sd">        Scikit-learn missing data strategy.</span>
+<span class="sd">    random_state : int (default = 1234)</span>
+<span class="sd">        Random state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    instance of :class:`~ugtm.ugtm_preprocess.ProcessedTrainTest`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
         <span class="n">imp</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">missing_strategy</span><span class="p">)</span>
         <span class="n">train</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
@@ -205,6 +298,19 @@
 
 
 <div class="viewcode-block" id="chooseKernel"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_preprocess.chooseKernel">[docs]</a><span class="k">def</span> <span class="nf">chooseKernel</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">kerneltype</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Kernalize data (uses sklearn)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    data : array of shape (n_individuals, n_dimensions)</span>
+<span class="sd">        Data matrix.</span>
+<span class="sd">    kerneltype : {&#39;euclidean&#39;, &#39;cosine&#39;, &#39;laplacian&#39;, &#39;polynomial_kernel&#39;, &#39;jaccard&#39;}, optional</span>
+<span class="sd">        Kernel type.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_individuals, n_individuals)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">:</span>
         <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">pairwise_distances</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)))</span>
     <span class="k">elif</span> <span class="n">kerneltype</span> <span class="o">==</span> <span class="s1">&#39;cosine&#39;</span><span class="p">:</span>
@@ -253,7 +359,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'v1.1.7',
+            VERSION:'v2.0.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -264,6 +370,9 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
       <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   

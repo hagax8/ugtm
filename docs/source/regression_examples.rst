@@ -10,6 +10,7 @@ Example of parameter selection and cross-validation using GTM regression (GTR) a
 
         from ugtm import eGTR
         import numpy as np
+        from numpy import sqrt
         from sklearn import model_selection
         from sklearn.metrics import mean_squared_error 
         from sklearn.svm import SVR

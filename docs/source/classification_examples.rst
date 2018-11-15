@@ -55,7 +55,7 @@ Example of parameter selection and cross-validation using GTM classification (GT
 
         gs.fit(X_train, y_train)
 
-        # Returns best score (0.8966) and best parameters
+        # Returns best score and best parameters
         print(gs.best_score_) 
         print(gs.best_params_) 
 
@@ -63,7 +63,7 @@ Example of parameter selection and cross-validation using GTM classification (GT
         y_true, y_pred = y_test, gs.predict(X_test)
         print(classification_report(y_true, y_pred))
 
-        # Record performance on test set (0.9379)
+        # Record performance on test set 
         performances['gtc'] = balanced_accuracy_score(y_true, y_pred) 
 
 
@@ -77,7 +77,7 @@ Example of parameter selection and cross-validation using GTM classification (GT
 
         gs.fit(X_train, y_train)
 
-        # Returns best score (0.9343) and best parameters
+        # Returns best score and best parameters
         print(gs.best_score_) 
         print(gs.best_params_)
 
@@ -85,7 +85,7 @@ Example of parameter selection and cross-validation using GTM classification (GT
         y_true, y_pred = y_test, gs.predict(X_test)
         print(classification_report(y_true, y_pred))
 
-        # Record performance on test set (0.9279)
+        # Record performance on test set
         performances['svm'] = balanced_accuracy_score(y_test, y_pred) 
 
         # Algorithm with best performance 

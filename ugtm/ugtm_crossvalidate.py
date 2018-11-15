@@ -4,7 +4,6 @@
 # License: MIT
 
 import numpy as np
-import math
 from sklearn.decomposition import PCA
 from sklearn.model_selection import KFold
 from sklearn.metrics import recall_score
@@ -20,28 +19,93 @@ from . import ugtm_predictions
 from . import ugtm_preprocess
 
 
-def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
-                     niter=200, k=0, m=0, doPCA=False, n_components=-1,
-                     missing=False, missing_strategy='most_frequent',
+def crossvalidateGTC(data, labels, k=16, m=4, s=-1.0, regul=1.0,
+                     n_neighbors=1, niter=200,
+                     representation="modes",
+                     doPCA=False, n_components=-1,
+                     missing=False, missing_strategy='median',
                      random_state=1234, predict_mode="bayes",
-                     prior="equiprobable",
-                     l=-1.0, s=-1.0, n_folds=5, n_repetitions=10):
+                     prior="estimated",
+                     n_folds=5, n_repetitions=10):
+    r"""Cross-validate GTC model.
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Train set data matrix.
+    labels : array of shape (n_individuals, 1)
+        Labels for train set.
+    k : int, optional (default = 16)
+        If k is set to 0, k is computed as sqrt(5*sqrt(n_individuals))+2.
+        k is the sqrt of the number of GTM nodes.
+        One of four GTM hyperparameters (k, m, s, regul).
+        Ex: k = 25 means the GTM will be discretized into a 25x25 grid.
+    m : int, optional (default = 4)
+        If m is set to 0, m is computed as sqrt(k).
+        (generally good rule of thumb).
+        m is the qrt of the number of RBF centers.
+        One of four GTM hyperparameters (k, m, s, regul).
+        Ex: m = 5 means the RBF functions will be arranged on a 5x5 grid.
+    s : float, optional (default = -1)
+        RBF width factor. Default (-1) is to try different values.
+        Parameter to tune width of RBF functions.
+        Impacts manifold flexibility.
+    regul : float, optional (default = -1)
+        Regularization coefficient. Default (-1) is to try different values.
+        Impacts manifold flexibility.
+    n_neighbors : int, optional (default = 1)
+        Number of neighbors for kNN algorithm (number of nearest nodes).
+        At the moment, n_neighbors for GTC is always equal to 1.
+    niter : int, optional (default = 200)
+        Number of iterations for EM algorithm.
+    representation : {"modes", "means"}
+        2D GTM representation for the test set, used for kNN algorithms:
+        "modes" for position with max. responsibility,
+        "means" for average position (usual GTM representation)
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str, optional (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int, optional (default = 1234)
+        Random state.
+    predict_mode : {"bayes", "knn"}, optional
+        Choose between nearest node algorithm
+        ("knn", output of :func:`~ugtm.ugtm_predictions.predictNN`)
+        or GTM Bayes classifier
+        ("bayes", output of :func:`~ugtm.ugtm_predictions.predictBayes`).
+        NB: the kNN algorithm is limited to only 1 nearest node at the moment
+        (n_neighbors = 1).
+    prior : {"estimated", "equiprobable"}, optional
+        Type of prior used to build GTM class map
+        (:func:`~ugtm.ugtm_landscape.classMap`).
+        Choose "estimated" to account for class imbalance.
+    n_folds : int, optional (default = 5)
+        Number of CV folds.
+    n_repetitions : int, optional (default = 10)
+        Number of CV iterations.
+    """
     print("")
     print("k = sqrt(grid size), m = sqrt(radial basis function grid size), "
-          "l = regularization, s = RBF width factor")
+          "regul = regularization, s = RBF width factor")
     print("")
     uniqClasses, labels = np.unique(labels, return_inverse=True)
     nClasses = len(uniqClasses)
     print("Classes: ", uniqClasses)
-    print("nClasses: %s" %(nClasses))
+    print("nClasses: %s" % (nClasses))
     print("")
-    print("model\tparameters=k:m:s:l\t"
+    print("model\tparameters=k:m:s:regul\t"
           "recall with CI\tprecision with CI\tF1-score with CI")
     print("")
     if k == 0:
-        k = int(math.sqrt(5*math.sqrt(data.shape[0])))+2
+        k = int(np.sqrt(5*np.sqrt(data.shape[0])))+2
     if m == 0:
-        m = int(math.sqrt(k))
+        m = int(np.sqrt(k))
     if n_components == -1 and doPCA:
         pca = PCA(random_state=random_state)
         pca.fit(data)
@@ -50,11 +114,11 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
         print("Used number of components explaining 80%% of "
               "the variance in whole data set = %s\n" %
               n_components)
-    if l < 0.0:
+    if regul < 0.0:
         lvec = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100]
     else:
-        lvec = [l]
-    if s < 0.0:
+        lvec = [regul]
+    if s <= 0.0:
         svec = [0.25, 0.5, 1.0, 1.50, 2.0]
     else:
         svec = [s]
@@ -62,8 +126,8 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
     nummodel = 0
     savemodel = ""
     for s in svec:
-        for l in lvec:
-            modelstring = str(k)+':'+str(m)+":"+str(s)+":"+str(l)
+        for regul in lvec:
+            modelstring = str(k)+':'+str(m)+":"+str(s)+":"+str(regul)
             nummodel += 1
             recallvec = []
             precisionvec = []
@@ -90,7 +154,7 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
                     prediction = ugtm_predictions.GTC(train=train,
                                                       labels=labels[train_index],
                                                       test=test, k=k,
-                                                      m=m, s=s, l=l,
+                                                      m=m, s=s, regul=regul,
                                                       n_neighbors=n_neighbors,
                                                       niter=niter,
                                                       representation=representation,
@@ -162,18 +226,70 @@ def crossvalidateGTC(data, labels, n_neighbors=1, representation="modes",
     print("")
 
 
-def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
-                     niter=200, k=0, m=0, doPCA=False, n_components=-1,
-                     missing=False, missing_strategy='most_frequent',
-                     random_state=1234, l=-1, s=-1, n_folds=5, n_repetitions=10):
+def crossvalidateGTR(data, labels, k=16, m=4, s=-1, regul=-1,
+                     n_neighbors=1, niter=200, representation="modes",
+                     doPCA=False, n_components=-1,
+                     missing=False, missing_strategy='median',
+                     random_state=1234, n_folds=5, n_repetitions=10):
+    r"""Cross-validate GTR model.
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Train set data matrix.
+    labels : array of shape (n_individuals, 1)
+        Labels for train set.
+    k : int, optional (default = 16)
+        If k is set to 0, k is computed as sqrt(5*sqrt(n_individuals))+2.
+        k is the sqrt of the number of GTM nodes.
+        One of four GTM hyperparameters (k, m, s, regul).
+        Ex: k = 25 means the GTM will be discretized into a 25x25 grid.
+    m : int, optional (default = 4)
+        If m is set to 0, m is computed as sqrt(k).
+        (generally good rule of thumb).
+        m is the qrt of the number of RBF centers.
+        One of four GTM hyperparameters (k, m, s, regul).
+        Ex: m = 5 means the RBF functions will be arranged on a 5x5 grid.
+    s : float, optional (default = -1)
+        RBF width factor. Default (-1) is to try different values.
+        Parameter to tune width of RBF functions.
+        Impacts manifold flexibility.
+    regul : float, optional (default = -1)
+        Regularization coefficient. Default (-1) is to try different values.
+        Impacts manifold flexibility.
+    n_neighbors : int, optional (default = 1)
+        Number of neighbors for kNN algorithm (number of nearest nodes).
+    niter : int, optional (default = 200)
+        Number of iterations for EM algorithm.
+    representation : {"modes", "means"}
+        2D GTM representation for the test set, used for kNN algorithms:
+        "modes" for position with max. responsibility,
+        "means" for average position (usual GTM representation)
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str, optional (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int, optional (default = 1234)
+        Random state.
+    n_folds : int, optional (default = 5)
+        Number of CV folds.
+    n_repetitions : int, optional (default = 10)
+        Number of CV iterations.
+    """
     print("")
     print("k = sqrt(grid size), m = sqrt(radial basis function grid size), "
-          "l = regularization, s = RBF width factor")
+          "regul = regularization, s = RBF width factor")
     print("")
     if k == 0:
-        k = int(math.sqrt(5*math.sqrt(data.shape[0])))+2
+        k = int(np.sqrt(5*np.sqrt(data.shape[0])))+2
     if m == 0:
-        m = int(math.sqrt(k))
+        m = int(np.sqrt(k))
     if n_components == -1 and doPCA is True:
         pca = PCA(random_state=random_state)
         pca.fit(data)
@@ -181,11 +297,11 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
             pca.explained_variance_ratio_.cumsum(), 0.8)+1
         print("Used number of components explaining 80%% of the variance = %s\n"
               % n_components)
-    if l < 0.0:
+    if regul < 0.0:
         lvec = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100]
     else:
-        lvec = [l]
-    if s < 0.0:
+        lvec = [regul]
+    if s <= 0.0:
         svec = [0.25, 0.5, 1.0, 1.50, 2.0]
     else:
         svec = [s]
@@ -194,10 +310,10 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
     modelvec = ""
     savemeanr2 = 0.0
     savehr2 = 0.0
-    print("k:m:s:l\tRMSE with CI\tR2 with CI\t")
+    print("k:m:s:regul\tRMSE with CI\tR2 with CI\t")
     for s in svec:
-        for l in lvec:
-            modelstring = str(s)+":"+str(l)
+        for regul in lvec:
+            modelstring = str(s)+":"+str(regul)
             rmsevec = []
             r2vec = []
             for j in range(n_repetitions):
@@ -210,7 +326,7 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
                     prediction = ugtm_predictions.GTR(train=train,
                                                       labels=labels[train_index],
                                                       test=test, k=k,
-                                                      m=m, s=s, l=l,
+                                                      m=m, s=s, regul=regul,
                                                       n_neighbors=n_neighbors,
                                                       niter=niter,
                                                       representation=representation,
@@ -221,7 +337,7 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
                                                       missing_strategy=missing_strategy)
                     y_pred = np.append(y_pred, prediction)
                     y_true = np.append(y_true, labels[test_index])
-                rmse = math.sqrt(mean_squared_error(y_true, y_pred))
+                rmse = np.sqrt(mean_squared_error(y_true, y_pred))
                 r2 = r2_score(y_true, y_pred)
                 rmsevec = np.append(rmsevec, rmse)
                 r2vec = np.append(r2vec, r2)
@@ -236,19 +352,49 @@ def crossvalidateGTR(data, labels, n_neighbors=1, representation="modes",
                 savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
                 savehr2 = saveser2 * t._ppf((1+0.95)/2., len(r2vec)-1)
             print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
-                  %(str(k)+':'+str(m)+':'+modelstring, mean, h, meanr2, hr2))
+                  % (str(k)+':'+str(m)+':'+modelstring, mean, h, meanr2, hr2))
     print('')
     print("########best GTR model##########")
     print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
-          %(str(k)+':'+str(m)+':'+modelvec,
-            savemean, saveh, savemeanr2, savehr2))
+          % (str(k)+':'+str(m)+':'+modelvec,
+             savemean, saveh, savemeanr2, savehr2))
     print("")
 
 
-def crossvalidatePCAC(data, labels, doPCA=False, n_components=-1, missing=False,
-                      missing_strategy='most_frequent', random_state=1234,
-                      n_neighbors=1, n_folds=5, n_repetitions=10,
-                      maxneighbours=11):
+def crossvalidatePCAC(data, labels, n_neighbors=1, maxneighbours=11,
+                      doPCA=False, n_components=-1, missing=False,
+                      missing_strategy='median', random_state=1234,
+                      n_folds=5, n_repetitions=10):
+    r"""Cross-validate PCA kNN classification model.
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Train set data matrix.
+    labels : array of shape (n_individuals, 1)
+        Labels for train set.
+    n_neighbors : int, optional (default = 1)
+        Number of neighbors for kNN algorithm (number of nearest nodes).
+    max_neighbors : int, optional (default = 11)
+        The function crossvalidates kNN models with k between n_neighbors
+        and max_neighbors.
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str, optional (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int, optional (default = 1234)
+        Random state.
+    n_folds : int, optional (default = 5)
+        Number of CV folds.
+    n_repetitions : int, optional (default = 10)
+        Number of CV iterations.
+    """
     if n_components == -1 and doPCA is True:
         pca = PCA(random_state=random_state)
         pca.fit(data)
@@ -368,10 +514,42 @@ def crossvalidatePCAC(data, labels, doPCA=False, n_components=-1, missing=False,
     print("")
 
 
-def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
-                      missing_strategy='most_frequent',
-                      random_state=1234, n_neighbors=1,
-                      n_folds=5, n_repetitions=10, maxneighbours=11):
+def crossvalidatePCAR(data, labels, n_neighbors=1,
+                      maxneighbours=11, doPCA=False,
+                      n_components=-1, missing=False,
+                      missing_strategy='median',
+                      random_state=1234,
+                      n_folds=5, n_repetitions=10):
+    r"""Cross-validate PCA kNN regression model.
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Train set data matrix.
+    labels : array of shape (n_individuals, 1)
+        Labels for train set.
+    n_neighbors : int, optional (default = 1)
+        Number of neighbors for kNN algorithm (number of nearest nodes).
+    max_neighbors : int, optional (default = 11)
+        The function crossvalidates kNN models with k between n_neighbors
+        and max_neighbors.
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str, optional (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int, optional (default = 1234)
+        Random state.
+    n_folds : int, optional (default = 5)
+        Number of CV folds.
+    n_repetitions : int, optional (default = 10)
+        Number of CV iterations.
+    """
     if n_components == -1 and doPCA is True:
         pca = PCA(random_state=random_state)
         pca.fit(data)
@@ -416,7 +594,7 @@ def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
                     labels[train_index],
                     c, "regression"))
                 y_true = np.append(y_true, labels[test_index])
-            rmse = math.sqrt(mean_squared_error(y_true, y_pred))
+            rmse = np.sqrt(mean_squared_error(y_true, y_pred))
             r2 = r2_score(y_true, y_pred)
             rmsevec = np.append(rmsevec, rmse)
             r2vec = np.append(r2vec, r2)
@@ -431,17 +609,46 @@ def crossvalidatePCAR(data, labels, doPCA=False, n_components=-1, missing=False,
             savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
             savehr2 = saveser2 * t._ppf((1+0.95)/2., len(r2vec)-1)
         print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
-              %(modelstring, mean, h, meanr2, hr2))
+              % (modelstring, mean, h, meanr2, hr2))
     print('')
     print("########best nearest neighbors model##########")
     print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
-          %(modelvec, savemean, saveh, savemeanr2, savehr2))
+          % (modelvec, savemean, saveh, savemeanr2, savehr2))
     print("")
 
 
-def crossvalidateSVC(data, labels, doPCA=False, n_components=-1, missing=False,
-                     missing_strategy='most_frequent',
-                     random_state=1234, C=1.0, n_folds=5, n_repetitions=10):
+def crossvalidateSVC(data, labels, C=1.0, doPCA=False, n_components=-1,
+                     missing=False,
+                     missing_strategy='median',
+                     random_state=1234, n_folds=5, n_repetitions=10):
+    r"""Cross-validate SVC model.
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Train set data matrix.
+    labels : array of shape (n_individuals, 1)
+        Labels for train set.
+    C : float, optional (default = 1.0)
+        SVM regularization parameter.
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str, optional (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int, optional (default = 1234)
+        Random state.
+    n_folds : int, optional (default = 5)
+        Number of CV folds.
+    n_repetitions : int, optional (default = 10)
+        Number of CV iterations.
+    """
+
     if n_components == -1 and doPCA is True:
         pca = PCA(random_state=random_state)
         pca.fit(data)
@@ -555,10 +762,43 @@ def crossvalidateSVC(data, labels, doPCA=False, n_components=-1, missing=False,
     print("")
 
 
-def crossvalidateSVR(data, labels, doPCA=False, n_components=-1, missing=False,
-                     missing_strategy='most_frequent', random_state=1234,
-                     C=-1, epsilon=-1, n_folds=5, n_repetitions=10):
-    uniqClasses, labels = np.unique(labels, return_inverse=True)
+def crossvalidateSVR(data, labels,
+                     C=-1, epsilon=-1,
+                     doPCA=False,
+                     n_components=-1, missing=False,
+                     missing_strategy='median', random_state=1234,
+                     n_folds=5, n_repetitions=10):
+    r"""Cross-validate SVR model with linear kernel.
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Train set data matrix.
+    labels : array of shape (n_individuals, 1)
+        Labels for train set.
+    C : float, optional (default = -1)
+        SVM regularization parameter.
+        If (C = -1), different values are tested.
+    epsilon : float, optional (default = -1)
+        SVM tolerance parameter.
+        If (epsilon = -1), different values are tested.
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str, optional (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int, optional (default = 1234)
+        Random state.
+    n_folds : int, optional (default = 5)
+        Number of CV folds.
+    n_repetitions : int, optional (default = 10)
+        Number of CV iterations.
+    """
     if C < 0.0:
         Cvec = np.power(2, np.arange(
             start=-5, stop=15, step=1, dtype=np.float))
@@ -603,7 +843,7 @@ def crossvalidateSVR(data, labels, doPCA=False, n_components=-1, missing=False,
                     clf.fit(processed.train, labels[train_index])
                     y_pred = np.append(y_pred, clf.predict(processed.test))
                     y_true = np.append(y_true, labels[test_index])
-                rmse = math.sqrt(mean_squared_error(y_true, y_pred))
+                rmse = np.sqrt(mean_squared_error(y_true, y_pred))
                 r2 = r2_score(y_true, y_pred)
                 rmsevec = np.append(rmsevec, rmse)
                 r2vec = np.append(r2vec, r2)
@@ -618,20 +858,48 @@ def crossvalidateSVR(data, labels, doPCA=False, n_components=-1, missing=False,
                 savemeanr2, saveser2 = np.mean(r2vec), st.sem(r2vec)
                 savehr2 = saveser2 * t._ppf((1+0.95)/2., len(r2vec)-1)
             print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
-                  %(modelstring, mean, h, meanr2, hr2))
+                  % (modelstring, mean, h, meanr2, hr2))
     print('')
     print("########best linear SVM model##########")
     print("%s\t%.4f +/- %.4f\t%.4f +/- %.4f"
-          %(modelvec, savemean, saveh, savemeanr2, savehr2))
+          % (modelvec, savemean, saveh, savemeanr2, savehr2))
     print("")
 
 
-def crossvalidateSVCrbf(data, labels, doPCA=False,
+def crossvalidateSVCrbf(data, labels,  C=1, gamma=1, doPCA=False,
                         n_components=-1, missing=False,
-                        missing_strategy='most_frequent',
-                        random_state=1234, C=1, gamma=1, n_folds=5,
+                        missing_strategy='median',
+                        random_state=1234, n_folds=5,
                         n_repetitions=10):
+    r"""Cross-validate SVC model with RBF kernel.
 
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Train set data matrix.
+    labels : array of shape (n_individuals, 1)
+        Labels for train set.
+    C : float, optional (default = 1)
+        SVM regularization parameter.
+    gamma : float, optional (default = 1)
+        RBF parameter.
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str, optional (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int, optional (default = 1234)
+        Random state.
+    n_folds : int, optional (default = 5)
+        Number of CV folds.
+    n_repetitions : int, optional (default = 10)
+        Number of CV iterations.
+    """
     if C < 0.0:
         Cvec = np.power(2, np.arange(
             start=-5, stop=15, step=1, dtype=np.float))
@@ -642,9 +910,9 @@ def crossvalidateSVCrbf(data, labels, doPCA=False,
             start=-15, stop=3, step=1, dtype=np.float))
     else:
         gvec = [gamma]
-    modelvec = ""
+#    modelvec = ""
     savemean = -9999.0
-    saveh = 0.0
+#    saveh = 0.0
     nummodel = 0
     if n_components == -1 and doPCA is True:
         pca = PCA(random_state=random_state)
@@ -726,8 +994,8 @@ def crossvalidateSVCrbf(data, labels, doPCA=False,
             hf1 = sef1 * t._ppf((1+0.95)/2., len(f1vec)-1)
             if(meanf1 > savemean):
                 savemean = meanf1
-                saveh = hf1
-                modelvec = modelstring
+#                saveh = hf1
+#                modelvec = modelstring
                 savemodel = "Model "+str(nummodel)
             for i in range(0, nClasses):
                 meanclass[i], seclass[i] = np.mean(recallclassvec[:, i]), \
@@ -787,14 +1055,14 @@ def whichExperiment(data, labels, args, discrete=False):
                          missing=args.missing, missing_strategy=args.missing_strategy,
                          random_state=args.random_state, k=args.grid_size,
                          m=args.rbf_grid_size, predict_mode=args.predict_mode,
-                         prior=args.prior, l=args.regularization,
+                         prior=args.prior, regul=args.regularization,
                          s=args.rbf_width_factor)
     elif decide == 'crossvalidateGTR':
         crossvalidateGTR(data=data, labels=labels, doPCA=args.pca, n_components=args.n_components,
                          n_neighbors=args.n_neighbors, representation=args.representation,
                          missing=args.missing, missing_strategy=args.missing_strategy,
                          random_state=args.random_state, k=args.grid_size, m=args.rbf_grid_size,
-                         l=args.regularization, s=args.rbf_width_factor)
+                         regul=args.regularization, s=args.rbf_width_factor)
     elif decide == 'crossvalidateSVC':
         crossvalidateSVC(data=data, labels=labels, doPCA=args.pca, n_components=args.n_components,
                          missing=args.missing, missing_strategy=args.missing_strategy,
@@ -823,7 +1091,7 @@ def whichExperiment(data, labels, args, discrete=False):
                          representation=args.representation, missing=args.missing,
                          missing_strategy=args.missing_strategy, random_state=args.random_state,
                          k=args.grid_size, m=args.rbf_grid_size, predict_mode=args.predict_mode,
-                         prior=args.prior, l=args.regularization, s=args.rbf_width_factor)
+                         prior=args.prior, regul=args.regularization, s=args.rbf_width_factor)
     elif decide == 'comparecrossvalidateR':
         crossvalidateSVR(data=data, labels=labels, doPCA=args.pca, n_components=args.n_components,
                          missing=args.missing, missing_strategy=args.missing_strategy,
@@ -833,6 +1101,6 @@ def whichExperiment(data, labels, args, discrete=False):
                          n_neighbors=args.n_neighbors, representation=args.representation,
                          missing=args.missing, missing_strategy=args.missing_strategy,
                          random_state=args.random_state, k=args.grid_size, m=args.rbf_grid_size,
-                         l=args.regularization, s=args.rbf_width_factor)
+                         regul=args.regularization, s=args.rbf_width_factor)
     else:
         print("Could not determine which experiment to conduct.")

@@ -15,7 +15,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-
+sys.path.append(os.path.abspath('exts'))
 
 # -- Project information -----------------------------------------------------
 
@@ -26,7 +26,7 @@ author = u'Helena A. Gaspar'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'v1.1.7'
+release = u'v2.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -50,9 +50,11 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
+    'altairplot'
 ]
+altairplot_links = {'editor': False, 'source': False, 'export': False}
 
-mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+mathjax_path = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 autosummary_generate = True
 napoleon_google_docstring = False
 napoleon_use_param = False
@@ -91,7 +93,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'alabaster'
+# html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme

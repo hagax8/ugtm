@@ -26,30 +26,31 @@ class TestGTMSklearn(unittest.TestCase):
         self.assertTrue(transformed.shape == (60, 2))
 
     def test_eGTM_modes(self):
-        transformed = eGTM().fit(self.train).transform(self.test,model="modes")
+        transformed = eGTM().fit(self.train).transform(self.test, model="modes")
         self.assertTrue(transformed.shape == (60, 2))
 
     def test_eGTM_trainequalstest(self):
-         transformed = eGTM().fit(self.train).transform(self.train,model="responsibilities")
-         original = eGTM().fit(self.train).optimizedModel.matR
-         np.testing.assert_almost_equal(original, transformed, decimal=7)
+        transformed = eGTM().fit(self.train).transform(
+            self.train, model="responsibilities")
+        original = eGTM().fit(self.train).optimizedModel.matR
+        np.testing.assert_almost_equal(original, transformed, decimal=7)
 
     def test_eGTC(self):
         predicted_labels = eGTC().fit(
             self.train, self.labels
-            ).predict(self.test)
+        ).predict(self.test)
         self.assertTrue(predicted_labels.shape == (60,))
 
     def test_eGTCnn(self):
         predicted_labels = eGTCnn().fit(
             self.train, self.labels
-            ).predict(self.test)
+        ).predict(self.test)
         self.assertTrue(predicted_labels.shape == (60,))
 
     def test_eGTR(self):
         predicted_labels = eGTR().fit(
             self.train, self.labels
-            ).predict(self.test)
+        ).predict(self.test)
         self.assertTrue(predicted_labels.shape == (60,))
 
 

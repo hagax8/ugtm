@@ -51,7 +51,7 @@ parser.add_argument('--output',
                     help='output name',
                     dest='output')
 parser.add_argument('--crossvalidate',
-                    help='show best l (regularization coefficient) '
+                    help='show best regul (regularization coefficient) '
                          'and s (RBF width factor) '
                          'for classification or regression, '
                          'with default grid size parameter '
@@ -396,7 +396,7 @@ elif type_of_experiment == 'traintest':
                                   random_state=args.random_state,
                                   k=args.grid_size, m=args.rbf_grid_size,
                                   predict_mode=args.predict_mode,
-                                  prior=args.prior, l=args.regularization,
+                                  prior=args.prior, regul=args.regularization,
                                   s=args.rbf_width_factor)
     prediction['optimizedModel'].plot_html(ids=ids, plot_arrows=True,
                                            title="GTM",
@@ -442,14 +442,14 @@ elif type_of_experiment == 'visualization':
     # set default parameters
     k = int(math.sqrt(5*math.sqrt(data.shape[0])))+2
     m = int(math.sqrt(k))
-    l = 0.1
+    regul = 0.1
     s = 0.3
     niter = 1000
     maxdim = 100
 
     # set parameters if provided in options
     if args.regularization:
-        l = args.regularization
+        regul = args.regularization
     if args.rbf_width_factor:
         s = args.rbf_width_factor
     if args.grid_size:
@@ -493,12 +493,12 @@ elif type_of_experiment == 'visualization':
     # GTM visualization
     elif args.model == 'GTM':
         start = time.time()
-        gtm = ugtm.runGTM(data=data, k=k, m=m, s=s, l=l, niter=niter,
+        gtm = ugtm.runGTM(data=data, k=k, m=m, s=s, regul=regul, niter=niter,
                           doPCA=args.pca, n_components=args.n_components,
                           missing=args.missing,
                           missing_strategy=args.missing_strategy,
                           random_state=args.random_state, verbose=args.verbose)
-        print("k:%s, m:%s, l:%s, s:%s" % (k, m, l, s))
+        print("k:%s, m:%s, regul:%s, s:%s" % (k, m, regul, s))
         end = time.time()
         elapsed = end - start
         print("time taken for GTM: ", elapsed)
@@ -520,10 +520,10 @@ elif type_of_experiment == 'visualization':
     # if it's for kGTM visualization
     elif args.model == 'kGTM':
         # kGTM embedding
-        print("k:%s, m:%s, l:%s, s:%s" % (k, m, l, s))
+        print("k:%s, m:%s, regul:%s, s:%s" % (k, m, regul, s))
         matK = ugtm.chooseKernel(data, args.kernel)
         start = time.time()
-        kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, l=l,
+        kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, regul=regul,
                             niter=niter, doKernel=False, maxdim=maxdim,
                             doPCA=False,
                             missing=args.missing,
@@ -555,7 +555,7 @@ elif type_of_experiment == 'visualization':
             uniqClasses, labels = np.unique(labels, return_inverse=True)
         print("Computing GTM embedding")
         start = time.time()
-        gtm = ugtm.runGTM(data=data, k=k, m=m, s=s, l=l, niter=niter,
+        gtm = ugtm.runGTM(data=data, k=k, m=m, s=s, regul=regul, niter=niter,
                           doPCA=args.pca, n_components=args.n_components,
                           missing=args.missing,
                           missing_strategy=args.missing_strategy,
@@ -592,7 +592,7 @@ elif type_of_experiment == 'visualization':
         matK = ugtm.chooseKernel(data, 'laplacian')
         print("Computing kGTM embedding (laplacian)")
         start = time.time()
-        kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, l=l, niter=niter,
+        kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, regul=regul, niter=niter,
                             maxdim=maxdim, doPCA=False, doKernel=False,
                             missing=args.missing,
                             missing_strategy=args.missing_strategy,
@@ -619,7 +619,7 @@ elif type_of_experiment == 'visualization':
         matK = ugtm.chooseKernel(data, 'euclidean')
         print("Computing kGTM embedding (euclidean)")
         start = time.time()
-        kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, l=l, niter=niter,
+        kgtm = ugtm.runkGTM(data=matK, k=k, m=m, s=s, regul=regul, niter=niter,
                             maxdim=maxdim, doKernel=False,
                             missing=args.missing,
                             missing_strategy=args.missing_strategy,

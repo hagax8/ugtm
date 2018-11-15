@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm.ugtm_core &mdash; ugtm v1.1.7 documentation</title>
+  <title>ugtm.ugtm_core &mdash; ugtm v2.0.0 documentation</title>
   
 
   
@@ -27,6 +27,7 @@
   
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 
@@ -77,11 +78,35 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ugtm.html">ugtm</a></li>
-</ul>
+              <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">ugtm quick tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTR_regressor.html">eGTR: GTM regressor</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">Links &amp; references</a></li>
 </ul>
 
             
@@ -155,10 +180,27 @@
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">distance</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="k">import</span> <span class="n">euclidean_distances</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">scale</span>
-<span class="c1"># create manifold</span>
 
 
 <div class="viewcode-block" id="createYMatrixInit"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createYMatrixInit">[docs]</a><span class="k">def</span> <span class="nf">createYMatrixInit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">matW</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Creates initial manifold matrix (Y).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    data : array of shape (n_individuals, n_dimensions)</span>
+<span class="sd">        Data matrix.</span>
+<span class="sd">    matW : array of shape (n_dimensions, n_rbf_centers+1)</span>
+<span class="sd">        Parameter matrix (PCA-initialized).</span>
+<span class="sd">    matPhiMPlusOne : array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_dimensions, n_nodes)</span>
+<span class="sd">        Manifold in n-dimensional space (projection of matX in data space);</span>
+<span class="sd">        A point matY[:,i] is a center of Gaussian component in data space.</span>
+<span class="sd">        :math:`\mathbf{Y}=\mathbf{W}\mathbf{\Phi}^T`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">shap1</span> <span class="o">=</span> <span class="n">matW</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">shap2</span> <span class="o">=</span> <span class="n">matPhiMPlusOne</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">TheMeans</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -172,6 +214,27 @@
 
 
 <div class="viewcode-block" id="createPhiMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createPhiMatrix">[docs]</a><span class="k">def</span> <span class="nf">createPhiMatrix</span><span class="p">(</span><span class="n">matX</span><span class="p">,</span> <span class="n">matM</span><span class="p">,</span> <span class="n">numX</span><span class="p">,</span> <span class="n">numM</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Creates matrix of RBF functions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matX : array of shape (n_nodes, 2)</span>
+<span class="sd">        Coordinates of nodes defining a grid in the 2D space.</span>
+<span class="sd">    matM : array of shape (n_rbf_centers, 2)</span>
+<span class="sd">        Coordinates of radial basis function (RBF) centers,</span>
+<span class="sd">        defining a grid in the 2D space.</span>
+<span class="sd">    numX : int</span>
+<span class="sd">        Number of nodes (n_nodes).</span>
+<span class="sd">    numM : int</span>
+<span class="sd">        Number of RBF centers (n_rbf_centers)</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        RBF width factor.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numX</span><span class="p">,</span> <span class="n">numM</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numX</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
@@ -185,27 +248,70 @@
 
 
 <div class="viewcode-block" id="computeWidth"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.computeWidth">[docs]</a><span class="k">def</span> <span class="nf">computeWidth</span><span class="p">(</span><span class="n">matM</span><span class="p">,</span> <span class="n">numM</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Initializes radial basis function width using hyperparameter sigma.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matM : array of shape (n_rbf_centers, 2)</span>
+<span class="sd">        Coordinates of radial basis function (RBF) centers,</span>
+<span class="sd">        defining a grid in the 2D space.</span>
+<span class="sd">    numM : int</span>
+<span class="sd">        Number of RBF centers (n_rbf_centers)</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        RBF width factor.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    float</span>
+<span class="sd">        Initial radial basis function (RBF) width.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Result</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">Distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numM</span><span class="p">,</span> <span class="n">numM</span><span class="p">])</span>
-    <span class="n">mins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numM</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-    <span class="n">maxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numM</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
-            <span class="n">Coo1</span> <span class="o">=</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">Coo2</span> <span class="o">=</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Coo1</span> <span class="o">+</span> <span class="n">Coo2</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
-        <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
-        <span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
-        <span class="n">Result</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mins</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">numM</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">Result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">maxs</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">Result</span><span class="p">)</span></div>
+        <span class="n">Distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numM</span><span class="p">,</span> <span class="n">numM</span><span class="p">])</span>
+        <span class="n">mins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numM</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">maxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numM</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
+                <span class="n">Coo1</span> <span class="o">=</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">Coo2</span> <span class="o">=</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">matM</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">matM</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Coo1</span> <span class="o">+</span> <span class="n">Coo2</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
+            <span class="n">mins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numM</span><span class="p">):</span>
+            <span class="n">maxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">Distances</span><span class="p">[</span><span class="n">i</span><span class="p">])])</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="n">Result</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mins</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">maxs</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">Result</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="createWMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createWMatrix">[docs]</a><span class="k">def</span> <span class="nf">createWMatrix</span><span class="p">(</span><span class="n">matX</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matU</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">,</span> <span class="n">n_rbf_centers</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Creates PCA-initialized parameter matrix W.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matX : array of shape (n_nodes, 2)</span>
+<span class="sd">        Coordinates of nodes defining a grid in the 2D space.</span>
+<span class="sd">    matPhiMPlusOne: array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+<span class="sd">    matU : array of shape (n_dimensions, 2)</span>
+<span class="sd">        2 first principal axes of data covariance matrix.</span>
+<span class="sd">    n_dimensions: int</span>
+<span class="sd">        Data space dimensionality (number of variables).</span>
+<span class="sd">    n_rbf_centers : int</span>
+<span class="sd">        Number of RBF centers.</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        RBF width factor.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_dimensions, n_rbf_centers+1)</span>
+<span class="sd">        Parameter matrix W (PCA-initialized).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">NormX</span> <span class="o">=</span> <span class="n">scale</span><span class="p">(</span><span class="n">matX</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_std</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">myProd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">matU</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">NormX</span><span class="p">))</span>
     <span class="n">tinv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">matPhiMPlusOne</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
@@ -215,16 +321,62 @@
 
 
 <div class="viewcode-block" id="createYMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createYMatrix">[docs]</a><span class="k">def</span> <span class="nf">createYMatrix</span><span class="p">(</span><span class="n">matW</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Updates manifold matrix (Y) using new parameter matrix (W).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matW : array of shape (n_dimensions, n_rbf_centers+1)</span>
+<span class="sd">        Parameter matrix (PCA-initialized).</span>
+<span class="sd">    matPhiMPlusOne : array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_dimensions, n_nodes)</span>
+<span class="sd">        Manifold in n-dimensional space (projection of matX in data space);</span>
+<span class="sd">        A point matY[:,i] is a center of Gaussian component in data space.</span>
+<span class="sd">        :math:`\mathbf{Y}=\mathbf{W}\mathbf{\Phi}^T`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">matW</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">matPhiMPlusOne</span><span class="p">))</span>
     <span class="k">return</span><span class="p">(</span><span class="n">Result</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="createDistanceMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createDistanceMatrix">[docs]</a><span class="k">def</span> <span class="nf">createDistanceMatrix</span><span class="p">(</span><span class="n">matY</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes distances between manifold centers and data vectors.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matY : array of shape (n_dimensions, n_nodes)</span>
+<span class="sd">        Manifold in n-dimensional space (projection of matX in data space);</span>
+<span class="sd">    data : array of shape (n_individuals, n_dimensions)</span>
+<span class="sd">        Data matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Matrix of squared Euclidean distances between manifold and data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Result</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">matY</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;sqeuclidean&#39;</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">Result</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="KERNELcreateDistanceMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.KERNELcreateDistanceMatrix">[docs]</a><span class="k">def</span> <span class="nf">KERNELcreateDistanceMatrix</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">matL</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes distances between data and manifold for kernel algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    data : array of shape (n_individuals, n_dimensions)</span>
+<span class="sd">        Data matrix.</span>
+<span class="sd">    matL : array of shape (n_individuals, n_rbf_centers+1)</span>
+<span class="sd">        Parameter matrix (regul).</span>
+<span class="sd">    matPhiMPlusOne: array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Matrix of distances between manifold and data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">matPhiMPlusOne</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">n_individuals</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">Result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">n_individuals</span><span class="p">])</span>
@@ -238,6 +390,18 @@
 
 
 <div class="viewcode-block" id="exp_normalize"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.exp_normalize">[docs]</a><span class="k">def</span> <span class="nf">exp_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Exp-normalize trick: compute exp(x-max(x))</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">        2D array</span>
+<span class="sd">            An array x</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">        2D array</span>
+<span class="sd">            y = exp(x-max(x))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
@@ -245,15 +409,49 @@
 
 
 <div class="viewcode-block" id="createPMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createPMatrix">[docs]</a><span class="k">def</span> <span class="nf">createPMatrix</span><span class="p">(</span><span class="n">matD</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes data distribution matrix = exp(-(parameter)*distances).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matD : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Matrix of squared Euclidean distances between manifold and data.</span>
+<span class="sd">    betaInv : float</span>
+<span class="sd">        Noise variance parameter for the data distribution.</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">    n_dimensions : int</span>
+<span class="sd">            Data space dimensionality (number of variables).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Data distribution with variance betaInv (transformed: exp(x-max(x)))</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    Important: this data distribution is not exact per se</span>
+<span class="sd">    and is to be used as input</span>
+<span class="sd">    for createRMatrix (responsibilities).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">)</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">betaInv</span>
-    <span class="c1"># constante = np.power(((beta)/(2*np.pi)),dim/2)</span>
-    <span class="c1"># constante = 1</span>
+    <span class="c1"># exp_normalize computes exp(x-max(x)) to avoid overflow for createRMatrix</span>
     <span class="n">matP</span> <span class="o">=</span> <span class="n">exp_normalize</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">beta</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">matD</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">matP</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="createRMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createRMatrix">[docs]</a><span class="k">def</span> <span class="nf">createRMatrix</span><span class="p">(</span><span class="n">matP</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes responsibilities (posterior probabilities).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matP : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Data distribution with variance betaInv (transformed: exp(x-max(x)))</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Posterior probabilities (responsibilities).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">)</span>
     <span class="n">sums</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">matP</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">matR</span> <span class="o">=</span> <span class="p">(</span><span class="n">matP</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sums</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
@@ -261,18 +459,55 @@
 
 
 <div class="viewcode-block" id="createGMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.createGMatrix">[docs]</a><span class="k">def</span> <span class="nf">createGMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Creates the G diagonal matrix from responsibilities (R)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matR : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Posterior probabilities (responsibilities).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_nodes, n_nodes)</span>
+<span class="sd">        Diagonal matrix with elements</span>
+<span class="sd">        :math:`G_{ii}=\sum_{n}^{n\_individuals} R_{in}`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sums</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">matG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">sums</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">matG</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="optimWMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimWMatrix">[docs]</a><span class="k">def</span> <span class="nf">optimWMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matG</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+<div class="viewcode-block" id="optimWMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimWMatrix">[docs]</a><span class="k">def</span> <span class="nf">optimWMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matG</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">regul</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Updates parameter matrix W.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matR : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Posterior probabilities (responsibilities).</span>
+<span class="sd">    matPhiMPlusOne: array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+<span class="sd">    matG : array of shape (n_nodes, n_nodes)</span>
+<span class="sd">        Diagonal matrix with elements</span>
+<span class="sd">        :math:`G_{ii}=\sum_{n}^{n\_individuals} R_{in}`.</span>
+<span class="sd">    data : array of shape (n_individuals, n_dimensions)</span>
+<span class="sd">        Data matrix.</span>
+<span class="sd">    betaInv : float</span>
+<span class="sd">        Noise variance parameter for the data distribution.</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">    regul : float</span>
+<span class="sd">        Regularization coefficient.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_dimensions, n_rbf_centers+1)</span>
+<span class="sd">        Updated parameter matrix W.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_rbf_centersP</span> <span class="o">=</span> <span class="n">matPhiMPlusOne</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">LBmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_rbf_centersP</span><span class="p">,</span> <span class="n">n_rbf_centersP</span><span class="p">])</span>
     <span class="n">PhiGPhi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">matPhiMPlusOne</span><span class="p">),</span> <span class="n">matG</span><span class="p">),</span> <span class="n">matPhiMPlusOne</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rbf_centersP</span><span class="p">):</span>
-        <span class="n">LBmat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span> <span class="o">*</span> <span class="n">betaInv</span>
+        <span class="n">LBmat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">regul</span> <span class="o">*</span> <span class="n">betaInv</span>
     <span class="n">PhiGPhiLB</span> <span class="o">=</span> <span class="n">PhiGPhi</span> <span class="o">+</span> <span class="n">LBmat</span>
     <span class="n">Ginv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">PhiGPhiLB</span><span class="p">)</span>
     <span class="n">matW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
@@ -280,13 +515,35 @@
     <span class="k">return</span><span class="p">(</span><span class="n">matW</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="optimLMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimLMatrix">[docs]</a><span class="k">def</span> <span class="nf">optimLMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matG</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+<div class="viewcode-block" id="optimLMatrix"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimLMatrix">[docs]</a><span class="k">def</span> <span class="nf">optimLMatrix</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matPhiMPlusOne</span><span class="p">,</span> <span class="n">matG</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">regul</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Updates parameter matrix regul for kernel GTM.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matR : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Posterior probabilities (responsibilities).</span>
+<span class="sd">    matPhiMPlusOne: array of shape (n_nodes, n_rbf_centers+1)</span>
+<span class="sd">        RBF matrix plus one dimension to include a term for bias.</span>
+<span class="sd">    matG : array of shape (n_nodes, n_nodes)</span>
+<span class="sd">        Diagonal matrix with elements</span>
+<span class="sd">        :math:`G_{ii}=\sum_{n}^{n\_individuals} R_{in}`.</span>
+<span class="sd">    betaInv : float</span>
+<span class="sd">        Noise variance parameter for the data distribution.</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">    regul : float</span>
+<span class="sd">        Regularization coefficient.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_individuals, n_rbf_centers+1)</span>
+<span class="sd">        Updated parameter matrix regul.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_rbf_centersP</span> <span class="o">=</span> <span class="n">matPhiMPlusOne</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">LBmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_rbf_centersP</span><span class="p">,</span> <span class="n">n_rbf_centersP</span><span class="p">])</span>
     <span class="n">PhiGPhi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">matPhiMPlusOne</span><span class="p">),</span> <span class="n">matG</span><span class="p">),</span> <span class="n">matPhiMPlusOne</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rbf_centersP</span><span class="p">):</span>
-        <span class="n">LBmat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span> <span class="o">*</span> <span class="n">betaInv</span>
+        <span class="n">LBmat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">regul</span> <span class="o">*</span> <span class="n">betaInv</span>
     <span class="n">PhiGPhiLB</span> <span class="o">=</span> <span class="n">PhiGPhi</span> <span class="o">+</span> <span class="n">LBmat</span>
     <span class="n">Ginv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">PhiGPhiLB</span><span class="p">)</span>
     <span class="n">matW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
@@ -295,39 +552,125 @@
 
 
 <div class="viewcode-block" id="optimBetaInv"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.optimBetaInv">[docs]</a><span class="k">def</span> <span class="nf">optimBetaInv</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matD</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Updates noise variance parameter.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matR : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Posterior probabilities (responsibilities).</span>
+<span class="sd">    matD : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Matrix of squared Euclidean distances between manifold and data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    float</span>
+<span class="sd">        Updated noise variance parameter (:math:`\beta^{-1}`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_individuals</span> <span class="o">=</span> <span class="n">matR</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">betaInv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matD</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">n_individuals</span><span class="o">*</span><span class="n">n_dimensions</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">betaInv</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="meanPoint"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.meanPoint">[docs]</a><span class="k">def</span> <span class="nf">meanPoint</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matX</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes mean positions for data points (usual GTM output).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matR : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Posterior probabilities (responsibilities).</span>
+<span class="sd">    matX : array of shape (n_nodes, 2)</span>
+<span class="sd">        Coordinates of nodes defining a grid in the 2D space.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_individuals, 2)</span>
+<span class="sd">        Data representation in 2D space: mean positions (usual GTM output).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">matR</span><span class="p">),</span> <span class="n">matX</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">matMeans</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="modePoint"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.modePoint">[docs]</a><span class="k">def</span> <span class="nf">modePoint</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">matX</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes modes (nodes with maximum responsibility for each data point).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matR : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Posterior probabilities (responsibilities).</span>
+<span class="sd">    matX : array of shape (n_nodes, 2)</span>
+<span class="sd">        Coordinates of nodes defining a grid in the 2D space.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_individuals, 2)</span>
+<span class="sd">        Data representation in 2D space: modes (nodes with max responsibility).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">matModes</span> <span class="o">=</span> <span class="n">matX</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">matR</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="p">:]</span>
     <span class="k">return</span><span class="p">(</span><span class="n">matModes</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="computelogLikelihood"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.computelogLikelihood">[docs]</a><span class="k">def</span> <span class="nf">computelogLikelihood</span><span class="p">(</span><span class="n">matP</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes log likelihood = GTM objective function</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matP : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Data distribution with variance betaInv (transformed: exp(x-max(x)))</span>
+<span class="sd">    betaInv : float</span>
+<span class="sd">        Noise variance parameter for the data distribution.</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">    n_dimensions: int</span>
+<span class="sd">        Data space dimensionality (number of variables).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    float</span>
+<span class="sd">        Log likelihood.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">LogLikelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">()</span>
     <span class="n">n_nodes</span> <span class="o">=</span> <span class="n">matP</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">n_individuals</span> <span class="o">=</span> <span class="n">matP</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">LogLikelihood</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">prior</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">n_nodes</span>
     <span class="n">placeholder</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="c1"># this constant was not introduced in matP calculation</span>
+    <span class="c1"># and is re-introduced here</span>
     <span class="n">constante</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(((</span><span class="mi">1</span><span class="o">/</span><span class="n">betaInv</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)),</span>
                                        <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span>
-                                        <span class="n">n_dimensions</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">placeholder</span><span class="p">)))</span>
+        <span class="n">n_dimensions</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">placeholder</span><span class="p">)))</span>
     <span class="n">LogLikelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-                            <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">constante</span><span class="o">*</span><span class="n">matP</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">prior</span><span class="p">,</span>
-                                       <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">)</span><span class="o">.</span><span class="n">tiny</span><span class="p">)))</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">constante</span><span class="o">*</span><span class="n">matP</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">prior</span><span class="p">,</span>
+                   <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">)</span><span class="o">.</span><span class="n">tiny</span><span class="p">)))</span>
     <span class="n">LogLikelihood</span> <span class="o">/=</span> <span class="n">n_individuals</span>
     <span class="k">return</span><span class="p">(</span><span class="o">-</span><span class="n">LogLikelihood</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="evalBetaInv"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.evalBetaInv">[docs]</a><span class="k">def</span> <span class="nf">evalBetaInv</span><span class="p">(</span><span class="n">matY</span><span class="p">,</span> <span class="n">betaInv</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Decides which value to use for initial noise variance parameter.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matY : array of shape (n_dimensions, n_nodes)</span>
+<span class="sd">        Manifold in n-dimensional space (projection of matX in data space);</span>
+<span class="sd">    betaInv : float</span>
+<span class="sd">        The 3rd eigenvalue of the data covariance matrix.</span>
+<span class="sd">    random_state : int, optional</span>
+<span class="sd">        Random state used to initialize BetaInv randomly</span>
+<span class="sd">        in case of bad initialization.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    float</span>
+<span class="sd">        Noise variance parameter for the data distribution (betaInv).</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">        Initialized to be the larger between:</span>
+<span class="sd">        (1) the 3rd eigenvalue of the data covariance matrix</span>
+<span class="sd">        (function parameter),</span>
+<span class="sd">        (2) half the average distance between centers of Gaussian components.</span>
+<span class="sd">        In case of bad initialization (betaInv = 0),</span>
+<span class="sd">        betaInv is set to a random value</span>
+<span class="sd">        (a message would then be displayed on screen).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
     <span class="n">Distances</span> <span class="o">=</span> <span class="n">euclidean_distances</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">matY</span><span class="p">))</span>
     <span class="n">myMin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Distances</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
@@ -342,6 +685,25 @@
 
 
 <div class="viewcode-block" id="initBetaInvRandom"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_core.initBetaInvRandom">[docs]</a><span class="k">def</span> <span class="nf">initBetaInvRandom</span><span class="p">(</span><span class="n">matD</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">,</span> <span class="n">n_individuals</span><span class="p">,</span> <span class="n">n_dimensions</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Computes initial noise variance parameter for kernel GTM.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    matD : array of shape (n_nodes, n_individuals)</span>
+<span class="sd">        Matrix of squared Euclidean distances between manifold and data.</span>
+<span class="sd">    n_nodes : int</span>
+<span class="sd">        The number of nodes defining a grid in the 2D space.</span>
+<span class="sd">    n_individuals : int</span>
+<span class="sd">        The number of data instances.</span>
+<span class="sd">    n_dimensions : int</span>
+<span class="sd">        Data space dimensionality (number of variables).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    float</span>
+<span class="sd">        Noise variance parameter for the data distribution (betaInv).</span>
+<span class="sd">        Written as :math:`\beta^{-1}` in the original paper.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">betaInv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">matD</span><span class="o">*</span><span class="mi">1</span><span class="o">/</span><span class="n">n_nodes</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">n_individuals</span><span class="o">*</span><span class="n">n_dimensions</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">betaInv</span><span class="p">)</span></div>
 </pre></div>
@@ -378,7 +740,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'v1.1.7',
+            VERSION:'v2.0.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -389,6 +751,9 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
       <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   

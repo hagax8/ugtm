@@ -6,6 +6,7 @@ Submodules
 .. autosummary::
     :toctree: _autosummary
 
+    ugtm_sklearn
     ugtm_gtm
     ugtm_kgtm
     ugtm_classes
@@ -23,3 +24,4 @@ from .ugtm_kgtm import *
 from .ugtm_predictions import *
 from .ugtm_crossvalidate import *
 from .ugtm_preprocess import *
+from .ugtm_sklearn import *

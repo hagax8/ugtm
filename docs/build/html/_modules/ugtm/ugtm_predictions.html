@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ugtm.ugtm_predictions &mdash; ugtm v1.1.7 documentation</title>
+  <title>ugtm.ugtm_predictions &mdash; ugtm v2.0.0 documentation</title>
   
 
   
@@ -27,6 +27,7 @@
   
     <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 
@@ -77,11 +78,35 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/ugtm.html">ugtm</a></li>
-</ul>
+              <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../readme.html">ugtm quick tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTM_transformer.html">eGTM: GTM transformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTC_classifier.html">eGTC: GTM classifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../eGTR_regressor.html">eGTR: GTM regressor</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../visualization_examples.html">Visualization examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../classification_examples.html">Classification examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../regression_examples.html">Regression examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced functions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tutorial</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Glossary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">Links &amp; references</a></li>
 </ul>
 
             
@@ -152,7 +177,6 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">neighbors</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">PCA</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">NearestNeighbors</span>
@@ -163,8 +187,61 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">ugtm_preprocess</span>
 
 
-<div class="viewcode-block" id="predictNN"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictNN">[docs]</a><span class="k">def</span> <span class="nf">predictNN</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">modeltype</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-              <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="predictNN"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictNN">[docs]</a><span class="k">def</span> <span class="nf">predictNN</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">modeltype</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span>
+              <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+              <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;GTM nearest node(s) classification or regression.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    optimizedModel : instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">        Optimized GTM model built using a training set</span>
+<span class="sd">        of shape (n_individuals, n_dimensions)</span>
+<span class="sd">    labels : array of shape (n_individuals, 1)</span>
+<span class="sd">        Labels (discrete or continuous) associated with training set</span>
+<span class="sd">    new_data : array of shape (n_test, n_dimensions)</span>
+<span class="sd">        New data matrix (test set).</span>
+<span class="sd">    modeltype : {&#39;classification&#39;, &#39;regression&#39;}, optional</span>
+<span class="sd">        Choice between classification and regression.</span>
+<span class="sd">    n_neighbors : int, optional (default = 1)</span>
+<span class="sd">        Number of nodes to take into account in kNN algorithm.</span>
+<span class="sd">        NB: for classification, n_neighbors is always equal to 1.</span>
+<span class="sd">    representation : {&#39;modes&#39;, &#39;means&#39;}, optional</span>
+<span class="sd">        Defines GTM representation type: mean or mode of responsibilities.</span>
+<span class="sd">    prior : {&#39;estimated&#39;, &#39;equiprobable&#39;}, optional</span>
+<span class="sd">        Only used for classification.</span>
+<span class="sd">        Sets priors (Bayes&#39; theorem) in :func:`~ugtm.ugtm_landscape.classMap`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_test, 1)</span>
+<span class="sd">        Predicted outcome.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    This function implements classification or regression based</span>
+<span class="sd">    on nearest GTM nodes:</span>
+
+<span class="sd">        1. If (modeltype == &#39;classification&#39;), generate GTM class map</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.classMap`);</span>
+<span class="sd">           if (modeltype == &#39;regression&#39;), generate GTM landscape</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.landscape`)</span>
+<span class="sd">        2. Project new data (:func:`~ugtm.ugtm_gtm.projection`)</span>
+<span class="sd">           on optimized GTM model (:class:`~ugtm.ugtm_classes.OptimizedGTM`)</span>
+<span class="sd">        3. Depending on provided parameters,</span>
+<span class="sd">           choose means or modes as GTM coordinates for the new data</span>
+<span class="sd">        4. Find the nodes closest to the new data GTM coordinates</span>
+<span class="sd">           (sklearn function kneighbors)</span>
+<span class="sd">        5. Retrieve predicted outcomes corresponding to nodes on class map</span>
+<span class="sd">           (classification task) or landscape (regression task)</span>
+<span class="sd">        6. If (modeltype == &#39;classification&#39;), the predicted outcome is the</span>
+<span class="sd">           outcome of the nearest node on the class map;</span>
+<span class="sd">           if (modeltype == &#39;regression&#39;),</span>
+<span class="sd">           the predicted outcome is the average outcome of the k nearest nodes</span>
+<span class="sd">           (k = n_neighbors), weighted by inverse squared distances</span>
+<span class="sd">           (weights=1/((dist)**2))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">modeltype</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
         <span class="n">activityModel</span> <span class="o">=</span> <span class="n">ugtm_landscape</span><span class="o">.</span><span class="n">landscape</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">modeltype</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
@@ -187,11 +264,36 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">nnID</span> <span class="o">=</span> <span class="n">fitted</span><span class="o">.</span><span class="n">kneighbors</span><span class="p">(</span><span class="n">rep</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">predicted</span> <span class="o">=</span> <span class="n">activityModel</span><span class="p">[</span><span class="n">nnID</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">predicted</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="predictNNSimple"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictNNSimple">[docs]</a><span class="k">def</span> <span class="nf">predictNNSimple</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                     <span class="n">modeltype</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Nearest neighbor(s) classification or regression.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    train : array of shape (n_train, n_dimensions)</span>
+<span class="sd">        Train set data matrix.</span>
+<span class="sd">    test : array of shape (n_test, n_dimensions)</span>
+<span class="sd">        Test set data matrix.</span>
+<span class="sd">    labels : array of shape (n_train, 1)</span>
+<span class="sd">        Labels (discrete or continuous) for the training set.</span>
+<span class="sd">    n_neighbors : int, optional (default = 1)</span>
+<span class="sd">        Number of nodes to take into account in kNN algorithm.</span>
+<span class="sd">    modeltype : {&#39;classification&#39;, &#39;regression&#39;}, optional</span>
+<span class="sd">        Choice between classification and regression.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_test, 1)</span>
+<span class="sd">        Predicted outcome.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    This function implements classification or regression based</span>
+<span class="sd">    on classical kNN algorithm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">modeltype</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span> <span class="ow">and</span> <span class="n">n_neighbors</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">neighborModel</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span>
             <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
@@ -204,10 +306,45 @@
         <span class="n">clf</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">)</span>
         <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
         <span class="n">predicted</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">predicted</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="predictBayes"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictBayes">[docs]</a><span class="k">def</span> <span class="nf">predictBayes</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="predictBayes"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.predictBayes">[docs]</a><span class="k">def</span> <span class="nf">predictBayes</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot; Bayesian GTM classifier (GTC Bayes).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    optimizedModel : instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">        Optimized GTM model built using a training set</span>
+<span class="sd">        of shape (n_individuals, n_dimensions)</span>
+<span class="sd">    labels : array of shape (n_individuals, 1)</span>
+<span class="sd">        Labels (discrete or continuous) associated with training set</span>
+<span class="sd">    new_data : array of shape (n_test, n_dimensions)</span>
+<span class="sd">        New data matrix (test set).</span>
+<span class="sd">    prior : {&#39;estimated&#39;, &#39;equiprobable&#39;}, optional</span>
+<span class="sd">        Only used for classification.</span>
+<span class="sd">        Sets priors (Bayes&#39; theorem) in :func:`~ugtm.ugtm_landscape.classMap`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_test, 1)</span>
+<span class="sd">        Predicted outcome.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    This function computes GTM class predictions by using</span>
+<span class="sd">    posterior probabilities of classes weighted by responsibilities.</span>
+<span class="sd">    Similar to maximum a posterior (MAP) estimator.</span>
+
+<span class="sd">        1. generate GTM class map</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.classMap`);</span>
+<span class="sd">        2. Project new data (:func:`~ugtm.ugtm_gtm.projection`)</span>
+<span class="sd">           on optimized GTM model (:class:`~ugtm.ugtm_classes.OptimizedGTM`)</span>
+<span class="sd">        3. Projected data responsibilities R are used as weights</span>
+<span class="sd">           to find outcome :math:`C_{max}` for each tested instance:</span>
+<span class="sd">           :math:`C_{max} = \operatorname*{arg\,max}_C \sum_k{R_{ki} P(C|k)}`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">activityModel</span> <span class="o">=</span> <span class="n">ugtm_landscape</span><span class="o">.</span><span class="n">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span>
                                             <span class="n">labels</span><span class="p">,</span> <span class="n">prior</span><span class="p">)</span><span class="o">.</span><span class="n">nodeClassP</span>
     <span class="n">projected</span> <span class="o">=</span> <span class="n">projection</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span><span class="o">.</span><span class="n">matR</span>
@@ -216,14 +353,130 @@
 
 
 <div class="viewcode-block" id="advancedGTC"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.advancedGTC">[docs]</a><span class="k">def</span> <span class="nf">advancedGTC</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span>
-                <span class="n">niter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">niter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
-                <span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">+</span><span class="mi">2</span>
-    <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+                <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
+                <span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Run GTC (GTM classification): advanced Bayes</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    train : array of shape (n_train, n_dimensions)</span>
+<span class="sd">        Train set data matrix.</span>
+<span class="sd">    labels : array of shape (n_train, 1)</span>
+<span class="sd">        Labels for train set.</span>
+<span class="sd">    test : array of shape (n_test, n_dimensions)</span>
+<span class="sd">        Test set data matrix.</span>
+<span class="sd">    k : int, optional (default = 16)</span>
+<span class="sd">        If k is set to 0, k is computed as sqrt(5*sqrt(n_individuals))+2.</span>
+<span class="sd">        k is the sqrt of the number of GTM nodes.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Ex: k = 25 means the GTM will be discretized into a 25x25 grid.</span>
+<span class="sd">    m : int, optional (default = 4)</span>
+<span class="sd">        If m is set to 0, m is computed as sqrt(k).</span>
+<span class="sd">        (generally good rule of thumb).</span>
+<span class="sd">        m is the qrt of the number of RBF centers.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Ex: m = 5 means the RBF functions will be arranged on a 5x5 grid.</span>
+<span class="sd">    s : float, optional (default = 0.3)</span>
+<span class="sd">        RBF width factor.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Parameter to tune width of RBF functions.</span>
+<span class="sd">        Impacts manifold flexibility.</span>
+<span class="sd">    regul : float, optional (default = 0.1)</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Regularization coefficient.</span>
+<span class="sd">        Impacts manifold flexibility.</span>
+<span class="sd">    n_neighbors : int, optional (default = 1)</span>
+<span class="sd">        Number of neighbors for kNN algorithm (number of nearest nodes).</span>
+<span class="sd">        At the moment, n_neighbors is always equal to 1.</span>
+<span class="sd">    niter : int, optional (default = 200)</span>
+<span class="sd">        Number of iterations for EM algorithm.</span>
+<span class="sd">    representation : {&quot;modes&quot;, &quot;means&quot;}</span>
+<span class="sd">        2D GTM representation for the test set, used for kNN algorithms:</span>
+<span class="sd">        &quot;modes&quot; for position with max. responsibility,</span>
+<span class="sd">        &quot;means&quot; for average position (usual GTM representation)</span>
+<span class="sd">    doPCA : bool, optional (default = False)</span>
+<span class="sd">        Apply PCA pre-processing.</span>
+<span class="sd">    n_components : int, optional (default = -1)</span>
+<span class="sd">        Number of components for PCA pre-processing.</span>
+<span class="sd">        If set to -1, keep principal components</span>
+<span class="sd">        accounting for 80% of data variance.</span>
+<span class="sd">    missing : bool, optional (default = True)</span>
+<span class="sd">        Replace missing values (calls scikit-learn functions).</span>
+<span class="sd">    missing_strategy : str, optional (default = &#39;median&#39;)</span>
+<span class="sd">        Scikit-learn missing data strategy.</span>
+<span class="sd">    random_state : int, optional (default = 1234)</span>
+<span class="sd">        Random state.</span>
+<span class="sd">    predict_mode : {&quot;bayes&quot;}, optional</span>
+<span class="sd">        At the moment, only the GTM Bayes classifier is available;</span>
+<span class="sd">        (&quot;bayes&quot;, output of :func:`~ugtm.ugtm_predictions.advancedPredictBayes`).</span>
+<span class="sd">    prior : {&quot;estimated&quot;, &quot;equiprobable&quot;}, optional</span>
+<span class="sd">        Type of prior used to build GTM class map</span>
+<span class="sd">        (:func:`~ugtm.ugtm_landscape.classMap`).</span>
+<span class="sd">        Choose &quot;estimated&quot; to account for class imbalance.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    a dict</span>
+
+<span class="sd">        The output is a dictionary defined as follows:</span>
+
+<span class="sd">            1. output[&quot;optimizedModel&quot;]: original training set GTM model,</span>
+<span class="sd">               instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">            2. output[&quot;indiv_projections&quot;]: test set GTM model,</span>
+<span class="sd">               instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">            3. output[&quot;indiv_probabilities&quot;]: class probabilities</span>
+<span class="sd">               for each individual (= dot product between test responsibility</span>
+<span class="sd">               matrix and posterior class probabilities)</span>
+<span class="sd">            4. output[&quot;indiv_predictions&quot;]: class prediction for each</span>
+<span class="sd">               individual (argmax of output[&quot;indiv_probabilities&quot;])</span>
+<span class="sd">            5. output[&quot;group_projections&quot;]: average responsibility vector</span>
+<span class="sd">               for the entire test set</span>
+<span class="sd">            6. output[&quot;group_probabilities&quot;]: posterior class probabilities</span>
+<span class="sd">               for the entire test set (dot product between</span>
+<span class="sd">               output[&quot;group_projections&quot;] and posterior class probabilities)</span>
+<span class="sd">            7. output[&quot;uniqClasses&quot;]: classes</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    The GTM nearest node classifier (predict_mode = &quot;knn&quot;,</span>
+<span class="sd">    :func:`~ugtm.ugtm_predictions.predictNN`):</span>
+
+<span class="sd">        1. A GTM class map (GTM colored by class)</span>
+<span class="sd">           is built using the training set</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.classMap`);</span>
+<span class="sd">           the class map is discretized into nodes,</span>
+<span class="sd">           and each node has a class label</span>
+<span class="sd">        2. The test set is projected onto the GTM map</span>
+<span class="sd">        3. A 2D GTM representation is chosen for the test set</span>
+<span class="sd">           (representation = modes or means)</span>
+<span class="sd">        4. Nearest node on the GTM map is found for each test set individual</span>
+<span class="sd">        5. The predicted label for each individual is the label of its</span>
+<span class="sd">           nearest node on the GTM map</span>
+
+<span class="sd">    The GTM Bayes classifier (predict_mode = &quot;bayes&quot;,</span>
+<span class="sd">    :func:`~ugtm.ugtm_predictions.predictBayes`):</span>
+
+<span class="sd">        1. A GTM class map (GTM colored by class)</span>
+<span class="sd">           is built using the training set</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.classMap`);</span>
+<span class="sd">           the class map is discretized into nodes,</span>
+<span class="sd">           and each node has posterior class probabilities</span>
+<span class="sd">        2. The test set is projected onto the GTM map</span>
+<span class="sd">        3. The GTM representation for each individual is its responsibility</span>
+<span class="sd">           vector (posterior probability distribution on the map)</span>
+<span class="sd">        4. The probabilities of belonging to each class for a</span>
+<span class="sd">           specific individual are computed</span>
+<span class="sd">           as an average of posterior class probabilities</span>
+<span class="sd">           (array of shape (n_nodes_n,classes)), weighted by the individual&#39;s</span>
+<span class="sd">           responsibilities on the GTM map (array of shape (1, n_nodes))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">+</span><span class="mi">2</span>
+    <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">n_components</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">doPCA</span><span class="p">:</span>
         <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
         <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
@@ -231,8 +484,8 @@
             <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(),</span> <span class="mf">0.8</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Used n_components explaining 80</span><span class="si">%%</span><span class="s2"> of the variance = </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span>
               <span class="o">%</span> <span class="n">n_components</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
-        <span class="n">l</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="k">if</span> <span class="n">regul</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">regul</span> <span class="o">=</span> <span class="mf">0.1</span>
     <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="mf">0.3</span>
     <span class="n">processed</span> <span class="o">=</span> <span class="n">ugtm_preprocess</span><span class="o">.</span><span class="n">processTrainTest</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">doPCA</span><span class="p">,</span>
@@ -240,14 +493,73 @@
                                                  <span class="n">missing_strategy</span><span class="p">)</span>
     <span class="n">initialModel</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span>
                               <span class="n">s</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
-    <span class="n">optimizedModel</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">initialModel</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">optimizedModel</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">initialModel</span><span class="p">,</span> <span class="n">regul</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">advancedPredictBayes</span><span class="p">(</span>
         <span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">processed</span><span class="o">.</span><span class="n">test</span><span class="p">,</span> <span class="n">prior</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">prediction</span></div>
 
 
 <div class="viewcode-block" id="advancedPredictBayes"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.advancedPredictBayes">[docs]</a><span class="k">def</span> <span class="nf">advancedPredictBayes</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span>
-                         <span class="n">new_data</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
+                         <span class="n">new_data</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Bayesian GTM classifier: complete model</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    optimizedModel : instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">        Optimized GTM model built using a training set</span>
+<span class="sd">        of shape (n_individuals, n_dimensions)</span>
+<span class="sd">    labels : array of shape (n_individuals, 1)</span>
+<span class="sd">        Labels (discrete or continuous) associated with training set</span>
+<span class="sd">    new_data : array of shape (n_test, n_dimensions)</span>
+<span class="sd">        New data matrix (test set).</span>
+<span class="sd">    prior : {&#39;estimated&#39;, &#39;equiprobable&#39;}, optional</span>
+<span class="sd">        Only used for classification.</span>
+<span class="sd">        Sets priors (Bayes&#39; theorem) in :func:`~ugtm.ugtm_landscape.classMap`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    a dict</span>
+
+<span class="sd">        The output is a dictionary defined as follows:</span>
+
+<span class="sd">            1. output[&quot;optimizedModel&quot;]: original training set GTM model,</span>
+<span class="sd">               instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">            2. output[&quot;indiv_projections&quot;]: test set GTM model,</span>
+<span class="sd">               instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`</span>
+<span class="sd">            3. output[&quot;indiv_probabilities&quot;]: class probabilities</span>
+<span class="sd">               for each individual (= dot product between test responsibility</span>
+<span class="sd">               matrix and posterior class probabilities)</span>
+<span class="sd">            4. output[&quot;indiv_predictions&quot;]: class prediction for each</span>
+<span class="sd">               individual (argmax of output[&quot;indiv_probabilities&quot;])</span>
+<span class="sd">            5. output[&quot;group_projections&quot;]: average responsibility vector</span>
+<span class="sd">               for the entire test set</span>
+<span class="sd">            6. output[&quot;group_probabilities&quot;]: posterior class probabilities</span>
+<span class="sd">               for the entire test set (dot product between</span>
+<span class="sd">               output[&quot;group_projections&quot;] and posterior class probabilities)</span>
+<span class="sd">            7. output[&quot;uniqClasses&quot;]: classes</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    This function computes GTM class predictions by using</span>
+<span class="sd">    posterior probabilities of classes weighted by responsibilities.</span>
+
+<span class="sd">        1. generate GTM class map</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.classMap`);</span>
+<span class="sd">        2. Project new data (:func:`~ugtm.ugtm_gtm.projection`)</span>
+<span class="sd">           on optimized GTM model (:class:`~ugtm.ugtm_classes.OptimizedGTM`)</span>
+<span class="sd">        3. Projected data responsibilities R are used as weights</span>
+<span class="sd">           to find outcome :math:`C_{max}` for each tested instance:</span>
+<span class="sd">           :math:`C_{max} = \operatorname*{arg\,max}_C \sum_k{R_{ki} P(C|k)}`</span>
+
+<span class="sd">    The algorithm is the same as</span>
+<span class="sd">    in :func:`~ugtm.ugtm_predicions.predictBayes`, but this function</span>
+<span class="sd">    returns a complete</span>
+<span class="sd">    output including original training set optimized GTM model, test set</span>
+<span class="sd">    GTM model, individual class probabilities for each individual,</span>
+<span class="sd">    class prediction for each individual, group projections (average position</span>
+<span class="sd">    of the whole test set on the map), class probabilities for the whole test</span>
+<span class="sd">    set, and classes used to build the classification model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">predicted</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">cl</span> <span class="o">=</span> <span class="n">ugtm_landscape</span><span class="o">.</span><span class="n">classMap</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prior</span><span class="p">)</span>
     <span class="n">activityModel</span> <span class="o">=</span> <span class="n">cl</span><span class="o">.</span><span class="n">nodeClassP</span>
@@ -265,6 +577,32 @@
 
 
 <div class="viewcode-block" id="printClassPredictions"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.printClassPredictions">[docs]</a><span class="k">def</span> <span class="nf">printClassPredictions</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Print output of :func:`~ugtm.ugtm_predictions.advancedPredictBayes`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    prediction : dict</span>
+<span class="sd">        Output of :func:`~ugtm.ugtm_predictions.advancedPredictBayes`.</span>
+<span class="sd">        With following keys:</span>
+<span class="sd">        &quot;optimizedModel&quot;: :class:`~ugtm.ugtm_classes.OptimizedGTM`,</span>
+<span class="sd">        &quot;indiv_projections&quot;: :class:`~ugtm.ugtm_classes.OptimizedGTM`,</span>
+<span class="sd">        &quot;indiv_probabilities&quot;: array of shape (n_individuals, n_classes),</span>
+<span class="sd">        &quot;indiv_predictions&quot;: array of shape (n_individuals, 1),</span>
+<span class="sd">        &quot;group_projections&quot;: array of shape (n_nodes, 1),</span>
+<span class="sd">        &quot;group_probabilities&quot;: array of shape (n_probabilities, 1),</span>
+<span class="sd">        &quot;uniqClasses&quot;: array of shape(n_classes, 1)</span>
+<span class="sd">    output : str</span>
+<span class="sd">        Output path to write class prediction model (prediction dictionary).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    CSV files</span>
+
+<span class="sd">        1. output_indiv_probabilities.csv</span>
+<span class="sd">        2. output_indiv_predictions.csv</span>
+<span class="sd">        3. output_group_probabilities.csv</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;Classes_in_this_order:&quot;</span>
     <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">grouproba</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="s2">&quot;group_probabilities&quot;</span><span class="p">]</span>
@@ -292,20 +630,123 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GTC"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.GTC">[docs]</a><span class="k">def</span> <span class="nf">GTC</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+<div class="viewcode-block" id="GTC"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.GTC">[docs]</a><span class="k">def</span> <span class="nf">GTC</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
         <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
-        <span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;equiprobable&quot;</span><span class="p">):</span>
+        <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">,</span>
+        <span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;bayes&quot;</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s2">&quot;estimated&quot;</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Run GTC (GTM classification): Bayes or nearest node algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    train : array of shape (n_train, n_dimensions)</span>
+<span class="sd">        Train set data matrix.</span>
+<span class="sd">    labels : array of shape (n_train, 1)</span>
+<span class="sd">        Labels for train set.</span>
+<span class="sd">    test : array of shape (n_test, n_dimensions)</span>
+<span class="sd">        Test set data matrix.</span>
+<span class="sd">    k : int, optional (default = 16)</span>
+<span class="sd">        If k is set to 0, k is computed as sqrt(5*sqrt(n_individuals))+2.</span>
+<span class="sd">        k is the sqrt of the number of GTM nodes.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Ex: k = 25 means the GTM will be discretized into a 25x25 grid.</span>
+<span class="sd">    m : int, optional (default = 4)</span>
+<span class="sd">        If m is set to 0, m is computed as sqrt(k).</span>
+<span class="sd">        (generally good rule of thumb).</span>
+<span class="sd">        m is the qrt of the number of RBF centers.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Ex: m = 5 means the RBF functions will be arranged on a 5x5 grid.</span>
+<span class="sd">    s : float, optional (default = 0.3)</span>
+<span class="sd">        RBF width factor.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Parameter to tune width of RBF functions.</span>
+<span class="sd">        Impacts manifold flexibility.</span>
+<span class="sd">    regul : float, optional (default = 0.1)</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Regularization coefficient.</span>
+<span class="sd">        Impacts manifold flexibility.</span>
+<span class="sd">    n_neighbors : int, optional (default = 1)</span>
+<span class="sd">        Number of neighbors for kNN algorithm (number of nearest nodes).</span>
+<span class="sd">        At the moment, n_neighbors is always equal to 1.</span>
+<span class="sd">    niter : int, optional (default = 200)</span>
+<span class="sd">        Number of iterations for EM algorithm.</span>
+<span class="sd">    representation : {&quot;modes&quot;, &quot;means&quot;}</span>
+<span class="sd">        2D GTM representation for the test set, used for kNN algorithms:</span>
+<span class="sd">        &quot;modes&quot; for position with max. responsibility,</span>
+<span class="sd">        &quot;means&quot; for average position (usual GTM representation)</span>
+<span class="sd">    doPCA : bool, optional (default = False)</span>
+<span class="sd">        Apply PCA pre-processing.</span>
+<span class="sd">    n_components : int, optional (default = -1)</span>
+<span class="sd">        Number of components for PCA pre-processing.</span>
+<span class="sd">        If set to -1, keep principal components</span>
+<span class="sd">        accounting for 80% of data variance.</span>
+<span class="sd">    missing : bool, optional (default = True)</span>
+<span class="sd">        Replace missing values (calls scikit-learn functions).</span>
+<span class="sd">    missing_strategy : str, optional (default = &#39;median&#39;)</span>
+<span class="sd">        Scikit-learn missing data strategy.</span>
+<span class="sd">    random_state : int, optional (default = 1234)</span>
+<span class="sd">        Random state.</span>
+<span class="sd">    predict_mode : {&quot;bayes&quot;, &quot;knn&quot;}, optional</span>
+<span class="sd">        Choose between nearest node algorithm</span>
+<span class="sd">        (&quot;knn&quot;, output of :func:`~ugtm.ugtm_predictions.predictNN`)</span>
+<span class="sd">        or GTM Bayes classifier</span>
+<span class="sd">        (&quot;bayes&quot;, output of :func:`~ugtm.ugtm_predictions.predictBayes`).</span>
+<span class="sd">        NB: the kNN algorithm is limited to only 1 nearest node at the moment</span>
+<span class="sd">        (n_neighbors = 1).</span>
+<span class="sd">    prior : {&quot;estimated&quot;, &quot;equiprobable&quot;}, optional</span>
+<span class="sd">        Type of prior used to build GTM class map</span>
+<span class="sd">        (:func:`~ugtm.ugtm_landscape.classMap`).</span>
+<span class="sd">        Choose &quot;estimated&quot; to account for class imbalance.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_test, 1)</span>
+<span class="sd">        Predicted class for test set individuals.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    The GTM nearest node classifier (predict_mode = &quot;knn&quot;,</span>
+<span class="sd">    :func:`~ugtm.ugtm_predictions.predictNN`):</span>
+
+<span class="sd">        1. A GTM class map (GTM colored by class)</span>
+<span class="sd">           is built using the training set</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.classMap`);</span>
+<span class="sd">           the class map is discretized into nodes,</span>
+<span class="sd">           and each node has a class label</span>
+<span class="sd">        2. The test set is projected onto the GTM map</span>
+<span class="sd">        3. A 2D GTM representation is chosen for the test set</span>
+<span class="sd">           (representation = modes or means)</span>
+<span class="sd">        4. Nearest node on the GTM map is found for each test set individual</span>
+<span class="sd">        5. The predicted label for each individual is the label of its</span>
+<span class="sd">           nearest node on the GTM map</span>
+
+<span class="sd">    The GTM Bayes classifier (predict_mode = &quot;bayes&quot;,</span>
+<span class="sd">    :func:`~ugtm.ugtm_predictions.predictBayes`):</span>
+
+<span class="sd">        1. A GTM class map (GTM colored by class)</span>
+<span class="sd">           is built using the training set</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.classMap`);</span>
+<span class="sd">           the class map is discretized into nodes,</span>
+<span class="sd">           and each node has posterior class probabilities</span>
+<span class="sd">        2. The test set is projected onto the GTM map</span>
+<span class="sd">        3. The GTM representation for each individual is its responsibility</span>
+<span class="sd">           vector (posterior probability distribution on the map)</span>
+<span class="sd">        4. The probabilities of belonging to each class for a</span>
+<span class="sd">           specific individual are computed</span>
+<span class="sd">           as an average of posterior class probabilities</span>
+<span class="sd">           (array of shape (n_nodes_n,classes)), weighted by the individual&#39;s</span>
+<span class="sd">           responsibilities on the GTM map (array of shape (1, n_nodes))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">+</span><span class="mi">2</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">+</span><span class="mi">2</span>
     <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
     <span class="n">processed</span> <span class="o">=</span> <span class="n">ugtm_preprocess</span><span class="o">.</span><span class="n">processTrainTest</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">doPCA</span><span class="p">,</span>
                                                  <span class="n">n_components</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span>
                                                  <span class="n">missing_strategy</span><span class="p">)</span>
     <span class="n">initialModel</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span>
                               <span class="n">s</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
-    <span class="n">optimizedModel</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">initialModel</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">optimizedModel</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">initialModel</span><span class="p">,</span> <span class="n">regul</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">predict_mode</span> <span class="o">==</span> <span class="s2">&quot;knn&quot;</span><span class="p">:</span>
         <span class="n">prediction</span> <span class="o">=</span> <span class="n">predictNN</span><span class="p">(</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">processed</span><span class="o">.</span><span class="n">test</span><span class="p">,</span>
                                <span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span>
@@ -316,18 +757,92 @@
     <span class="k">return</span> <span class="n">prediction</span></div>
 
 
-<div class="viewcode-block" id="GTR"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.GTR">[docs]</a><span class="k">def</span> <span class="nf">GTR</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+<div class="viewcode-block" id="GTR"><a class="viewcode-back" href="../../ugtm.html#ugtm.ugtm_predictions.GTR">[docs]</a><span class="k">def</span> <span class="nf">GTR</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
         <span class="n">representation</span><span class="o">=</span><span class="s2">&quot;modes&quot;</span><span class="p">,</span> <span class="n">doPCA</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+        <span class="n">missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">missing_strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Run GTR (GTM nearest node(s) regression).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    train : array of shape (n_train, n_dimensions)</span>
+<span class="sd">        Train set data matrix.</span>
+<span class="sd">    labels : array of shape (n_train, 1)</span>
+<span class="sd">        Labels for train set.</span>
+<span class="sd">    test : array of shape (n_test, n_dimensions)</span>
+<span class="sd">        Test set data matrix.</span>
+<span class="sd">    k : int, optional (default = 16)</span>
+<span class="sd">        If k is set to 0, k is computed as sqrt(5*sqrt(n_individuals))+2.</span>
+<span class="sd">        k is the sqrt of the number of GTM nodes.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Ex: k = 25 means the GTM will be discretized into a 25x25 grid.</span>
+<span class="sd">    m : int, optional (default = 4)</span>
+<span class="sd">        If m is set to 0, m is computed as sqrt(k).</span>
+<span class="sd">        (generally good rule of thumb).</span>
+<span class="sd">        m is the qrt of the number of RBF centers.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Ex: m = 5 means the RBF functions will be arranged on a 5x5 grid.</span>
+<span class="sd">    s : float, optional (default = 0.3)</span>
+<span class="sd">        RBF width factor.</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Parameter to tune width of RBF functions.</span>
+<span class="sd">        Impacts manifold flexibility.</span>
+<span class="sd">    regul : float, optional (default = 0.1)</span>
+<span class="sd">        One of four GTM hyperparameters (k, m, s, regul).</span>
+<span class="sd">        Regularization coefficient.</span>
+<span class="sd">        Impacts manifold flexibility.</span>
+<span class="sd">    n_neighbors : int, optional (default = 1)</span>
+<span class="sd">        Number of neighbors for kNN algorithm (number of nearest nodes).</span>
+<span class="sd">    niter : int, optional (default = 200)</span>
+<span class="sd">        Number of iterations for EM algorithm.</span>
+<span class="sd">    representation : {&quot;modes&quot;, &quot;means&quot;}</span>
+<span class="sd">        2D GTM representation for the test set, used for kNN algorithms:</span>
+<span class="sd">        &quot;modes&quot; for position with max. responsibility,</span>
+<span class="sd">        &quot;means&quot; for average position (usual GTM representation)</span>
+<span class="sd">    doPCA : bool, optional (default = False)</span>
+<span class="sd">        Apply PCA pre-processing.</span>
+<span class="sd">    n_components : int, optional (default = -1)</span>
+<span class="sd">        Number of components for PCA pre-processing.</span>
+<span class="sd">        If set to -1, keep principal components</span>
+<span class="sd">        accounting for 80% of data variance.</span>
+<span class="sd">    missing : bool, optional (default = True)</span>
+<span class="sd">        Replace missing values (calls scikit-learn functions).</span>
+<span class="sd">    missing_strategy : str, optional (default = &#39;median&#39;)</span>
+<span class="sd">        Scikit-learn missing data strategy.</span>
+<span class="sd">    random_state : int, optional (default = 1234)</span>
+<span class="sd">        Random state.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    array of shape (n_test, 1)</span>
+<span class="sd">        Predicted class for test set individuals.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    =====</span>
+<span class="sd">    The GTM nearest node(s) regression</span>
+<span class="sd">    (:func:`~ugtm.ugtm_predictions.predictNN`):</span>
+
+<span class="sd">        1. A GTM landscape (GTM colored by activity)</span>
+<span class="sd">           is built using the training set</span>
+<span class="sd">           (:func:`~ugtm.ugtm_landscape.landscape`);</span>
+<span class="sd">           the landscape is discretized into nodes,</span>
+<span class="sd">           and each node has an estimated activity value</span>
+<span class="sd">        2. The test set is projected onto the GTM map</span>
+<span class="sd">        3. A 2D GTM representation is chosen for the test set</span>
+<span class="sd">           (representation = modes or means)</span>
+<span class="sd">        4. Nearest node(s) on the GTM map is found for each test set individual</span>
+<span class="sd">        5. The predicted activity for each individual is a weighted average</span>
+<span class="sd">           of nearest node activities.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">+</span><span class="mi">2</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">+</span><span class="mi">2</span>
     <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
     <span class="n">processed</span> <span class="o">=</span> <span class="n">ugtm_preprocess</span><span class="o">.</span><span class="n">processTrainTest</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span>
                                                  <span class="n">doPCA</span><span class="p">,</span> <span class="n">n_components</span><span class="p">)</span>
     <span class="n">initialModel</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span>
                               <span class="n">s</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
-    <span class="n">optimizedModel</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">initialModel</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">optimizedModel</span> <span class="o">=</span> <span class="n">optimize</span><span class="p">(</span><span class="n">processed</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">initialModel</span><span class="p">,</span> <span class="n">regul</span><span class="p">,</span> <span class="n">niter</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">predictNN</span><span class="p">(</span><span class="n">optimizedModel</span><span class="o">=</span><span class="n">optimizedModel</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
                            <span class="n">new_data</span><span class="o">=</span><span class="n">processed</span><span class="o">.</span><span class="n">test</span><span class="p">,</span> <span class="n">modeltype</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span>
                            <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span>
@@ -367,7 +882,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'v1.1.7',
+            VERSION:'v2.0.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -378,6 +893,9 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
       <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   

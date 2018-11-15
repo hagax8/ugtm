@@ -18,9 +18,9 @@ class ReturnU(object):
 
 
 class InitialGTM(object):
-    r"""Initial GTM model.
+    r"""Class for initial GTM model.
 
-    Parameters
+    Arguments
     ----------
     matX : array of shape (n_nodes, 2)
         Coordinates of nodes defining a grid in the 2D space.
@@ -44,7 +44,7 @@ class InitialGTM(object):
         Parameter matrix (PCA-initialized).
     matY: array of shape (n_dimensions, n_nodes)
         Manifold in n-dimensional space (projection of matX in data space);
-        A point matY[:,i] is a Gaussian component center in data space.
+        A point matY[:,i] is a center of Gaussian component in data space.
         :math:`\mathbf{Y}=\mathbf{W}\mathbf{\Phi}^T`
     betaInv: float
         Noise variance parameter for the data distribution.
@@ -59,6 +59,44 @@ class InitialGTM(object):
 
     def __init__(self, matX, matM, n_nodes, n_rbf_centers, rbfWidth,
                  matPhiMPlusOne, matW, matY, betaInv, n_dimensions):
+        r"""Constructor for InitialGTM class.
+
+        Parameters
+        ----------
+        matX : array of shape (n_nodes, 2)
+            Coordinates of nodes defining a grid in the 2D space.
+        matM : array of shape (n_rbf_centers, 2)
+            Coordinates of radial basis function (RBF) centers,
+            defining a grid in the 2D space.
+        n_nodes : int
+            The number of nodes defining a grid in the 2D space.
+        n_rbf_centers : int
+            The number of radial basis function (RBF) centers.
+        rbfWidth : float
+            Initial radial basis function (RBF) width.
+            This is set to the average of the minimum distance between RBF centers:
+            :math:`rbfWidth=\sigma \times average(\mathbf{distances(rbf)}_{min})`,
+            where :math:`sigma` is the GTM hyperparameter s.
+            NB: if GTM hyperparameter s = 0 (not recommended),
+            rbfWidth is set to the maximum distance between RBF centers.
+        matPhiMPlusOne: array of shape (n_nodes, n_rbf_centers+1)
+            RBF matrix plus one dimension to include a term for bias.
+        matW: array of shape (n_dimensions, n_rbf_centers+1)
+            Parameter matrix (PCA-initialized).
+        matY: array of shape (n_dimensions, n_nodes)
+            Manifold in n-dimensional space (projection of matX in data space);
+            A point matY[:,i] is a Gaussian component center in data space.
+            :math:`\mathbf{Y}=\mathbf{W}\mathbf{\Phi}^T`
+        betaInv: float
+            Noise variance parameter for the data distribution.
+            Written as :math:`\beta^{-1}` in the original paper.
+            Initialized to be the larger between:
+            (1) the 3rd eigenvalue of the data covariance matrix,
+            (2) half the average distance between Gaussian component centers
+            in the data space (matY matrix).
+        n_dimensions: int
+            Data space dimensionality (number of variables).
+        """
         self.matX = matX
         self.matM = matM
         self.n_rbf_centers = n_rbf_centers
@@ -72,9 +110,9 @@ class InitialGTM(object):
 
 
 class OptimizedGTM(object):
-    r"""Optimized GTM model.
+    r"""Class for optimized GTM model.
 
-    Parameters
+    Attributes
     ----------
     matX : array of shape (n_nodes, 2)
         Coordinates of nodes defining a grid in the 2D space.
@@ -83,9 +121,9 @@ class OptimizedGTM(object):
     matY : array of shape (n_dimensions, n_nodes)
         Manifold in n-dimensional space (projection of matX in data space).
         matY = np.dot(matW, np.transpose(matPhiMPlusOne))
-    matP : array of shape (n_instances, n_nodes)
+    matP : array of shape (n_individuals, n_nodes)
         Data distribution with variance betaInv.
-    matR : array of shape (n_instances, n_nodes)
+    matR : array of shape (n_individuals, n_nodes)
         Responsibilities (posterior probabilities),
         used to compute data representations:
         means (matMeans) and modes (matModes).
@@ -95,9 +133,9 @@ class OptimizedGTM(object):
     betaInv: float
         Noise variance parameter for the data distribution.
         Written as :math:`\beta^{-1}` in the original paper.
-    matMeans : array of shape (n_instances, 2)
+    matMeans : array of shape (n_individuals, 2)
         Data representation in 2D space: means (most commonly used for GTM).
-    matModes : array of shape(n_instances, 2)
+    matModes : array of shape(n_individuals, 2)
         Data representation in 2D space: modes
         (for each instance, coordinate with highest responsibility).
     n_dimensions : int
@@ -108,6 +146,39 @@ class OptimizedGTM(object):
 
     def __init__(self, matW, matY, matP, matR, betaInv, matMeans,
                  matModes, matX, n_dimensions, converged):
+        r"""Constructor for OptimizedGTM class.
+
+        Parameters
+        ----------
+        matX : array of shape (n_nodes, 2)
+            Coordinates of nodes defining a grid in the 2D space.
+        matW : array of shape (n_dimensions, n_rbf_centers+1)
+            Parameter matrix (PCA-initialized).
+        matY : array of shape (n_dimensions, n_nodes)
+            Manifold in n-dimensional space (projection of matX in data space).
+            matY = np.dot(matW, np.transpose(matPhiMPlusOne))
+        matP : array of shape (n_individuals, n_nodes)
+            Data distribution with variance betaInv.
+        matR : array of shape (n_individuals, n_nodes)
+            Responsibilities (posterior probabilities),
+            used to compute data representations:
+            means (matMeans) and modes (matModes).
+            Responsibilities are the main output of GTM.
+            matR[i,:] represents the responsibility vector for an instance i.
+            The columns in matR correspond to rows in matX (nodes).
+        betaInv: float
+            Noise variance parameter for the data distribution.
+            Written as :math:`\beta^{-1}` in the original paper.
+        matMeans : array of shape (n_individuals, 2)
+            Data representation in 2D space: means (most commonly used for GTM).
+        matModes : array of shape(n_individuals, 2)
+            Data representation in 2D space: modes
+            (for each instance, coordinate with highest responsibility).
+        n_dimensions : int
+            Data space dimensionality (number of variables).
+        converged : bool
+            True if the model has converged; otherwise False.
+        """
         self.matW = matW
         self.matY = matY
         self.matP = matP
@@ -176,9 +247,7 @@ class OptimizedGTM(object):
             (4) initial space dimension and data distribution variance,
             (5) manifold coordinates (matY),
             (6) parameter matrix (matW)
-
         """
-
         outparams = "n_dimensions:"+str(self.n_dimensions) + \
                     "\n"+"variance:"+str(self.betaInv)
         np.savetxt(fname=output+"_responsibilities.csv",
@@ -227,7 +296,7 @@ class OptimizedGTM(object):
 
         Parameters
         ----------
-        labels : array of shape (n_instances,), optional (default = None)
+        labels : array of shape (n_individuals,), optional (default = None)
             Data labels.
         title : str, optional (default = '')
             Plot title.
@@ -254,7 +323,6 @@ class OptimizedGTM(object):
         Notes
         -----
         This function plots mean representations only (no landscape nor modes).
-
         """
         plot(coordinates=self.matMeans, labels=labels, title=title,
              output=output, discrete=discrete,
@@ -268,7 +336,7 @@ class OptimizedGTM(object):
 
         Parameters
         ----------
-        labels : array of shape (n_instances,), optional (default = None)
+        labels : array of shape (n_individuals,), optional (default = None)
             Data labels.
         title : str, optional (default = '')
             Plot title.
@@ -294,7 +362,6 @@ class OptimizedGTM(object):
         Notes
         -----
         This function plots mode representations only (no landscape nor means).
-
         """
         plot(coordinates=self.matModes, labels=labels, title=title,
              output=output, discrete=discrete,
@@ -304,14 +371,14 @@ class OptimizedGTM(object):
     def plot_html(self, labels=None, ids=None, plot_arrows=True,
                   title="GTM", discrete=False, output="output",
                   pointsize=1.0, alpha=0.3, do_interpolate=True,
-                  cname="Spectral_r", prior="equiprobable"):
+                  cname="Spectral_r", prior="estimated"):
         """ Plotting function for GTM object - HTML output.
 
         Parameters
         ----------
-        labels : array of shape (n_instances,), optional (default = None)
+        labels : array of shape (n_individuals,), optional (default = None)
             Data labels.
-        ids : array of shape (n_instances,), optional (default = None)
+        ids : array of shape (n_individuals,), optional (default = None)
             Identifiers for each data point - appears in tooltips.
         title : str, optional (default = '')
             Plot title.
@@ -327,7 +394,7 @@ class OptimizedGTM(object):
             Interpolate color between grid nodes.
         cname : str, optional (default = 'Spectral_r')
             Name of matplotlib color map.
-        prior : {'equiprobable','estimated'}
+        prior : {'estimated','equiprobable'}
             Type of prior used to compute class probabilities on the map.
             Choose equiprobable for equiprobable priors.
             Estimated priors take into account class imbalance.
@@ -353,12 +420,12 @@ class OptimizedGTM(object):
 
     def plot_multipanel(self, labels, output="output", discrete=False,
                         pointsize=1.0, alpha=0.3, do_interpolate=True,
-                        cname="Spectral_r", prior="equiprobable"):
+                        cname="Spectral_r", prior="estimated"):
         """ Multipanel visualization for GTM object - PDF output.
 
         Parameters
         ----------
-        labels : array of shape (n_instances,), optional (default = None)
+        labels : array of shape (n_individuals,), optional (default = None)
             Data labels.
         output : str, optional (default = 'ouptut')
             Output path for plot.
@@ -372,7 +439,7 @@ class OptimizedGTM(object):
             Interpolate color between grid nodes.
         cname : str, optional (default = 'Spectral_r')
             Name of matplotlib color map.
-        prior : {'equiprobable','estimated'}
+        prior : {'estimated','equiprobable'}
             Type of prior used to compute class probabilities on the map.
             Choose equiprobable for equiprobable priors.
             Estimated priors take into account class imbalance.
@@ -396,11 +463,13 @@ class OptimizedGTM(object):
                              title="GTM_projection", discrete=False,
                              output="output", pointsize=1.0,
                              alpha=0.3, do_interpolate=True,
-                             cname="Spectral_r", prior="equiprobable"):
+                             cname="Spectral_r", prior="estimated"):
         """ Returns a GTM landscape with projected data points - HTML output.
 
         Parameters
         ----------
+        projections : instance of :class:`ugtm.ugtm_classes.OptimizedGTM`
+            OptimizedGTM model.
         labels : array of shape (n_train,), optional (default = None)
             Data labels for the training set (not projections).
         ids : array of shape (n_test,), optional (default = None)
@@ -419,7 +488,7 @@ class OptimizedGTM(object):
             Interpolate color between grid nodes.
         cname : str, optional (default = 'Spectral_r')
             Name of matplotlib color map.
-        prior : {'equiprobable','estimated'}
+        prior : {'estimated','equiprobable'}
             Type of prior used to compute class probabilities on the map.
             Choose equiprobable for equiprobable priors.
             Estimated priors take into account class imbalance.

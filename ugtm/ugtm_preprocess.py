@@ -15,13 +15,56 @@ from sklearn.decomposition import PCA
 
 
 class ProcessedTrainTest(object):
+    r"""Class for processed train and test set.
+
+    Arguments
+    =========
+    train : array of shape (n_train, n_dimensions)
+        Train data matrix.
+    test : array of shape (n_test, ndimensions)
+        Test data matrix.
+    """
+
     def __init__(self, train, test):
+        r""" Constructor for :class:`~ugtm.ugtm_preprocess.ProcessedTrainTest`.
+
+        Parameters
+        =========
+        train : array of shape (n_train, n_dimensions)
+            Train data matrix.
+        test : array of shape (n_test, ndimensions)
+            Test data matrix.
+        """
         self.train = train
         self.test = test
 
 
 def pcaPreprocess(data, doPCA=False, n_components=-1, missing=False,
-                  missing_strategy='most_frequent', random_state=1234):
+                  missing_strategy='median', random_state=1234):
+    r"""Preprocess data using PCA.
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Data matrix.
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int (default = 1234)
+        Random state.
+
+    Returns
+    =======
+    array of shape (n_individuals, n_components)
+        Data projected onto principal axes.
+    """
     if missing:
         imp = SimpleImputer(strategy=missing_strategy)
         data = imp.fit_transform(data)
@@ -40,7 +83,32 @@ def pcaPreprocess(data, doPCA=False, n_components=-1, missing=False,
 
 
 def processTrainTest(train, test, doPCA, n_components, missing=False,
-                     missing_strategy='most_frequent', random_state=1234):
+                     missing_strategy='median', random_state=1234):
+    r"""Preprocess train and test data using PCA.
+
+    Parameters
+    ==========
+    train : array of shape (n_individuals, n_train)
+        Train data matrix.
+    test : array of shape (n_individuals, n_test)
+        Test data matrix.
+    doPCA : bool, optional (default = False)
+        Apply PCA pre-processing.
+    n_components : int, optional (default = -1)
+        Number of components for PCA pre-processing.
+        If set to -1, keep principal components
+        accounting for 80% of data variance.
+    missing : bool, optional (default = True)
+        Replace missing values (calls scikit-learn functions).
+    missing_strategy : str (default = 'median')
+        Scikit-learn missing data strategy.
+    random_state : int (default = 1234)
+        Random state.
+
+    Returns
+    =======
+    instance of :class:`~ugtm.ugtm_preprocess.ProcessedTrainTest`
+    """
     if missing:
         imp = SimpleImputer(strategy=missing_strategy)
         train = imp.fit_transform(train)
@@ -58,6 +126,19 @@ def processTrainTest(train, test, doPCA, n_components, missing=False,
 
 
 def chooseKernel(data, kerneltype='euclidean'):
+    r"""Kernalize data (uses sklearn)
+
+    Parameters
+    ==========
+    data : array of shape (n_individuals, n_dimensions)
+        Data matrix.
+    kerneltype : {'euclidean', 'cosine', 'laplacian', 'polynomial_kernel', 'jaccard'}, optional
+        Kernel type.
+
+    Returns
+    =======
+    array of shape (n_individuals, n_individuals)
+    """
     if kerneltype == 'euclidean':
         K = np.divide(1, (1+pairwise_distances(data, metric="euclidean")))
     elif kerneltype == 'cosine':
