@@ -3,7 +3,7 @@ Overview
 ========
 
 
-Generative topographic mapping (GTM) is a probabilisitc dimensionality reduction algorithm introduced by `Bishop, Svensen and Williams <https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf>`_, which can also be used for classification and regression using class maps or activity landscapes: 
+Generative topographic mapping (GTM) is a probabilistic dimensionality reduction algorithm introduced by `Bishop, Svensen and Williams <https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf>`_, which can also be used for classification and regression using class maps or activity landscapes: 
 
 .. altair-plot::
         :hide-code:  
