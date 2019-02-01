@@ -28,7 +28,7 @@ Or p3 for python 3.6.6:
 
 ## Documentation
 
-[Readthedocs](http://ugtm.readthedocs.io/en/latest/)
+[Readthedocs](https://ugtm.readthedocs.io/)
 
 
 ## Prerequisites
