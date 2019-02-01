@@ -78,7 +78,7 @@ which are colored by predicted label. To each node is associated class probabili
             y='x2',
             color='predicted_node_label:N',
             size=alt.value(50),
-            opacity='probability_of_predominant class:Q',
+            opacity='probability_of_predominant_class:Q',
             tooltip=['x1','x2', 'predicted_node_label:N', 'probability_of_predominant_class:Q']
         ).properties(title = "Class map", width = 200, height = 200)
 
