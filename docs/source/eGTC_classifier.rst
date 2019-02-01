@@ -70,7 +70,7 @@ which are colored by predicted label. To each node is associated class probabili
 
         dfclassmap = pd.DataFrame(gtc.optimizedModel.matX, columns=["x1", "x2"]) 
         dfclassmap["predicted_node_label"] = iris.target_names[gtc.node_label]
-        dfclassmap["probability_of_predominant class"] = np.max(gtc.node_probabilities,axis=1) 
+        dfclassmap["probability_of_predominant_class"] = np.max(gtc.node_probabilities,axis=1) 
 
         # Classification map
         alt.Chart(dfclassmap).mark_square().encode(
