@@ -78,8 +78,8 @@ which are colored by predicted label. To each node is associated class probabili
             y='x2',
             color='predicted_node_label:N',
             size=alt.value(50),
-            opacity='probability_of_predominant class',
-            tooltip=['x1','x2', 'predicted_node_label:N', 'probability_of_predominant_class']
+            opacity='probability_of_predominant class:Q',
+            tooltip=['x1','x2', 'predicted_node_label:N', 'probability_of_predominant_class:Q']
         ).properties(title = "Class map", width = 200, height = 200)
 
 
@@ -134,7 +134,7 @@ Visualize predicted vs real labels using the iris dataset and `altair <https://a
                    legend=alt.Legend(title="label")), 
             opacity="probability_of_predominant_class:Q", 
             tooltip=["x1", "x2", "predicted_label:N",
-                     "true_label:N", "probability_of_predominant_class"]
+                     "true_label:N", "probability_of_predominant_class:Q"]
         ).properties(title="Pedicted labels", width=200, height=200).interactive()
 
         # Projection of X_test colored by true_label
@@ -144,7 +144,7 @@ Visualize predicted vs real labels using the iris dataset and `altair <https://a
                             legend=alt.Legend(title="label")),
             size=alt.value(100), 
             tooltip=["x1", "x2", "predicted_label:N",
-                     "true_label:N", "probability_of_predominant_class"]
+                     "true_label:N", "probability_of_predominant_class:Q"]
         ).properties(title="True_labels", width=200, height=200).interactive()
 
                 
