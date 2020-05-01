@@ -145,7 +145,10 @@ class eGTM(BaseEstimator, TransformerMixin):
         dic["modes"] = self.projected.matModes
         dic["responsibilities"] = self.projected.matR
 
-        return dic[model]
+        if model is not None:
+            return dic[model]
+        else:
+            return dic["means"]
 
     def fit_transform(self, X, model="means"):
         """Fits and transforms X using GTM.
@@ -196,8 +199,24 @@ class eGTM(BaseEstimator, TransformerMixin):
         dic["means"] = self.projected.matMeans
         dic["modes"] = self.projected.matModes
         dic["responsibilities"] = self.projected.matR
+        if model is not None:
+            return dic[model]
+        else:
+            return dic["means"]
 
-        return dic[model]
+    def inverse_transform(self, matR):
+        """Inverse transformation of responsibility onto the original data space
+
+        Parameters
+        ==========
+        matR : array of shape (n_samples, n_nodes)
+
+        Returns
+        =======
+        matY : array of shape (n_samples, n_dimensions)
+        """
+        weightedPhi = np.dot(matR, self.initialModel.matPhiMPlusOne)
+        return np.dot(weightedPhi, self.optimizedModel.matW.T)
 
 
 class eGTC(BaseEstimator, ClassifierMixin):
