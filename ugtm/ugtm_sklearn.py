@@ -41,12 +41,18 @@ class eGTM(BaseEstimator, TransformerMixin):
         Number of iterations for EM algorithm.
     verbose : bool, optional (default = False)
         Verbose mode (outputs loglikelihood values during EM algorithm).
+    model : {'means', 'modes', 'responsibilities','complete'}, optional
+        GTM data representations:
+        'means' for mean data positions,
+        'modes' for positions with  max. responsibilities,
+        'responsibilities' for probability distribution on the map,
+        'complete' for a complete instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`
 
     """
 
     def __init__(self, k=16, m=4, s=0.3, regul=0.1,
                  random_state=1234,
-                 niter=200, verbose=False):
+                 niter=200, verbose=False, model="means"):
         """Constructor for eGTM class.
 
         Parameters
@@ -75,7 +81,16 @@ class eGTM(BaseEstimator, TransformerMixin):
             Number of iterations for EM algorithm.
         verbose : bool, optional (default = False)
             Verbose mode (outputs loglikelihood values during EM algorithm).
+        model : {'means', 'modes', 'responsibilities','complete'}, optional
+            GTM data representations:
+            'means' for mean data positions,
+            'modes' for positions with  max. responsibilities,
+            'responsibilities' for probability distribution on the map,
+            'complete' for a complete instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`
+
         """
+        assert model in ('means', 'modes', 'responsibilities','complete'),\
+            "model must be either of 'means', 'modes', 'responsibilities', or 'complete'"
         self.k = k
         self.m = m
         self.s = s
@@ -83,8 +98,9 @@ class eGTM(BaseEstimator, TransformerMixin):
         self.random_state = random_state
         self.niter = niter
         self.verbose = verbose
+        self.model = model
 
-    def fit(self, X):
+    def fit(self, X, y=None):
         """Fits GTM to X using :class:`~ugtm.ugtm_classes.OptimizedGTM`.
 
         Parameters
@@ -106,7 +122,7 @@ class eGTM(BaseEstimator, TransformerMixin):
 
         return self
 
-    def transform(self, X, model="means"):
+    def transform(self, X):
         """Projects new data X onto GTM using :func:`~ugtm.ugtm_gtm.projection`.
 
         Parameters
@@ -114,19 +130,13 @@ class eGTM(BaseEstimator, TransformerMixin):
 
         X : 2D array
             Data matrix.
-        model : {'means', 'modes', 'responsibilities','complete'}, optional
-            GTM data representations:
-            'means' for mean data positions,
-            'modes' for positions with  max. responsibilities,
-            'responsibilities' for probability distribution on the map,
-            'complete' for a complete instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`
 
         Returns
         =======
-        if model="means", array of shape (n_instances, 2),
-        if model="modes", array of shape (n_instances, 2),
-        if model="responsibilities", array of shape (n_instances, n_nodes),
-        if model="complete", instance of class :class:`~ugtm.ugtm_classes.OptimizedGTM`
+        if self.model="means", array of shape (n_instances, 2),
+        if self.model="modes", array of shape (n_instances, 2),
+        if self.model="responsibilities", array of shape (n_instances, n_nodes),
+        if self.model="complete", instance of class :class:`~ugtm.ugtm_classes.OptimizedGTM`
         """
 
         # Check fit
@@ -145,12 +155,9 @@ class eGTM(BaseEstimator, TransformerMixin):
         dic["modes"] = self.projected.matModes
         dic["responsibilities"] = self.projected.matR
 
-        if model is not None:
-            return dic[model]
-        else:
-            return dic["means"]
+        return dic[self.model]
 
-    def fit_transform(self, X, model="means"):
+    def fit_transform(self, X, y=None):
         """Fits and transforms X using GTM.
 
         Parameters
@@ -158,19 +165,13 @@ class eGTM(BaseEstimator, TransformerMixin):
 
         X : 2D array
             Data matrix.
-        model : {'means', 'modes', 'responsibilities','complete'}, optional
-            GTM data representations:
-            'means' for mean data positions,
-            'modes' for positions with  max. responsibilities,
-            'responsibilities' for probability distribution on the map,
-            'complete' for a complete instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`
 
         Returns
         =======
-        if model="means", array of shape (n_instances, 2),
-        if model="modes", array of shape (n_instances, 2),
-        if model="responsibilities", array of shape (n_instances, n_nodes),
-        if model="complete", instance of class :class:`~ugtm.ugtm_classes.OptimizedGTM`
+        if self.model="means", array of shape (n_instances, 2),
+        if self.model="modes", array of shape (n_instances, 2),
+        if self.model="responsibilities", array of shape (n_instances, n_nodes),
+        if self.model="complete", instance of class :class:`~ugtm.ugtm_classes.OptimizedGTM`
         """
 
         X = check_array(X)
@@ -199,10 +200,7 @@ class eGTM(BaseEstimator, TransformerMixin):
         dic["means"] = self.projected.matMeans
         dic["modes"] = self.projected.matModes
         dic["responsibilities"] = self.projected.matR
-        if model is not None:
-            return dic[model]
-        else:
-            return dic["means"]
+        return dic[self.model]
 
     def inverse_transform(self, matR):
         """Inverse transformation of responsibility onto the original data space
