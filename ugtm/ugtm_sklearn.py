@@ -89,7 +89,7 @@ class eGTM(BaseEstimator, TransformerMixin):
             'complete' for a complete instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`
 
         """
-        assert model in ('means', 'modes', 'responsibilities','complete'),\
+        assert model in ('means', 'modes', 'responsibilities', 'complete'),\
             "model must be either of 'means', 'modes', 'responsibilities', or 'complete'"
         self.k = k
         self.m = m
