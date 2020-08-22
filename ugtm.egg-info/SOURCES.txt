@@ -46,7 +46,6 @@ docs/build/html/_sources/_autosummary/_autosummary/ugtm.ugtm_plot.ugtm_landscape
 docs/build/html/_sources/_autosummary/_autosummary/ugtm.ugtm_predictions.rst.txt
 docs/build/html/_sources/_autosummary/_autosummary/ugtm.ugtm_preprocess.rst.txt
 docs/build/html/_sources/_autosummary/_autosummary/ugtm.ugtm_sklearn.rst.txt
-docs/source/requires.txt
 ugtm/__init__.py
 ugtm/ugtm_classes.py
 ugtm/ugtm_core.py
