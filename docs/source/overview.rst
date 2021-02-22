@@ -3,7 +3,7 @@ Overview
 ========
 
 
-Generative topographic mapping (GTM) is a probabilisitc dimensionality reduction algorithm introduced by `Bishop, Svensen and Williams <https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf>`_, which can also be used for classification and regression using class maps or activity landscapes: 
+Generative topographic mapping (GTM) is a probabilistic dimensionality reduction algorithm introduced by `Bishop, Svensen and Williams <https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf>`_, which can also be used for classification and regression using class maps or activity landscapes: 
 
 .. altair-plot::
         :hide-code:  
@@ -33,28 +33,28 @@ Generative topographic mapping (GTM) is a probabilisitc dimensionality reduction
         points = eGTM().fit(X).transform(X)
 
         df = pd.DataFrame(points, columns=["x1", "x2"])
-        df['original label'] = iris.target_names[y]
+        df['original_label'] = iris.target_names[y]
 
         dfclassmap = pd.DataFrame(gtc.optimizedModel.matX, columns=["x1", "x2"]) 
-        dfclassmap["predicted node label"] = iris.target_names[gtc.node_label]
-        dfclassmap["probability of predominant class"] = np.max(gtc.node_probabilities,axis=1) 
+        dfclassmap["predicted_node_label"] = iris.target_names[gtc.node_label]
+        dfclassmap["probability_of_predominant_class"] = np.max(gtc.node_probabilities,axis=1) 
 
         # Classification map
         ch1 = alt.Chart(dfclassmap).mark_square().encode(
             x='x1',
             y='x2',
-            color=alt.Color('predicted node label:N',legend=alt.Legend(title="label")),
+            color=alt.Color('predicted_node_label:N',legend=alt.Legend(title="label")),
             size=alt.value(80),
-            opacity='probability of predominant class',
-            tooltip=['x1','x2', 'predicted node label:N', 'probability of predominant class']
+            opacity='probability_of_predominant_class',
+            tooltip=['x1','x2', 'predicted_node_label:N', 'probability_of_predominant_class']
         ).properties(title = "GTM class map: iris dataset",
                      width = 200, height = 200)
 
         ch2 = alt.Chart(df).mark_circle(stroke="grey").encode(
            x='x1',
            y='x2',
-           color=alt.Color('original label:N',legend=alt.Legend(title="label")),
-           tooltip=['original label','x1','x2']
+           color=alt.Color('original_label:N',legend=alt.Legend(title="label")),
+           tooltip=['original_label','x1','x2']
         )
 
         chr3 = ch1 + ch2

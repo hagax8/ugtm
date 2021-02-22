@@ -65,17 +65,17 @@ which can be colored by predicted label. This visualization uses the python pack
         gtr = gtr.fit(X_train,y_train)
 
         dfclassmap = pd.DataFrame(gtr.optimizedModel.matX, columns=["x1", "x2"]) 
-        dfclassmap["predicted node label"] = gtr.node_label
+        dfclassmap["predicted_node_label"] = gtr.node_label
 
         # Classification map
         alt.Chart(dfclassmap).mark_square().encode(
             x='x1',
             y='x2',
-            color=alt.Color('predicted node label:Q',
+            color=alt.Color('predicted_node_label:Q',
                             scale=alt.Scale(scheme='greenblue'),
                             legend=alt.Legend(title="Boston house prices")),
             size=alt.value(50),
-            tooltip=['x1','x2', 'predicted node label:Q']
+            tooltip=['x1','x2', 'predicted_node_label:Q']
         ).properties(title = "Activity landscape", width = 200, height = 200)
 
 
@@ -117,21 +117,21 @@ This visualization uses the python package `altair <https://altair-viz.github.io
         transformed = eGTM().fit(X_train).transform(X_test)
 
         df = pd.DataFrame(transformed, columns=["x1", "x2"])
-        df["predicted label"] = y_pred
-        df["true label"] = y_test
+        df["predicted_label"] = y_pred
+        df["true_label"] = y_test
 
         chart1 = alt.Chart(df).mark_point().encode(
         x='x1',y='x2',
-        color=alt.Color("predicted label:Q",scale=alt.Scale(scheme='greenblue'),
+        color=alt.Color("predicted_label:Q",scale=alt.Scale(scheme='greenblue'),
                          legend=alt.Legend(title="Boston house prices")),  
-        tooltip=["x1", "x2", "predicted label:Q", "true label:Q"]
+        tooltip=["x1", "x2", "predicted_label:Q", "true_label:Q"]
         ).properties(title="Pedicted labels", width=200, height=200).interactive()
 
         chart2 = alt.Chart(df).mark_point().encode(
         x='x1',y='x2',
-        color=alt.Color("true label:Q",scale=alt.Scale(scheme='greenblue'),
+        color=alt.Color("true_label:Q",scale=alt.Scale(scheme='greenblue'),
                         legend=alt.Legend(title="Boston house prices")),   
-        tooltip=["x1", "x2", "predicted label:Q", "true label:Q"]
+        tooltip=["x1", "x2", "predicted_label:Q", "true_label:Q"]
         ).properties(title="True labels", width=200, height=200).interactive()
 
         alt.hconcat(chart1, chart2)

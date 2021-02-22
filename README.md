@@ -28,7 +28,7 @@ Or p3 for python 3.6.6:
 
 ## Documentation
 
-[Readthedocs](http://ugtm.readthedocs.io/en/latest/)
+[Readthedocs](https://ugtm.readthedocs.io/)
 
 
 ## Prerequisites
@@ -43,8 +43,24 @@ and following packages:
 - mpld3>=0.3
 - jinja2>=2.10
 
+## Citing ugtm
 
-## Author
+Cite ugtm version and the [following paper](https://openresearchsoftware.metajnl.com/articles/10.5334/jors.235/):
+
+```
+@ARTICLE{Gaspar2018-qt,
+  title   = "ugtm: A Python Package for Data Modeling and Visualization Using
+             Generative Topographic Mapping",
+  author  = "Gaspar, H{\'e}l{\'e}na Alexandra",
+  journal = "Journal of Open Research Software",
+  volume  =  6,
+  pages   = "215",
+  month   =  dec,
+  year    =  2018
+}
+```
+
+## Principal author / admin
 
 Héléna A. Gaspar, hagax8@gmail.com, https://github.com/hagax8
 

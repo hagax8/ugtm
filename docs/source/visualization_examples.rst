@@ -32,9 +32,8 @@ S-curve
         lle = man.fit_transform(X)
 
         # Construct GTM 
-        gtm = eGTM(m=2).fit(X)
-        gtm_means = gtm.transform(X,model="means")
-        gtm_modes = gtm.transform(X,model="modes")
+        gtm_means = eGTM(m=2, model="means").fit_transform(X)
+        gtm_modes = eGTM(m=2, model="modes").fit_transform(X)
 
         dgtm_modes = pd.DataFrame(gtm_modes, columns=["x1", "x2"]) 
         dgtm_modes["label"] = y 
@@ -159,9 +158,8 @@ Severed sphere
         lle = man.fit_transform(X)
 
         # Construct GTM 
-        gtm = eGTM(m=2).fit(X)
-        gtm_means = gtm.transform(X,model="means")
-        gtm_modes = gtm.transform(X,model="modes")
+        gtm_means = eGTM(m=2, model="means").fit_transform(X)
+        gtm_modes = eGTM(m=2, model="modes").fit_transform(X)
 
         dgtm_modes = pd.DataFrame(gtm_modes, columns=["x1", "x2"]) 
         dgtm_modes["label"] = y 
@@ -277,9 +275,8 @@ Hand-written digits
         lle = man.fit_transform(X)
 
         # Construct GTM 
-        gtm = eGTM().fit(X)
-        gtm_means = gtm.transform(X,model="means")
-        gtm_modes = gtm.transform(X,model="modes")
+        gtm_means = eGTM(m=2, model="means").fit_transform(X)
+        gtm_modes = eGTM(m=2, model="modes").fit_transform(X)
 
         dgtm_modes = pd.DataFrame(gtm_modes, columns=["x1", "x2"]) 
         dgtm_modes["label"] = y 

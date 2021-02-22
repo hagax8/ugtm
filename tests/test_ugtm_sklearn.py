@@ -26,12 +26,12 @@ class TestGTMSklearn(unittest.TestCase):
         self.assertTrue(transformed.shape == (60, 2))
 
     def test_eGTM_modes(self):
-        transformed = eGTM().fit(self.train).transform(self.test, model="modes")
+        transformed = eGTM(model="modes").fit(self.train).transform(self.test)
         self.assertTrue(transformed.shape == (60, 2))
 
     def test_eGTM_trainequalstest(self):
-        transformed = eGTM().fit(self.train).transform(
-            self.train, model="responsibilities")
+        transformed = eGTM(model="responsibilities").fit(self.train).transform(
+            self.train)
         original = eGTM().fit(self.train).optimizedModel.matR
         np.testing.assert_almost_equal(original, transformed, decimal=7)
 
