@@ -17,6 +17,16 @@ Run GTM
         transformed = eGTM().fit(X_train).transform(X_test)
 
 The default output of eGTM.transform is the mean GTM projection. For other data representations (modes, responsibilities), see :func:`~ugtm.ugtm_sklearn.eGTM.transform`.
+Example of generating responsibilities (posterior probabilities for each node on the manifold) and reverse-mapping them to the input space::
+
+        from ugtm import eGTM
+        import numpy as np
+
+        X_train = np.random.randn(100, 50)
+
+        gtm_model = eGTM(model='responsibilities').fit(X_train)
+        transformed = gtm_model.transform(X_train)
+        inverse_transform = gtm_model.inverse_transform(transformed)
 
 
 
