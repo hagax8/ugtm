@@ -1,9 +1,6 @@
 numpy>=1.14.5
-scikit-learn>=0.20
+scikit-learn>=0.20.0
 matplotlib>=2.2.2
 scipy>=0.19.1
 mpld3>=0.3
-jinja2>=2.10
-altair>=2.2.2
-contextlib2
-docutils
+jinja2>=2.10.0

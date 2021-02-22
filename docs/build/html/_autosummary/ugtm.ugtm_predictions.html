@@ -1,55 +1,57 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>ugtm.ugtm_predictions &mdash; ugtm v2.0.0 documentation</title>
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/altair-plot.css" type="text/css" />
+
+  
+  
+
+  
   
 
   
 
   
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/altair-plot.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="ugtm v2.0.0 documentation" href="../index.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -80,11 +82,15 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
             
-                <p class="caption"><span class="caption-text">Get started here</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
@@ -118,32 +124,52 @@
             
           
         </div>
+        
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">ugtm</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ugtm</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
-    <li>ugtm.ugtm_predictions</li>
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>ugtm.ugtm_predictions</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
           
@@ -151,7 +177,10 @@
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -161,35 +190,35 @@
 <span id="ugtm-ugtm-predictions"></span><h1>ugtm.ugtm_predictions<a class="headerlink" href="#module-ugtm.ugtm_predictions" title="Permalink to this headline">¶</a></h1>
 <p>GTC (GTM classification) and GTR (GTM regression)</p>
 <p class="rubric">Functions</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.GTC" title="ugtm.ugtm_predictions.GTC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GTC</span></code></a>(train,&nbsp;labels,&nbsp;test[,&nbsp;k,&nbsp;m,&nbsp;s,&nbsp;regul,&nbsp;…])</td>
-<td>Run GTC (GTM classification): Bayes or nearest node algorithm.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.GTC" title="ugtm.ugtm_predictions.GTC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GTC</span></code></a>(train, labels, test[, k, m, s, regul, …])</p></td>
+<td><p>Run GTC (GTM classification): Bayes or nearest node algorithm.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.GTR" title="ugtm.ugtm_predictions.GTR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GTR</span></code></a>(train,&nbsp;labels,&nbsp;test[,&nbsp;k,&nbsp;m,&nbsp;s,&nbsp;regul,&nbsp;…])</td>
-<td>Run GTR (GTM nearest node(s) regression).</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.GTR" title="ugtm.ugtm_predictions.GTR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GTR</span></code></a>(train, labels, test[, k, m, s, regul, …])</p></td>
+<td><p>Run GTR (GTM nearest node(s) regression).</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.advancedGTC" title="ugtm.ugtm_predictions.advancedGTC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">advancedGTC</span></code></a>(train,&nbsp;labels,&nbsp;test[,&nbsp;…])</td>
-<td>Run GTC (GTM classification): advanced Bayes</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.advancedGTC" title="ugtm.ugtm_predictions.advancedGTC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">advancedGTC</span></code></a>(train, labels, test[, …])</p></td>
+<td><p>Run GTC (GTM classification): advanced Bayes</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.advancedPredictBayes" title="ugtm.ugtm_predictions.advancedPredictBayes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">advancedPredictBayes</span></code></a>(optimizedModel,&nbsp;labels,&nbsp;…)</td>
-<td>Bayesian GTM classifier: complete model</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.advancedPredictBayes" title="ugtm.ugtm_predictions.advancedPredictBayes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">advancedPredictBayes</span></code></a>(optimizedModel, labels, …)</p></td>
+<td><p>Bayesian GTM classifier: complete model</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.predictBayes" title="ugtm.ugtm_predictions.predictBayes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predictBayes</span></code></a>(optimizedModel,&nbsp;labels,&nbsp;new_data)</td>
-<td>Bayesian GTM classifier (GTC Bayes).</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.predictBayes" title="ugtm.ugtm_predictions.predictBayes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predictBayes</span></code></a>(optimizedModel, labels, new_data)</p></td>
+<td><p>Bayesian GTM classifier (GTC Bayes).</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.predictNN" title="ugtm.ugtm_predictions.predictNN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predictNN</span></code></a>(optimizedModel,&nbsp;labels,&nbsp;new_data)</td>
-<td>GTM nearest node(s) classification or regression.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.predictNN" title="ugtm.ugtm_predictions.predictNN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predictNN</span></code></a>(optimizedModel, labels, new_data)</p></td>
+<td><p>GTM nearest node(s) classification or regression.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.predictNNSimple" title="ugtm.ugtm_predictions.predictNNSimple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predictNNSimple</span></code></a>(train,&nbsp;test,&nbsp;labels[,&nbsp;…])</td>
-<td>Nearest neighbor(s) classification or regression.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.predictNNSimple" title="ugtm.ugtm_predictions.predictNNSimple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predictNNSimple</span></code></a>(train, test, labels[, …])</p></td>
+<td><p>Nearest neighbor(s) classification or regression.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.printClassPredictions" title="ugtm.ugtm_predictions.printClassPredictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">printClassPredictions</span></code></a>(prediction,&nbsp;output)</td>
-<td>Print output of <a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.advancedPredictBayes" title="ugtm.ugtm_predictions.advancedPredictBayes"><code class="xref py py-func docutils literal notranslate"><span class="pre">advancedPredictBayes()</span></code></a>.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.printClassPredictions" title="ugtm.ugtm_predictions.printClassPredictions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">printClassPredictions</span></code></a>(prediction, output)</p></td>
+<td><p>Print output of <a class="reference internal" href="../ugtm.html#ugtm.ugtm_predictions.advancedPredictBayes" title="ugtm.ugtm_predictions.advancedPredictBayes"><code class="xref py py-func docutils literal notranslate"><span class="pre">advancedPredictBayes()</span></code></a>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -197,22 +226,28 @@
 
 
            </div>
+           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Helena A. Gaspar.
+        &#169; Copyright 2018, Helena A. Gaspar.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -221,39 +256,15 @@
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'v2.0.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

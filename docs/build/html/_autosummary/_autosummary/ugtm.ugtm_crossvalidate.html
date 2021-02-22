@@ -1,58 +1,57 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>ugtm.ugtm_crossvalidate &mdash; ugtm v2.0.0 documentation</title>
   
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
+
+  
+  
+
+  
   
 
   
 
   
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/altair-plot.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="ugtm v2.0.0 documentation" href="../../index.html"/>
-        <link rel="up" title="ugtm" href="../ugtm.html"/>
-        <link rel="next" title="ugtm.ugtm_preprocess" href="ugtm.ugtm_preprocess.html"/>
-        <link rel="prev" title="ugtm.ugtm_predictions" href="ugtm.ugtm_predictions.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -83,11 +82,15 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
             
-                <p class="caption"><span class="caption-text">Get started here</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
@@ -96,17 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../eGTR_regressor.html">eGTR: GTM regressor</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API reference</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../../api.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../api.html#modules">Modules</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../ugtm.html">ugtm</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="../ugtm.html#submodules">Submodules</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -130,36 +124,52 @@
             
           
         </div>
+        
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">ugtm</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ugtm</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
-          <li><a href="../../api.html">API Reference</a> &raquo;</li>
-      
-          <li><a href="../ugtm.html">ugtm</a> &raquo;</li>
-      
-    <li>ugtm.ugtm_crossvalidate</li>
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>ugtm.ugtm_crossvalidate</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
           
@@ -167,7 +177,10 @@
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -177,35 +190,35 @@
 <span id="ugtm-ugtm-crossvalidate"></span><h1>ugtm.ugtm_crossvalidate<a class="headerlink" href="#module-ugtm.ugtm_crossvalidate" title="Permalink to this headline">¶</a></h1>
 <p>Cross-validation support for GTC and GTR models (also SVM and PCA).</p>
 <p class="rubric">Functions</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateGTC" title="ugtm.ugtm_crossvalidate.crossvalidateGTC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateGTC</span></code></a>(data,&nbsp;labels[,&nbsp;k,&nbsp;m,&nbsp;s,&nbsp;…])</td>
-<td>Cross-validate GTC model.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateGTC" title="ugtm.ugtm_crossvalidate.crossvalidateGTC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateGTC</span></code></a>(data, labels[, k, m, s, …])</p></td>
+<td><p>Cross-validate GTC model.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateGTR" title="ugtm.ugtm_crossvalidate.crossvalidateGTR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateGTR</span></code></a>(data,&nbsp;labels[,&nbsp;k,&nbsp;m,&nbsp;s,&nbsp;…])</td>
-<td>Cross-validate GTR model.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateGTR" title="ugtm.ugtm_crossvalidate.crossvalidateGTR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateGTR</span></code></a>(data, labels[, k, m, s, …])</p></td>
+<td><p>Cross-validate GTR model.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidatePCAC" title="ugtm.ugtm_crossvalidate.crossvalidatePCAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidatePCAC</span></code></a>(data,&nbsp;labels[,&nbsp;…])</td>
-<td>Cross-validate PCA kNN classification model.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidatePCAC" title="ugtm.ugtm_crossvalidate.crossvalidatePCAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidatePCAC</span></code></a>(data, labels[, …])</p></td>
+<td><p>Cross-validate PCA kNN classification model.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidatePCAR" title="ugtm.ugtm_crossvalidate.crossvalidatePCAR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidatePCAR</span></code></a>(data,&nbsp;labels[,&nbsp;…])</td>
-<td>Cross-validate PCA kNN regression model.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidatePCAR" title="ugtm.ugtm_crossvalidate.crossvalidatePCAR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidatePCAR</span></code></a>(data, labels[, …])</p></td>
+<td><p>Cross-validate PCA kNN regression model.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateSVC" title="ugtm.ugtm_crossvalidate.crossvalidateSVC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateSVC</span></code></a>(data,&nbsp;labels[,&nbsp;C,&nbsp;doPCA,&nbsp;…])</td>
-<td>Cross-validate SVC model.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateSVC" title="ugtm.ugtm_crossvalidate.crossvalidateSVC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateSVC</span></code></a>(data, labels[, C, doPCA, …])</p></td>
+<td><p>Cross-validate SVC model.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateSVCrbf" title="ugtm.ugtm_crossvalidate.crossvalidateSVCrbf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateSVCrbf</span></code></a>(data,&nbsp;labels[,&nbsp;C,&nbsp;…])</td>
-<td>Cross-validate SVC model with RBF kernel.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateSVCrbf" title="ugtm.ugtm_crossvalidate.crossvalidateSVCrbf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateSVCrbf</span></code></a>(data, labels[, C, …])</p></td>
+<td><p>Cross-validate SVC model with RBF kernel.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateSVR" title="ugtm.ugtm_crossvalidate.crossvalidateSVR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateSVR</span></code></a>(data,&nbsp;labels[,&nbsp;C,&nbsp;epsilon,&nbsp;…])</td>
-<td>Cross-validate SVR model with linear kernel.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.crossvalidateSVR" title="ugtm.ugtm_crossvalidate.crossvalidateSVR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crossvalidateSVR</span></code></a>(data, labels[, C, epsilon, …])</p></td>
+<td><p>Cross-validate SVR model with linear kernel.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.whichExperiment" title="ugtm.ugtm_crossvalidate.whichExperiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">whichExperiment</span></code></a>(data,&nbsp;labels,&nbsp;args[,&nbsp;discrete])</td>
-<td></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../../ugtm.html#ugtm.ugtm_crossvalidate.whichExperiment" title="ugtm.ugtm_crossvalidate.whichExperiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">whichExperiment</span></code></a>(data, labels, args[, discrete])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -213,31 +226,28 @@
 
 
            </div>
+           
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="ugtm.ugtm_preprocess.html" class="btn btn-neutral float-right" title="ugtm.ugtm_preprocess" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="ugtm.ugtm_predictions.html" class="btn btn-neutral" title="ugtm.ugtm_predictions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Helena A. Gaspar.
+        &#169; Copyright 2018, Helena A. Gaspar.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -246,39 +256,15 @@
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'v2.0.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

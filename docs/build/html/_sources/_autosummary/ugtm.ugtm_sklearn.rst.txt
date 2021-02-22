@@ -1,7 +1,11 @@
-ugtm.ugtm\_sklearn
+﻿ugtm.ugtm\_sklearn
 ==================
 
 .. automodule:: ugtm.ugtm_sklearn
+
+   
+   
+   
 
    
    
@@ -23,3 +27,6 @@ ugtm.ugtm\_sklearn
    
    
    
+
+
+

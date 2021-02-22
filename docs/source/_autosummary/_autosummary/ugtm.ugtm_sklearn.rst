@@ -9,6 +9,10 @@ ugtm.ugtm\_sklearn
 
    
    
+   
+
+   
+   
    .. rubric:: Classes
 
    .. autosummary::
@@ -23,3 +27,6 @@ ugtm.ugtm\_sklearn
    
    
    
+
+
+

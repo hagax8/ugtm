@@ -1,57 +1,59 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Classification examples &mdash; ugtm v2.0.0 documentation</title>
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
+
+  
+  
+
+  
   
 
   
 
   
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/altair-plot.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="ugtm v2.0.0 documentation" href="index.html"/>
-        <link rel="next" title="Regression examples" href="regression_examples.html"/>
-        <link rel="prev" title="Visualization examples" href="visualization_examples.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Regression examples" href="regression_examples.html" />
+    <link rel="prev" title="Visualization examples" href="visualization_examples.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -82,11 +84,15 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
             
-                <p class="caption"><span class="caption-text">Get started here</span></p>
+              
+            
+            
+              <p class="caption"><span class="caption-text">Get started here</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -123,32 +129,52 @@
             
           
         </div>
+        
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">ugtm</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ugtm</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="index.html">Docs</a> &raquo;</li>
-      
-    <li>Classification examples</li>
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Classification examples</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
           
@@ -156,7 +182,10 @@
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -170,27 +199,27 @@
 <p>The variables are the following:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
-<li>radius (mean of distances from center to points on the perimeter)</li>
-<li>texture (standard deviation of gray-scale values)</li>
-<li>perimeter</li>
-<li>area</li>
-<li>smoothness (local variation in radius lengths)</li>
-<li>compactness (perimeter^2 / area - 1.0)</li>
-<li>concavity (severity of concave portions of the contour)</li>
-<li>concave points (number of concave portions of the contour)</li>
-<li>symmetry</li>
-<li>fractal dimension (“coastline approximation” - 1)</li>
+<li><p>radius (mean of distances from center to points on the perimeter)</p></li>
+<li><p>texture (standard deviation of gray-scale values)</p></li>
+<li><p>perimeter</p></li>
+<li><p>area</p></li>
+<li><p>smoothness (local variation in radius lengths)</p></li>
+<li><p>compactness (perimeter^2 / area - 1.0)</p></li>
+<li><p>concavity (severity of concave portions of the contour)</p></li>
+<li><p>concave points (number of concave portions of the contour)</p></li>
+<li><p>symmetry</p></li>
+<li><p>fractal dimension (“coastline approximation” - 1)</p></li>
 </ol>
 </div></blockquote>
 <p>The target variable is the diagnosis (malignant/benign).</p>
 <p>Example of parameter selection and cross-validation using GTM classification (GTC) and SVM classification (SVC):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="k">import</span> <span class="n">eGTC</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_breast_cancer</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ugtm</span> <span class="kn">import</span> <span class="n">eGTC</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_breast_cancer</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">model_selection</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">balanced_accuracy_score</span>
-<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">classification_report</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">balanced_accuracy_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">classification_report</span>
 
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">()</span>
@@ -256,31 +285,32 @@
 
 
            </div>
+           
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="regression_examples.html" class="btn btn-neutral float-right" title="Regression examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="visualization_examples.html" class="btn btn-neutral" title="Visualization examples" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="regression_examples.html" class="btn btn-neutral float-right" title="Regression examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="visualization_examples.html" class="btn btn-neutral float-left" title="Visualization examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Helena A. Gaspar.
+        &#169; Copyright 2018, Helena A. Gaspar.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -289,39 +319,15 @@
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'v2.0.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@3"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
-      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>
