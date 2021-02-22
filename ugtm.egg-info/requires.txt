@@ -4,3 +4,5 @@ matplotlib>=2.2.2
 scipy>=0.19.1
 mpld3>=0.3
 jinja2>=2.10.0
+altair>=2.2.2
+contextlib2
