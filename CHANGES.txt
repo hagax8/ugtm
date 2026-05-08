@@ -1,3 +1,9 @@
+v2.2.1, 8th May 2026
+  - Fixed eGTM.fit_transform not setting is_fitted_ sentinel, causing
+    NotFittedError when fit_transform is used directly.
+  - Replaced removed sklearn datasets.load_boston with
+    fetch_california_housing in documentation examples.
+
 v2.2.0, 8th May 2026
   - Removed bundled plotting module (matplotlib and mpld3 dependencies
     dropped); outputs (matMeans, matModes, matR) are plain NumPy arrays

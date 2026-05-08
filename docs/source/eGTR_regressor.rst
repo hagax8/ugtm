@@ -5,17 +5,17 @@ eGTR: GTM regressor
 Run eGTR
 --------
 
-:class:`~ugtm.ugtm_sklearn.eGTR` is a sklearn-compatible GTM regressor. Similarly to PCA or t-SNE, GTM reduces the dimensionality from n_dimensions to 2 dimensions. GTR uses a GTM class map to predict labels for new data (cf. :func:`~gtm.ugtm_landscape.landscape`). The following example uses the iris dataset::
+:class:`~ugtm.ugtm_sklearn.eGTR` is a sklearn-compatible GTM regressor. Similarly to PCA or t-SNE, GTM reduces the dimensionality from n_dimensions to 2 dimensions. GTR uses a GTM class map to predict labels for new data (cf. :func:`~gtm.ugtm_landscape.landscape`). The following example uses the California housing dataset::
 
         from ugtm import eGTR
         from sklearn import datasets
         from sklearn import preprocessing
-        from sklearn import decomposition 
+        from sklearn import decomposition
         from sklearn import model_selection
 
-        boston = datasets.load_boston()
-        X = boston.data 
-        y = boston.target
+        housing = datasets.fetch_california_housing()
+        X = housing.data
+        y = housing.target
 
         X_train, X_test, y_train, y_test = model_selection.train_test_split(
         X, y, test_size=0.33, random_state=42)
@@ -26,7 +26,7 @@ Run eGTR
         X_test = scaler.transform(X_test)
 
         # Predict labels for X_test
-        gtr = eGTR() 
+        gtr = eGTR()
         gtr = gtr.fit(X_train,y_train)
         y_pred = gtr.predict(X_test)
 
@@ -49,22 +49,22 @@ which can be colored by predicted label. This visualization uses the python pack
         from sklearn import metrics
         from sklearn import model_selection
 
-        boston = datasets.load_boston()
-        X = boston.data 
-        y = boston.target
+        housing = datasets.fetch_california_housing()
+        X = housing.data
+        y = housing.target
 
         X_train, X_test, y_train, y_test = model_selection.train_test_split(
         X, y, test_size=0.33, random_state=42)
 
         # optional preprocessing
         std = preprocessing.StandardScaler()
-        X_train = std.fit(X_train).transform(X_train) 
+        X_train = std.fit(X_train).transform(X_train)
 
-        # Construct activity landscape 
-        gtr = eGTR() 
+        # Construct activity landscape
+        gtr = eGTR()
         gtr = gtr.fit(X_train,y_train)
 
-        dfclassmap = pd.DataFrame(gtr.optimizedModel.matX, columns=["x1", "x2"]) 
+        dfclassmap = pd.DataFrame(gtr.optimizedModel.matX, columns=["x1", "x2"])
         dfclassmap["predicted_node_label"] = gtr.node_label
 
         # Classification map
@@ -73,7 +73,7 @@ which can be colored by predicted label. This visualization uses the python pack
             y='x2',
             color=alt.Color('predicted_node_label:Q',
                             scale=alt.Scale(scheme='greenblue'),
-                            legend=alt.Legend(title="Boston house prices")),
+                            legend=alt.Legend(title="California house prices")),
             size=alt.value(50),
             tooltip=['x1','x2', 'predicted_node_label:Q']
         ).properties(title = "Activity landscape", width = 200, height = 200)
@@ -96,9 +96,9 @@ This visualization uses the python package `altair <https://altair-viz.github.io
         from sklearn import metrics
         from sklearn import model_selection
 
-        boston = datasets.load_boston()
-        X = boston.data 
-        y = boston.target
+        housing = datasets.fetch_california_housing()
+        X = housing.data
+        y = housing.target
 
         X_train, X_test, y_train, y_test = model_selection.train_test_split(
         X, y, test_size=0.33, random_state=42)
@@ -109,7 +109,7 @@ This visualization uses the python package `altair <https://altair-viz.github.io
         X_test = scaler.transform(X_test)
 
         # Predict labels for X_test
-        gtr = eGTR() 
+        gtr = eGTR()
         gtr = gtr.fit(X_train,y_train)
         y_pred = gtr.predict(X_test)
 
@@ -123,14 +123,14 @@ This visualization uses the python package `altair <https://altair-viz.github.io
         chart1 = alt.Chart(df).mark_point().encode(
         x='x1',y='x2',
         color=alt.Color("predicted_label:Q",scale=alt.Scale(scheme='greenblue'),
-                         legend=alt.Legend(title="Boston house prices")),  
+                         legend=alt.Legend(title="California house prices")),
         tooltip=["x1", "x2", "predicted_label:Q", "true_label:Q"]
-        ).properties(title="Pedicted labels", width=200, height=200).interactive()
+        ).properties(title="Predicted labels", width=200, height=200).interactive()
 
         chart2 = alt.Chart(df).mark_point().encode(
         x='x1',y='x2',
         color=alt.Color("true_label:Q",scale=alt.Scale(scheme='greenblue'),
-                        legend=alt.Legend(title="Boston house prices")),   
+                        legend=alt.Legend(title="California house prices")),
         tooltip=["x1", "x2", "predicted_label:Q", "true_label:Q"]
         ).properties(title="True labels", width=200, height=200).interactive()
 

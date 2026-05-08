@@ -26,7 +26,7 @@ author = u'Helena A. Gaspar'
 # The short X.Y version
 version = u'2.2'
 # The full version, including alpha/beta/rc tags
-release = u'v2.2.0'
+release = u'v2.2.1'
 
 
 # -- General configuration ---------------------------------------------------

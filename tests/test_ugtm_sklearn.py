@@ -1,6 +1,7 @@
 import unittest
 import ugtm
 from ugtm import eGTM, eGTC, eGTR, eGTCnn
+from sklearn.exceptions import NotFittedError
 import numpy as np
 
 
@@ -24,6 +25,14 @@ class TestGTMSklearn(unittest.TestCase):
     def test_eGTM(self):
         transformed = eGTM().fit(self.train).transform(self.test)
         self.assertTrue(transformed.shape == (60, 2))
+
+    def test_eGTM_fit_transform(self):
+        transformed = eGTM().fit_transform(self.train)
+        self.assertTrue(transformed.shape == (50, 2))
+
+    def test_eGTM_not_fitted(self):
+        with self.assertRaises(NotFittedError):
+            eGTM().transform(self.test)
 
     def test_eGTM_modes(self):
         transformed = eGTM(model="modes").fit(self.train).transform(self.test)

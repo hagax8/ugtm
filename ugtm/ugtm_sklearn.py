@@ -185,9 +185,7 @@ class eGTM(BaseEstimator, TransformerMixin):
                                                 self.regul,
                                                 self.niter,
                                                 verbose=self.verbose)
-
-        # Check fit
-        check_is_fitted(self)
+        self.is_fitted_ = True
 
         # Input validation
         X = check_array(X)
