@@ -2,8 +2,7 @@ CHANGES.txt
 LICENSE.txt
 MANIFEST.in
 README.rst
-setup.cfg
-setup.py
+pyproject.toml
 docs/build/html/_sources/api.rst.txt
 docs/build/html/_sources/classification_examples.rst.txt
 docs/build/html/_sources/classmap.rst.txt
@@ -47,6 +46,12 @@ docs/build/html/_sources/_autosummary/_autosummary/ugtm.ugtm_predictions.rst.txt
 docs/build/html/_sources/_autosummary/_autosummary/ugtm.ugtm_preprocess.rst.txt
 docs/build/html/_sources/_autosummary/_autosummary/ugtm.ugtm_sklearn.rst.txt
 docs/source/requires.txt
+tests/test_ugtm_GTC.py
+tests/test_ugtm_GTR.py
+tests/test_ugtm_gtm.py
+tests/test_ugtm_sklearn.py
+tests/test_ugtm_workflow.py
+tests/test_ugtm_write.py
 ugtm/__init__.py
 ugtm/ugtm_classes.py
 ugtm/ugtm_core.py
@@ -54,7 +59,6 @@ ugtm/ugtm_crossvalidate.py
 ugtm/ugtm_gtm.py
 ugtm/ugtm_kgtm.py
 ugtm/ugtm_landscape.py
-ugtm/ugtm_plot.py
 ugtm/ugtm_predictions.py
 ugtm/ugtm_preprocess.py
 ugtm/ugtm_sklearn.py

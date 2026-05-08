@@ -20,13 +20,13 @@ sys.path.append(os.path.abspath('exts'))
 # -- Project information -----------------------------------------------------
 
 project = u'ugtm'
-copyright = u'2018, Helena A. Gaspar'
+copyright = u'2018-2026, Helena A. Gaspar'
 author = u'Helena A. Gaspar'
 
 # The short X.Y version
-version = u'2.0'
+version = u'2.2'
 # The full version, including alpha/beta/rc tags
-release = u'v2.0.0'
+release = u'v2.2.0'
 
 
 # -- General configuration ---------------------------------------------------

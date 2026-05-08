@@ -119,6 +119,7 @@ class eGTM(BaseEstimator, TransformerMixin):
                                                 self.regul,
                                                 self.niter,
                                                 verbose=self.verbose)
+        self.is_fitted_ = True
 
         return self
 
@@ -140,7 +141,7 @@ class eGTM(BaseEstimator, TransformerMixin):
         """
 
         # Check fit
-        check_is_fitted(self, ['optimizedModel'])
+        check_is_fitted(self)
 
         # Input validation
         X = check_array(X)
@@ -186,7 +187,7 @@ class eGTM(BaseEstimator, TransformerMixin):
                                                 verbose=self.verbose)
 
         # Check fit
-        check_is_fitted(self, ['optimizedModel'])
+        check_is_fitted(self)
 
         # Input validation
         X = check_array(X)
@@ -339,7 +340,7 @@ class eGTC(BaseEstimator, ClassifierMixin):
             Data matrix.
         """
         # Check fit
-        check_is_fitted(self, ['optimizedModel', 'node_probabilities'])
+        check_is_fitted(self)
 
         # Input validation
         X = check_array(X)
@@ -463,6 +464,7 @@ class eGTR(BaseEstimator, RegressorMixin):
 
         # Compute activity model = activity landscape
         self.node_label = ugtm_landscape.landscape(self.optimizedModel, y)
+        self.is_fitted_ = True
 
         # Return the regressor
         return self
@@ -478,7 +480,7 @@ class eGTR(BaseEstimator, RegressorMixin):
 
         """
         # Check fit
-        check_is_fitted(self, ['optimizedModel', 'node_label'])
+        check_is_fitted(self)
 
         # Input validation
         X = check_array(X)
@@ -640,7 +642,7 @@ class eGTCnn(BaseEstimator, RegressorMixin):
         """
 
         # Check fit
-        check_is_fitted(self, ['optimizedModel', 'node_label'])
+        check_is_fitted(self)
 
         # Input validation
         X = check_array(X)

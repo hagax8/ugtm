@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ugtm"
+version = "2.2.0"
+description = "Generative Topographic Mapping (GTM) for Python: GTM classification and regression"
+readme = "README.rst"
+license = "MIT"
+authors = [{ name = "Helena A. Gaspar", email = "hagax8@gmail.com" }]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.21",
+    "scikit-learn>=1.0",
+    "scipy>=1.7",
+    "jinja2>=3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/hagax8/ugtm"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["ugtm*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

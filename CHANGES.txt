@@ -1,1 +1,14 @@
+v2.2.0, 8th May 2026
+  - Removed bundled plotting module (matplotlib and mpld3 dependencies
+    dropped); outputs (matMeans, matModes, matR) are plain NumPy arrays
+    for use with any plotting library.
+  - Fixed numpy 2.x incompatibility: replaced removed np.float alias.
+  - Fixed sklearn 1.x compatibility: updated check_is_fitted usage and
+    added is_fitted_ sentinel to eGTM and eGTR estimators.
+  - Modernised packaging: migrated from setup.py to pyproject.toml (PEP 517).
+  - Replaced deprecated nose test runner with pytest.
+  - Updated dependency lower bounds: numpy>=1.21, scikit-learn>=1.0,
+    scipy>=1.7, jinja2>=3.0.
+  - Requires Python >= 3.8.
+
 v1.0, 7th May 2018 -- Initial release.

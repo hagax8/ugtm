@@ -16,39 +16,6 @@ class TestGTMWorkflow(unittest.TestCase):
         gtm_coordinates = gtm.matMeans
         gtm_modes = gtm.matModes
         gtm_responsibilities = gtm.matR
-        gtm.plot_multipanel(output="tests/output_tests/testout2",
-                            labels=labels, discrete=True, pointsize=20)
-        gtm.plot_multipanel(output="tests/output_tests/testout3",
-                            labels=activity, discrete=False, pointsize=20)
-        gtm.plot_multipanel(output="tests/output_tests/testout4",
-                            labels=labels, discrete=True, pointsize=20,
-                            do_interpolate=False)
-        gtm.plot_multipanel(output="tests/output_tests/testout5",
-                            labels=activity,
-                            discrete=False, pointsize=20, do_interpolate=False)
-        gtm.plot(output="tests/output_tests/testout6", pointsize=20)
-        gtm.plot(output="tests/output_tests/testout7",
-                 labels=labels, discrete=True, pointsize=20)
-        gtm.plot(output="tests/output_tests/testout8",
-                 labels=activity, discrete=False, pointsize=20)
-        gtm.plot_html(output="tests/output_tests/testout9", pointsize=20)
-        gtm.plot_html(output="tests/output_tests/testout10",
-                      labels=activity, discrete=False, pointsize=20)
-        gtm.plot_html(output="tests/output_tests/testout11",
-                      labels=labels, discrete=True, pointsize=20)
-        gtm.plot_html(output="tests/output_tests/testout12", labels=activity,
-                      discrete=False, pointsize=20,
-                      do_interpolate=False, ids=labels)
-        gtm.plot_html(output="tests/output_tests/testout13", labels=labels,
-                      discrete=True, pointsize=20, do_interpolate=False)
-        transformed = ugtm.transform(
-            optimizedModel=gtm, train=train, test=test)
-        transformed.plot_html(
-            output="tests/output_tests/testout14", pointsize=20)
-        transformed.plot(output="tests/output_tests/testout15", pointsize=20)
-        gtm.plot_html_projection(output="tests/output_tests/testout16",
-                                 projections=transformed, labels=labels,
-                                 discrete=True, pointsize=20)
         predicted_labels = ugtm.GTC(train=train, test=test, labels=labels)
         predicted_model = ugtm.advancedGTC(
             train=train, test=test, labels=labels)

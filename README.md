@@ -1,53 +1,80 @@
-# ugtm: Generative Topographic Mapping with Python.
+# ugtm: Generative Topographic Mapping with Python
 
-Link to the package documentation: http://ugtm.readthedocs.io/en/latest/
+GTM (Generative Topographic Mapping) is a dimensionality reduction algorithm (like t-SNE, LLE, etc.) created by Bishop et al. ([paper](https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf)) and a probabilistic counterpart of Kohonen maps.
 
-GTM (Generative Topographic Mapping) is a dimensionality reduction algorithm (as t-SNE, LLE, etc) created by Bishop et al. (https://www.microsoft.com/en-us/research/wp-content/uploads/1998/01/bishop-gtm-ncomp-98.pdf) and a probabilistic counterpart of Kohonen maps.
-
-ugtm is a python package implementing GTM and GTM prediction algorithms. ugtm contains the core functions and runGTM.py (in bin directory) is an easy-to-use program. The kernel version of the algorithm (kGTM) is also implemented. You can also generate regression or classification maps, or evaluate the predictive accuracy (classification) or RMSE/R2 (regression) in repeated cross-validation experiments.
-
-## Install ugtm
-
-Simple installation:
-- pip install ugtm
-
-If you get error messages, try upgrading packages:
-- pip install --upgrade pip numpy scikit-learn matplotlib scipy mpld3 jinja2
-- sudo pip install --upgrade pip numpy scikit-learn matplotlib scipy mpld3 jinja2
-
-If you have problems with anaconda packages, try to create a virtual env called "p2" for python 2.7.14:
-- conda create -n p2 python=2.7.14 numpy=1.14.5 scikit-learn=0.20 matplotlib=2.2.2 scipy=0.19.1 mpld3=0.3 jinja2=2.10
-- source activate p2
-- pip install ugtm
-
-Or p3 for python 3.6.6:
-- conda create -n p3 python=3.6.6 numpy=1.14.5 scikit-learn=0.20 matplotlib=2.2.2 scipy=0.19.1 mpld3=0.3 jinja2=2.10
-- source activate p3
-- pip install ugtm
-
+ugtm implements GTM and GTM-based prediction algorithms, including a kernel variant (kGTM), classification (GTC) and regression (GTR) maps, sklearn-compatible estimators, and repeated cross-validation.
 
 ## Documentation
 
-[Readthedocs](https://ugtm.readthedocs.io/)
+Full documentation including examples: [ugtm.readthedocs.io](https://ugtm.readthedocs.io/)
 
+## Install
 
-## Prerequisites
+```bash
+pip install ugtm
+```
 
-Python 2.7 or + (tested on Python 3.4.6 and Python 2.7.14)
+Requires Python >= 3.8 and:
+- numpy >= 1.21
+- scikit-learn >= 1.0
+- scipy >= 1.7
+- jinja2 >= 3.0
 
-and following packages:
-- scikit-learn>=0.20
-- numpy>=1.14.5
-- matplotlib>=2.2.2
-- scipy>=0.19.1
-- mpld3>=0.3
-- jinja2>=2.10
+## Quick start
+
+```python
+import ugtm
+import numpy as np
+
+data = np.random.randn(100, 50)
+labels = np.random.choice([1, 2], size=100)
+
+# Fit a GTM map
+gtm = ugtm.runGTM(data=data)
+
+# Access 2D representations
+coordinates = gtm.matMeans          # mean positions (n_samples, 2)
+modes       = gtm.matModes          # mode positions (n_samples, 2)
+resp        = gtm.matR              # responsibilities (n_samples, n_nodes)
+```
+
+### sklearn-compatible estimators
+
+```python
+from ugtm import eGTM, eGTC, eGTR
+
+X_train = np.random.randn(100, 50)
+X_test  = np.random.randn(50, 50)
+y_train = np.random.choice([1, 2, 3], size=100)
+
+transformed      = eGTM().fit(X_train).transform(X_test)
+predicted_labels = eGTC().fit(X_train, y_train).predict(X_test)
+predicted_values = eGTR().fit(X_train, y_train).predict(X_test)
+```
+
+## Visualisation
+
+ugtm no longer bundles a plotting module. The outputs (`matMeans`, `matModes`, `matR`) are plain NumPy arrays — use matplotlib directly:
+
+```python
+import matplotlib.pyplot as plt
+
+gtm = ugtm.runGTM(data=data)
+coords = gtm.matMeans  # shape (n_samples, 2)
+
+plt.scatter(coords[:, 0], coords[:, 1], c=labels, cmap="Spectral_r")
+plt.colorbar()
+plt.title("GTM map")
+plt.show()
+```
+
+For richer examples (landscapes, class maps, projections) see the [readthedocs documentation](https://ugtm.readthedocs.io/).
 
 ## Citing ugtm
 
-Cite ugtm version and the [following paper](https://openresearchsoftware.metajnl.com/articles/10.5334/jors.235/):
+Cite ugtm and the [following paper](https://openresearchsoftware.metajnl.com/articles/10.5334/jors.235/):
 
-```
+```bibtex
 @ARTICLE{Gaspar2018-qt,
   title   = "ugtm: A Python Package for Data Modeling and Visualization Using
              Generative Topographic Mapping",
@@ -60,8 +87,6 @@ Cite ugtm version and the [following paper](https://openresearchsoftware.metajnl
 }
 ```
 
-## Principal author / admin
+## Author
 
-Héléna A. Gaspar, hagax8@gmail.com, https://github.com/hagax8
-
-
+Héléna A. Gaspar — hagax8@gmail.com — [github.com/hagax8](https://github.com/hagax8)

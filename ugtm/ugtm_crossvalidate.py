@@ -666,7 +666,7 @@ def crossvalidateSVC(data, labels, C=1.0, doPCA=False, n_components=-1,
     print("")
     if C < 0.0:
         Cvec = np.power(2, np.arange(
-            start=-5, stop=15, step=1, dtype=np.float))
+            start=-5, stop=15, step=1, dtype=float))
     else:
         Cvec = [C]
     savemean = -9999
@@ -801,7 +801,7 @@ def crossvalidateSVR(data, labels,
     """
     if C < 0.0:
         Cvec = np.power(2, np.arange(
-            start=-5, stop=15, step=1, dtype=np.float))
+            start=-5, stop=15, step=1, dtype=float))
     else:
         Cvec = [C]
     if epsilon < 0.0:
@@ -902,12 +902,12 @@ def crossvalidateSVCrbf(data, labels,  C=1, gamma=1, doPCA=False,
     """
     if C < 0.0:
         Cvec = np.power(2, np.arange(
-            start=-5, stop=15, step=1, dtype=np.float))
+            start=-5, stop=15, step=1, dtype=float))
     else:
         Cvec = [C]
     if gamma < 0.0:
         gvec = np.power(2.0, np.arange(
-            start=-15, stop=3, step=1, dtype=np.float))
+            start=-15, stop=3, step=1, dtype=float))
     else:
         gvec = [gamma]
 #    modelvec = ""
