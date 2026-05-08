@@ -52,14 +52,6 @@ ugtm.ugtm\_landscape module
     :undoc-members:
     :show-inheritance:
 
-ugtm.ugtm\_plot module
-----------------------
-
-.. automodule:: ugtm.ugtm_plot
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 ugtm.ugtm\_predictions module
 -----------------------------
 
