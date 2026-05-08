@@ -3,7 +3,7 @@ scikit-learn>=1.0
 scipy>=1.7
 jinja2>=3.0
 altair>=4.0,<5
-pandas
+pandas<3
 contextlib2
 docutils
 sphinx-rtd-theme
