@@ -50,8 +50,8 @@ which can be colored by predicted label. This visualization uses the python pack
         from sklearn import model_selection
 
         housing = datasets.fetch_california_housing()
-        X = housing.data
-        y = housing.target
+        X = housing.data[:100]
+        y = housing.target[:100]
 
         X_train, X_test, y_train, y_test = model_selection.train_test_split(
         X, y, test_size=0.33, random_state=42)
@@ -97,8 +97,8 @@ This visualization uses the python package `altair <https://altair-viz.github.io
         from sklearn import model_selection
 
         housing = datasets.fetch_california_housing()
-        X = housing.data
-        y = housing.target
+        X = housing.data[:100]
+        y = housing.target[:100]
 
         X_train, X_test, y_train, y_test = model_selection.train_test_split(
         X, y, test_size=0.33, random_state=42)
