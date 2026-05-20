@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ugtm"
-version = "2.2.1"
+version = "2.3.0"
 description = "Generative Topographic Mapping (GTM) for Python: GTM classification and regression"
 readme = "README.rst"
 license = "MIT"

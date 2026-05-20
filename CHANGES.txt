@@ -1,3 +1,11 @@
+v2.3.0, 20th May 2026
+  - Added incremental GTM (iGTM): block-wise EM that avoids holding the
+    full N×K responsibility matrix in memory.
+  - New public API: runIGTM(), eIGTM (sklearn transformer), transform_blocks()
+    generator for block-wise projection of large datasets.
+  - New core function optimWMatrixAcc for the iGTM M-step using accumulated
+    sufficient statistics.
+
 v2.2.1, 8th May 2026
   - Fixed eGTM.fit_transform not setting is_fitted_ sentinel, causing
     NotFittedError when fit_transform is used directly.

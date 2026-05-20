@@ -11,8 +11,9 @@ ugtm: Generative Topographic Mapping with Python
    overview
    installation
    eGTM_transformer
-   eGTC_classifier  
-   eGTR_regressor 
+   eIGTM_transformer
+   eGTC_classifier
+   eGTR_regressor
 
 .. toctree::
    :maxdepth: 1

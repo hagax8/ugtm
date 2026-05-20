@@ -24,9 +24,9 @@ copyright = u'2018-2026, Helena A. Gaspar'
 author = u'Helena A. Gaspar'
 
 # The short X.Y version
-version = u'2.2'
+version = u'2.3'
 # The full version, including alpha/beta/rc tags
-release = u'v2.2.1'
+release = u'v2.3.0'
 
 
 # -- General configuration ---------------------------------------------------

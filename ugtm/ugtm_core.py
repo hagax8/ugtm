@@ -343,6 +343,45 @@ def optimWMatrix(matR, matPhiMPlusOne, matG, data, betaInv, regul):
     return(matW)
 
 
+def optimWMatrixAcc(g_vec, RT_acc, matPhiMPlusOne, betaInv, regul):
+    r"""Updates W from block-accumulated sufficient statistics (iGTM M-step).
+
+    Parameters
+    ==========
+    g_vec : array of shape (n_nodes,)
+        Accumulated row sums of R across all blocks:
+        :math:`\sum_b \mathbf{R}_b \mathbf{1}`.
+    RT_acc : array of shape (n_nodes, n_dimensions)
+        Accumulated R @ X across all blocks:
+        :math:`\sum_b \mathbf{R}_b \mathbf{X}_b`.
+    matPhiMPlusOne : array of shape (n_nodes, n_rbf_centers+1)
+        RBF matrix plus bias column.
+    betaInv : float
+        Noise variance parameter.
+    regul : float
+        Regularization coefficient.
+
+    Returns
+    =======
+    array of shape (n_dimensions, n_rbf_centers+1)
+        Updated parameter matrix W.
+
+    Notes
+    =====
+    Equivalent to :func:`~ugtm.ugtm_core.optimWMatrix` but avoids forming
+    the full N×N responsibility matrix by using pre-accumulated statistics.
+    :math:`\mathbf{\Phi}^T \mathbf{G} \mathbf{\Phi}` is computed as
+    :math:`(\mathbf{\Phi} \odot \mathbf{g})^T \mathbf{\Phi}` to avoid
+    an explicit n_nodes×n_nodes diagonal matrix.
+    """
+    n_rbf_centersP = matPhiMPlusOne.shape[1]
+    PhiGPhi = (matPhiMPlusOne * g_vec[:, None]).T @ matPhiMPlusOne
+    LBmat = np.eye(n_rbf_centersP) * (regul * betaInv)
+    Ginv = np.linalg.inv(PhiGPhi + LBmat)
+    matW = (Ginv @ matPhiMPlusOne.T @ RT_acc).T
+    return matW
+
+
 def optimLMatrix(matR, matPhiMPlusOne, matG, betaInv, regul):
     r"""Updates parameter matrix regul for kernel GTM.
 

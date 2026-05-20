@@ -23,3 +23,4 @@ from .ugtm_predictions import *
 from .ugtm_crossvalidate import *
 from .ugtm_preprocess import *
 from .ugtm_sklearn import *
+from .ugtm_igtm import *

@@ -669,3 +669,178 @@ class eGTCnn(BaseEstimator, RegressorMixin):
 
         # Return predictions
         return self.predicted.astype(int)
+
+
+class eIGTM(BaseEstimator, TransformerMixin):
+    """eIGTM: incremental GTM Transformer for sklearn pipelines.
+
+    Fits a GTM model using block-wise EM (Gaspar et al. 2014), suitable
+    for large datasets where the full N×K responsibility matrix does not
+    fit in memory. The full matrix is never formed; only two
+    (n_nodes,)-shaped accumulators are kept per iteration.
+
+    Arguments
+    =========
+    k : int, optional (default = 16)
+        Sqrt of the number of GTM nodes (0 = auto).
+    m : int, optional (default = 4)
+        Sqrt of the number of RBF centers (0 = auto).
+    s : float, optional (default = 0.3)
+        RBF width factor.
+    regul : float, optional (default = 0.1)
+        Regularization coefficient.
+    random_state : int (default = 1234)
+        Random state.
+    niter : int, optional (default = 200)
+        Maximum EM iterations.
+    verbose : bool, optional (default = False)
+        Verbose mode.
+    model : {'means', 'modes', 'responsibilities', 'complete'}, optional
+        Output representation returned by :meth:`transform`.
+    n_blocks : int, optional (default = 0)
+        Number of data blocks. 0 = auto (``ceil(N / 5000)``).
+    """
+
+    def __init__(self, k=16, m=4, s=0.3, regul=0.1,
+                 random_state=1234, niter=200, verbose=False,
+                 model="means", n_blocks=0):
+        assert model in ('means', 'modes', 'responsibilities', 'complete'), \
+            "model must be 'means', 'modes', 'responsibilities', or 'complete'"
+        self.k = k
+        self.m = m
+        self.s = s
+        self.regul = regul
+        self.random_state = random_state
+        self.niter = niter
+        self.verbose = verbose
+        self.model = model
+        self.n_blocks = n_blocks
+
+    def fit(self, X, y=None):
+        """Fits iGTM to X using block-wise EM.
+
+        Parameters
+        ==========
+        X : 2D array
+            Data matrix.
+        """
+        from . import ugtm_igtm
+
+        X = check_array(X)
+
+        k = (self.k if self.k != 0
+             else int(np.sqrt(5 * np.sqrt(X.shape[0]))) + 2)
+        m = self.m if self.m != 0 else int(np.sqrt(k))
+        n_blocks = (self.n_blocks if self.n_blocks != 0
+                    else ugtm_igtm._auto_n_blocks(X.shape[0]))
+
+        self.initialModel = ugtm_gtm.initialize(
+            X, k, m, self.s, self.random_state)
+        self.optimizedModel = ugtm_igtm.optimize_igtm(
+            X, self.initialModel, self.regul, self.niter,
+            n_blocks, verbose=self.verbose)
+        self.is_fitted_ = True
+        return self
+
+    def transform(self, X):
+        """Projects X onto the fitted iGTM using a single E-step pass.
+
+        Parameters
+        ==========
+        X : 2D array
+            Data matrix.
+
+        Returns
+        =======
+        if self.model='means', array of shape (n_instances, 2),
+        if self.model='modes', array of shape (n_instances, 2),
+        if self.model='responsibilities', array of shape (n_instances, n_nodes),
+        if self.model='complete', instance of :class:`~ugtm.ugtm_classes.OptimizedGTM`
+        """
+        check_is_fitted(self)
+        X = check_array(X)
+        projected = ugtm_gtm.projection(self.optimizedModel, X)
+        dic = {
+            "complete": projected,
+            "means": projected.matMeans,
+            "modes": projected.matModes,
+            "responsibilities": projected.matR,
+        }
+        return dic[self.model]
+
+    def fit_transform(self, X, y=None):
+        """Fits iGTM to X and returns the training-set representation.
+
+        For ``model='means'`` and ``model='modes'`` the values computed
+        during the final block pass of :meth:`fit` are returned directly,
+        avoiding an extra projection pass.
+
+        Parameters
+        ==========
+        X : 2D array
+            Data matrix.
+
+        Returns
+        =======
+        See :meth:`transform`.
+        """
+        self.fit(X)
+        if self.model == "means":
+            return self.optimizedModel.matMeans
+        if self.model == "modes":
+            return self.optimizedModel.matModes
+        return self.transform(X)
+
+    def transform_blocks(self, X, block_size=5000):
+        """Project X onto the fitted iGTM block-by-block (generator).
+
+        Yields one block's result at a time so peak memory is proportional
+        to ``block_size × n_nodes`` rather than ``N × n_nodes``. Useful
+        when X is large or when ``model='responsibilities'`` and the full
+        N×K matrix would not fit in RAM.
+
+        Parameters
+        ==========
+        X : 2D array
+            Data matrix.
+        block_size : int, optional (default = 5000)
+            Number of rows per yielded block.
+
+        Yields
+        ======
+        Same type as :meth:`transform`, but for each block of rows.
+        For ``model='means'`` or ``model='modes'``: array of shape
+        ``(block_size, 2)`` (last block may be smaller).
+        For ``model='responsibilities'``: array of shape
+        ``(block_size, n_nodes)``.
+        For ``model='complete'``: instance of
+        :class:`~ugtm.ugtm_classes.OptimizedGTM`.
+        """
+        check_is_fitted(self)
+        X = check_array(X)
+        n = X.shape[0]
+        for start in range(0, n, block_size):
+            end = min(start + block_size, n)
+            projected = ugtm_gtm.projection(self.optimizedModel, X[start:end])
+            dic = {
+                "complete": projected,
+                "means": projected.matMeans,
+                "modes": projected.matModes,
+                "responsibilities": projected.matR,
+            }
+            yield dic[self.model]
+
+    def inverse_transform(self, matR):
+        """Maps responsibility vectors back to the original data space.
+
+        Parameters
+        ==========
+        matR : array of shape (n_samples, n_nodes)
+
+        Returns
+        =======
+        array of shape (n_samples, n_dimensions)
+        """
+        check_is_fitted(self)
+        weightedPhi = np.dot(matR, self.initialModel.matPhiMPlusOne)
+        return np.dot(weightedPhi, self.optimizedModel.matW.T)

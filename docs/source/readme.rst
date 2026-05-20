@@ -74,8 +74,35 @@ ugtm outputs are plain NumPy arrays (``matMeans``, ``matModes``, ``matR``), so a
 For richer interactive examples using Altair, see :doc:`visualization_examples`.
 
 
-4. Project new data onto an existing GTM map
----------------------------------------------
+4. Incremental GTM for large datasets
+--------------------------------------
+
+For datasets too large to hold the full N×K responsibility matrix in RAM,
+use :func:`~ugtm.ugtm_igtm.runIGTM` or :class:`~ugtm.ugtm_sklearn.eIGTM`.
+The ``n_blocks`` parameter controls how many chunks the data is split into
+(0 = auto, set to ``ceil(N / 5000)``)::
+
+    #run incremental GTM (same interface as runGTM)
+    igtm = ugtm.runIGTM(data=train, n_blocks=5, verbose=True)
+
+    #access coordinates and responsibilities
+    igtm_coordinates = igtm.matMeans
+    igtm_modes       = igtm.matModes
+
+    #sklearn-compatible transformer
+    from ugtm import eIGTM
+    transformed = eIGTM(n_blocks=5).fit_transform(train)
+
+    #block-wise projection for large test sets (generator)
+    model = eIGTM().fit(train)
+    for block in model.transform_blocks(test, block_size=1000):
+        pass  # process block here
+
+See :doc:`eIGTM_transformer` for full details.
+
+
+5. Project new data onto an existing GTM map
+--------------------------------------------
 
 New data can be projected onto an existing GTM map using the :func:`~ugtm.ugtm_gtm.transform` function. The train set is used to apply consistent preprocessing (e.g. PCA) to the test set::
 
@@ -90,7 +117,7 @@ New data can be projected onto an existing GTM map using the :func:`~ugtm.ugtm_g
     test_modes = transformed.matModes
 
 
-5. Output predictions for a test set: GTM regression (GTR) and classification (GTC)
+6. Output predictions for a test set: GTM regression (GTR) and classification (GTC)
 -------------------------------------------------------------------------------------
 
 The :func:`~ugtm.ugtm_predictions.GTR` function implements the GTM regression model and :func:`~ugtm.ugtm_predictions.GTC` function a GTM classification model::
@@ -102,7 +129,7 @@ The :func:`~ugtm.ugtm_predictions.GTR` function implements the GTM regression mo
     predicted = ugtm.GTC(train=train, test=test, labels=labels)
 
 
-6. Advanced GTM predictions with per-class probabilities
+7. Advanced GTM predictions with per-class probabilities
 ---------------------------------------------------------
 
 Per-class probabilities for a test set can be given by the :func:`~ugtm.ugtm_predictions.advancedGTC` function::
@@ -114,7 +141,7 @@ Per-class probabilities for a test set can be given by the :func:`~ugtm.ugtm_pre
     ugtm.printClassPredictions(predicted_model, "testout17")
 
 
-7. Crossvalidation experiments
+8. Crossvalidation experiments
 -------------------------------
 
 Different crossvalidation experiments were implemented to compare GTC and GTR models to classical machine learning methods::
