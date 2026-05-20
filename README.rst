@@ -41,6 +41,27 @@ sklearn-compatible estimators
     predicted_values = eGTR().fit(X_train, y_train).predict(X_test)
 
 
+Large datasets: incremental GTM (iGTM)
+---------------------------------------
+
+For datasets too large to hold the full N×K responsibility matrix in RAM,
+use iGTM (Gaspar et al. 2014). Data is processed in blocks; only two small
+accumulators are kept per iteration instead of the full N×K matrix::
+
+    from ugtm import runIGTM, eIGTM
+
+    # Low-level wrapper — same interface as runGTM
+    model = runIGTM(data, n_blocks=10)
+    coordinates = model.matMeans   # (n_samples, 2)
+
+    # sklearn transformer — n_blocks=0 chooses block size automatically
+    transformed = eIGTM().fit(X_train).transform(X_test)
+
+    # Block-wise projection for large test sets (generator, bounded memory)
+    for block in eIGTM().fit(X_train).transform_blocks(X_test, block_size=1000):
+        pass  # process each (block_size, 2) chunk here
+
+
 Visualisation
 -------------
 
@@ -80,3 +101,4 @@ References
 3. GTM classification models — https://www.ncbi.nlm.nih.gov/pubmed/24320683
 4. GTM regression models — https://www.ncbi.nlm.nih.gov/pubmed/27490381
 5. ugtm paper — https://openresearchsoftware.metajnl.com/articles/10.5334/jors.235/
+6. Incremental GTM — Gaspar et al. (2014), Chemical Data Visualization and Analysis with Incremental GTM: Big Data Challenge
