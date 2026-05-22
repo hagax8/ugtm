@@ -36,10 +36,12 @@ def optimize_igtm(data, initialModel, regul, niter, n_blocks, verbose=False):
     r"""Optimizes an iGTM model using single-pass block-wise EM.
 
     Each EM iteration makes one pass over the data in ``n_blocks`` blocks.
-    The sufficient statistics for the M-step
-    (:math:`\mathbf{g}` and :math:`\mathbf{R}^T \mathbf{X}`) and for the
-    :math:`\beta^{-1}` update are accumulated block-by-block so that the
-    full N×K responsibility matrix is never held in memory simultaneously.
+    Sufficient statistics (:math:`\mathbf{g}`, :math:`\mathbf{R}^T\mathbf{X}`,
+    and :math:`\sum_n\|\mathbf{t}_n\|^2`) are accumulated block-by-block.
+    After the M-step, :math:`\beta^{-1}` is updated exactly using the new
+    manifold :math:`\mathbf{Y}` via algebraic expansion of the squared
+    distances — no second pass required. The full N×K responsibility matrix
+    is never held in memory simultaneously.
 
     Parameters
     ==========
@@ -83,7 +85,7 @@ def optimize_igtm(data, initialModel, regul, niter, n_blocks, verbose=False):
     while i <= niter and converged < 4:
         g_vec = np.zeros(n_nodes, dtype=np.float64)
         RT_acc = np.zeros((n_nodes, n_dims), dtype=np.float64)
-        weighted_D_sum = 0.0
+        data_sq_sum = 0.0
         loglike_num = np.longdouble(0.0)
 
         # constant factor for log-likelihood (same across blocks per iteration)
@@ -101,7 +103,7 @@ def optimize_igtm(data, initialModel, regul, niter, n_blocks, verbose=False):
 
             g_vec += R_b.sum(axis=1)
             RT_acc += R_b @ X_b
-            weighted_D_sum += float(np.sum(R_b * D_b))
+            data_sq_sum += float(np.sum(X_b ** 2))
             loglike_num += np.sum(np.log(np.maximum(
                 np.sum(constante * P_b, axis=0) * prior,
                 np.finfo(np.longdouble).tiny
@@ -115,10 +117,17 @@ def optimize_igtm(data, initialModel, regul, niter, n_blocks, verbose=False):
         if verbose:
             print("Iter", i, " Err:", loglike)
 
-        # M-step
+        # M-step: W update then exact betaInv with new Y, no second pass.
+        # Expanding ||t_n - Y_new[:,i]||² and using accumulated statistics:
+        # Σ_{n,i} R_in ||t_n - Y_new[:,i]||²
+        #   = Σ_n ||t_n||²  -  2 · tr(Y_new * RT_acc.T)  +  Σ_i g_i ||Y_new[:,i]||²
         matW = ugtm_core.optimWMatrixAcc(g_vec, RT_acc, Phi, betaInv, regul)
         matY = ugtm_core.createYMatrix(matW, Phi)
-        betaInv = weighted_D_sum / (N * n_dims)
+        node_sq = np.sum(matY ** 2, axis=0)          # ||Y_new[:,i]||², shape (n_nodes,)
+        betaInv_num = (data_sq_sum
+                       - 2.0 * float(np.sum(matY * RT_acc.T))
+                       + float(np.dot(g_vec, node_sq)))
+        betaInv = betaInv_num / (N * n_dims)
 
         if diff <= 0.0001:
             converged += 1

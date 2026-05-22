@@ -13,13 +13,13 @@ sufficient-statistic arrays per iteration:
 
 * **g_vec** — shape (n_nodes,): accumulated row sums of R across blocks
 * **RT_acc** — shape (n_nodes, n_dimensions): accumulated R @ X across blocks
+* **data_sq_sum** — scalar: accumulated sum of squared data norms
 
 Peak memory per iteration is therefore O(block_size × n_nodes) rather than
-O(N × n_nodes). The W update is mathematically equivalent to standard GTM;
-only the β⁻¹ update uses the block-local distances rather than recomputed
-distances, which introduces a minor approximation that has negligible effect
-on the final manifold (Pearson r > 0.999 between GTM and iGTM coordinates
-in practice).
+O(N × n_nodes). Both the W and β⁻¹ updates are mathematically equivalent
+to standard GTM. β⁻¹ is computed exactly with the new manifold after each
+M-step by expanding squared distances algebraically from the accumulated
+statistics — no second data pass is required.
 
 
 Run eIGTM
