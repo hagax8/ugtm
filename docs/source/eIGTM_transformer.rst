@@ -6,7 +6,7 @@ Overview
 --------
 
 :class:`~ugtm.ugtm_sklearn.eIGTM` is a memory-efficient, sklearn-compatible
-GTM transformer for large datasets (Gaspar et al. 2014).
+GTM transformer for large datasets.
 Standard GTM holds the full N×K responsibility matrix in RAM at every EM
 iteration. iGTM makes one pass over the data per iteration, processing it
 in blocks and accumulating only small fixed-size arrays. The EM updates are
