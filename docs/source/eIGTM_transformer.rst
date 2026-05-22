@@ -142,32 +142,3 @@ Visualize projection
         ).properties(title="iGTM projection of X_test", width=300, height=300).interactive()
 
 
-Parameter optimization
------------------------
-
-:class:`~ugtm.ugtm_sklearn.eIGTM` is sklearn-compatible and works with
-``GridSearchCV``::
-
-        from ugtm import eIGTM
-        import numpy as np
-        from sklearn.pipeline import Pipeline
-        from sklearn.model_selection import GridSearchCV
-        from sklearn.neighbors import KNeighborsClassifier
-
-        X_train = np.random.randn(200, 20)
-        y_train = np.random.choice([0, 1], size=200)
-
-        pipe = Pipeline([
-            ('igtm', eIGTM()),
-            ('knn',  KNeighborsClassifier()),
-        ])
-
-        param_grid = {
-            'igtm__k':     [4, 8],
-            'igtm__s':     [0.3, 1.0],
-            'igtm__regul': [0.01, 0.1],
-        }
-
-        gs = GridSearchCV(pipe, param_grid, cv=3, scoring='accuracy')
-        gs.fit(X_train, y_train)
-        print(gs.best_params_)
