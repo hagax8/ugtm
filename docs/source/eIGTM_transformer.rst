@@ -8,18 +8,10 @@ Overview
 :class:`~ugtm.ugtm_sklearn.eIGTM` is a memory-efficient, sklearn-compatible
 GTM transformer for large datasets (Gaspar et al. 2014).
 Standard GTM holds the full N×K responsibility matrix in RAM at every EM
-iteration. iGTM processes the data in blocks, accumulating only two small
-sufficient-statistic arrays per iteration:
-
-* **g_vec** — shape (n_nodes,): accumulated row sums of R across blocks
-* **RT_acc** — shape (n_nodes, n_dimensions): accumulated R @ X across blocks
-* **data_sq_sum** — scalar: accumulated sum of squared data norms
-
-Peak memory per iteration is therefore O(block_size × n_nodes) rather than
-O(N × n_nodes). Both the W and β⁻¹ updates are mathematically equivalent
-to standard GTM. β⁻¹ is computed exactly with the new manifold after each
-M-step by expanding squared distances algebraically from the accumulated
-statistics — no second data pass is required.
+iteration. iGTM makes one pass over the data per iteration, processing it
+in blocks and accumulating only small fixed-size arrays. The EM updates are
+mathematically equivalent to standard GTM. Peak memory per iteration is
+O(block_size × n_nodes) rather than O(N × n_nodes).
 
 
 Run eIGTM
