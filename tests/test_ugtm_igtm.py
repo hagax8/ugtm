@@ -37,15 +37,17 @@ class TestIGTM(unittest.TestCase):
         self.assertEqual(model.matMeans.shape, (self.n_train, 2))
 
     def test_runIGTM_multiblock_close_to_GTM(self):
-        # W update is identical to GTM regardless of n_blocks; only betaInv
-        # timing differs (old D vs new D). Pearson r on each coordinate axis
-        # should be high.
+        # W and betaInv updates are mathematically equivalent to standard GTM
+        # regardless of n_blocks. Remaining differences are floating-point
+        # accumulation only (max ~0.004 in coordinates).
         gtm = runGTM(self.train, k=self.k, m=self.m, s=self.s, regul=self.regul)
-        igtm = runIGTM(self.train, k=self.k, m=self.m, s=self.s,
-                       regul=self.regul, n_blocks=3)
-        for dim in range(2):
-            r = np.corrcoef(gtm.matMeans[:, dim], igtm.matMeans[:, dim])[0, 1]
-            self.assertGreater(r, 0.9)
+        for n_blocks in [1, 2, 5]:
+            igtm = runIGTM(self.train, k=self.k, m=self.m, s=self.s,
+                           regul=self.regul, n_blocks=n_blocks)
+            for dim in range(2):
+                r = np.corrcoef(gtm.matMeans[:, dim], igtm.matMeans[:, dim])[0, 1]
+                self.assertGreater(r, 0.999,
+                    msg=f"n_blocks={n_blocks}, dim={dim}: r={r:.6f}")
 
     def test_runIGTM_1block_similar_to_GTM(self):
         # With 1 block the algorithms differ only in how betaInv is updated

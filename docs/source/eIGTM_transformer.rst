@@ -110,9 +110,12 @@ Setting ``n_blocks=1`` reproduces standard GTM behaviour (with the minor
 Visualize projection
 --------------------
 
+GTM and iGTM yield equivalent results. The plots below show projections of
+the same dataset with standard GTM and iGTM (n_blocks=2):
+
 .. altair-plot::
 
-        from ugtm import eIGTM
+        from ugtm import eGTM, eIGTM
         import numpy as np
         import altair as alt
         import pandas as pd
@@ -122,15 +125,21 @@ Visualize projection
         X_test  = np.random.randn(50, 10)
         labels  = np.random.choice(['A', 'B', 'C'], size=50)
 
-        transformed = eIGTM(n_blocks=2).fit(X_train).transform(X_test)
+        coords_gtm  = eGTM().fit(X_train).transform(X_test)
+        coords_igtm = eIGTM(n_blocks=2).fit(X_train).transform(X_test)
 
-        df = pd.DataFrame(transformed, columns=["x1", "x2"])
-        df["label"] = labels
+        def make_chart(coords, title):
+            df = pd.DataFrame(coords, columns=["x1", "x2"])
+            df["label"] = labels
+            return alt.Chart(df).mark_point(size=60).encode(
+                x='x1', y='x2',
+                color=alt.Color('label:N', scale=alt.Scale(scheme='set1')),
+                tooltip=['x1', 'x2', 'label']
+            ).properties(title=title, width=220, height=220).interactive()
 
-        alt.Chart(df).mark_point(size=60).encode(
-            x='x1', y='x2',
-            color=alt.Color('label:N', scale=alt.Scale(scheme='set1')),
-            tooltip=['x1', 'x2', 'label']
-        ).properties(title="iGTM projection of X_test", width=300, height=300).interactive()
+        alt.hconcat(
+            make_chart(coords_gtm,  "GTM"),
+            make_chart(coords_igtm, "iGTM (n_blocks=2)")
+        )
 
 
